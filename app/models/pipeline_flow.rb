@@ -4,6 +4,12 @@ module PipelineFlow
   COTEJO_STAGES  = %w[cotejo_ministerio cotejo_delegacion].freeze
 
   class << self
+    attr_writer :config_path
+
+    def config_path
+      @config_path ||= Rails.root.join("config/pipeline.yml")
+    end
+
     def all_stages        = stages.map { _1[:key] }
     def kanban_stages     = stages_for("kanban")
     def horizontal_stages = stages_for("horizontal")
@@ -52,7 +58,7 @@ module PipelineFlow
       def linear_sequence     = kanban_stages
 
       def config
-        @config ||= YAML.load_file(Rails.root.join("config/pipeline.yml")).deep_symbolize_keys
+        @config ||= YAML.load_file(config_path).deep_symbolize_keys
       end
   end
 end

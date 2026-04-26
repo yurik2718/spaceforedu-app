@@ -1,6 +1,6 @@
 class Admin::HomologationRequests::PipelineRetreatsController < ApplicationController
   def create
-    request_record = HomologationRequest.kept.find(params[:homologation_request_id])
+    request_record = HomologationRequest.kept.includes(:user).find(params[:homologation_request_id])
     authorize request_record, :manage_pipeline?
 
     request_record.retreat_pipeline!(changed_by: Current.user, reason: retreat_params[:reason])

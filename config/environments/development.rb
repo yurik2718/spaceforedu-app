@@ -92,4 +92,10 @@ Rails.application.configure do
     Bullet.console       = true
     Bullet.add_footer    = true
   end
+
+  # Hardcoded encryption keys for local dev. Production reads these from credentials —
+  # run `bin/rails db:encryption:init` and store the output via `bin/rails credentials:edit`.
+  config.active_record.encryption.primary_key            = "dev_primary_key_dev_primary_key_d"
+  config.active_record.encryption.deterministic_key      = "dev_deterministic_key_dev_determ"
+  config.active_record.encryption.key_derivation_salt    = "dev_key_derivation_salt_dev_salt"
 end

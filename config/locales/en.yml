@@ -1,6 +1,8 @@
 en:
   errors:
-    not_authorized: "You are not authorized to perform this action."
+    not_authorized:     "You are not authorized to perform this action."
+    privacy_required:   "must be accepted to register"
+    rate_limited:       "Too many attempts. Try again later."
 
   flash:
     request_created:    "Request created."
@@ -12,6 +14,13 @@ en:
     message_sent:       "Message sent."
     pipeline_advanced:  "Moved to next stage."
     pipeline_retreated: "Moved back to previous stage."
+    registered:         "Welcome aboard."
+
+  registrations:
+    title:          "Create your account"
+    submit:         "Sign up"
+    privacy_accept: "I accept the privacy policy."
+    have_account:   "Already have an account?"
 
   pipeline:
     stages:
@@ -54,5 +63,6 @@ en:
     dashboard:     "Dashboard"
     requests:      "Requests"
     conversations: "Messages"
+    pipeline:      "Pipeline"
     profile:       "Profile"
     sign_out:      "Sign out"

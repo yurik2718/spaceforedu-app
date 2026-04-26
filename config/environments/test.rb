@@ -53,4 +53,10 @@ Rails.application.configure do
 
   # Raise on lazy-loaded associations — N+1 breaks the test, not just warns.
   config.active_record.strict_loading_by_default = true
+
+  # Hardcoded keys for test environment so PII encryption (encrypts :phone, ...) round-trips
+  # without depending on Rails encrypted credentials. Production/dev keys live in credentials.
+  config.active_record.encryption.primary_key            = "test_primary_key_test_primary_key"
+  config.active_record.encryption.deterministic_key      = "test_deterministic_key_test_determ"
+  config.active_record.encryption.key_derivation_salt    = "test_key_derivation_salt_test_salt"
 end

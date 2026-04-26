@@ -20,3 +20,11 @@ student_other:
   name: Maria
   role: student
   country: AR
+
+discarded_user:
+  email_address: gone@example.com
+  password_digest: <%= password_digest %>
+  name: Gone
+  role: student
+  country: ES
+  discarded_at: <%= 1.day.ago %>

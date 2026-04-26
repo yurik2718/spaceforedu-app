@@ -1,6 +1,8 @@
 es:
   errors:
-    not_authorized: "No tienes permiso para realizar esta acción."
+    not_authorized:     "No tienes permiso para realizar esta acción."
+    privacy_required:   "debe ser aceptada para registrarse"
+    rate_limited:       "Demasiados intentos. Inténtalo más tarde."
 
   flash:
     request_created:    "Solicitud creada."
@@ -12,6 +14,13 @@ es:
     message_sent:       "Mensaje enviado."
     pipeline_advanced:  "Avanzada a la siguiente etapa."
     pipeline_retreated: "Devuelta a la etapa anterior."
+    registered:         "Bienvenido a bordo."
+
+  registrations:
+    title:          "Crea tu cuenta"
+    submit:         "Registrarse"
+    privacy_accept: "Acepto la política de privacidad."
+    have_account:   "¿Ya tienes una cuenta?"
 
   pipeline:
     stages:
@@ -54,5 +63,6 @@ es:
     dashboard:     "Panel"
     requests:      "Solicitudes"
     conversations: "Mensajes"
+    pipeline:      "Pipeline"
     profile:       "Perfil"
     sign_out:      "Cerrar sesión"

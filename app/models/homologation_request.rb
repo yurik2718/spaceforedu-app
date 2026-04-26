@@ -32,14 +32,16 @@ class HomologationRequest < ApplicationRecord
   end
 
   def confirm_payment!(confirmed_by:)
-    update!(
-      payment_confirmed_at: Time.current,
-      payment_confirmed_by: confirmed_by.id,
-      pipeline_stage:       PipelineFlow::STARTING_STAGE,
-      pipeline_changed_at:  Time.current,
-      pipeline_changed_by:  confirmed_by.id
-    )
-    transition_to!("payment_confirmed", changed_by: confirmed_by)
+    transaction do
+      update!(
+        payment_confirmed_at: Time.current,
+        payment_confirmed_by: confirmed_by.id,
+        pipeline_stage:       PipelineFlow::STARTING_STAGE,
+        pipeline_changed_at:  Time.current,
+        pipeline_changed_by:  confirmed_by.id
+      )
+      transition_to!("payment_confirmed", changed_by: confirmed_by)
+    end
   end
 
   def advance_pipeline!(changed_by:)

@@ -1,0 +1,12 @@
+unread_status_change:
+  user: student_es
+  notifiable: in_pipeline_es (HomologationRequest)
+  title: "Status changed"
+  body: "Your request is in review"
+
+already_read_message:
+  user: student_es
+  notifiable: in_pipeline_es (HomologationRequest)
+  title: "New message"
+  body: "Admin replied"
+  read_at: <%= 1.hour.ago %>

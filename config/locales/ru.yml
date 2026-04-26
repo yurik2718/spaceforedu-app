@@ -1,6 +1,8 @@
 ru:
   errors:
-    not_authorized: "У вас нет прав для выполнения этого действия."
+    not_authorized:     "У вас нет прав для выполнения этого действия."
+    privacy_required:   "должна быть принята для регистрации"
+    rate_limited:       "Слишком много попыток. Попробуйте позже."
 
   flash:
     request_created:    "Заявка создана."
@@ -12,6 +14,13 @@ ru:
     message_sent:       "Сообщение отправлено."
     pipeline_advanced:  "Передвинуто на следующий этап."
     pipeline_retreated: "Возвращено на предыдущий этап."
+    registered:         "Добро пожаловать."
+
+  registrations:
+    title:          "Создайте аккаунт"
+    submit:         "Зарегистрироваться"
+    privacy_accept: "Принимаю политику конфиденциальности."
+    have_account:   "Уже есть аккаунт?"
 
   pipeline:
     stages:
@@ -54,5 +63,6 @@ ru:
     dashboard:     "Панель"
     requests:      "Заявки"
     conversations: "Сообщения"
+    pipeline:      "Пайплайн"
     profile:       "Профиль"
     sign_out:      "Выйти"

@@ -14,9 +14,9 @@ class Conversation < ApplicationRecord
 
   def mark_read_for!(user)
     if user.super_admin?
-      update_column(:admin_last_read_at, Time.current)
+      update!(admin_last_read_at: Time.current)
     else
-      update_column(:student_last_read_at, Time.current)
+      update!(student_last_read_at: Time.current)
     end
   end
 end

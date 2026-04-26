@@ -1,0 +1,7 @@
+<div id="<%= dom_id(message) %>" class="chat <%= message.user.super_admin? ? 'chat-end' : 'chat-start' %>">
+  <div class="chat-header">
+    <%= message.user.name %>
+    <time class="text-xs opacity-50"><%= l message.created_at, format: :short %></time>
+  </div>
+  <div class="chat-bubble"><%= message.body %></div>
+</div>

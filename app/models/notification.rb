@@ -7,6 +7,7 @@ class Notification < ApplicationRecord
   after_create_commit -> { broadcast_prepend_to user, target: "notifications" }
 
   def mark_read!
-    update_column(:read_at, Time.current) unless read_at?
+    return if read_at?
+    update!(read_at: Time.current)
   end
 end

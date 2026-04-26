@@ -1,0 +1,7 @@
+<div id="<%= dom_id(notification) %>" class="alert <%= notification.read_at? ? 'opacity-60' : 'alert-info' %>">
+  <div>
+    <h4 class="font-bold"><%= notification.title %></h4>
+    <p class="text-sm"><%= notification.body %></p>
+    <time class="text-xs opacity-70"><%= l notification.created_at, format: :short %></time>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+old_admin_hello:
+  conversation: in_pipeline_es
+  user: admin
+  body: "Welcome, please send your diploma."
+  created_at: <%= 3.days.ago %>

@@ -8,6 +8,6 @@ class Message < ApplicationRecord
 
   private
     def touch_conversation
-      conversation.update_column(:last_message_at, created_at)
+      conversation.update!(last_message_at: created_at)
     end
 end
