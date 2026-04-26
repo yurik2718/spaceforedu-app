@@ -1,0 +1,45 @@
+ru:
+  errors:
+    not_authorized: "У вас нет прав для выполнения этого действия."
+
+  flash:
+    request_created:   "Заявка создана."
+    request_submitted: "Заявка отправлена. Мы уведомим вас после проверки."
+    request_updated:   "Заявка обновлена."
+    request_deleted:   "Заявка удалена."
+    payment_confirmed: "Оплата подтверждена. Ваша заявка в работе."
+    user_updated:      "Профиль обновлён."
+    message_sent:      "Сообщение отправлено."
+
+  requests:
+    status:
+      draft:             "Черновик"
+      submitted:         "Отправлена"
+      in_review:         "На проверке"
+      awaiting_reply:    "Ожидает ответа"
+      awaiting_payment:  "Ожидает оплаты"
+      payment_confirmed: "Оплата подтверждена"
+      in_progress:       "В работе"
+      resolved:          "Решена"
+      closed:            "Закрыта"
+
+  roles:
+    super_admin: "Администратор"
+    student:     "Студент"
+
+  actions:
+    view:   "Просмотр"
+    edit:   "Редактировать"
+    delete: "Удалить"
+    cancel: "Отмена"
+    save:   "Сохранить"
+    submit: "Отправить"
+    back:   "Назад"
+    send:   "Отправить"
+
+  nav:
+    dashboard:     "Панель"
+    requests:      "Заявки"
+    conversations: "Сообщения"
+    profile:       "Профиль"
+    sign_out:      "Выйти"

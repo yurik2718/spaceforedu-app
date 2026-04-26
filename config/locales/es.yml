@@ -1,0 +1,45 @@
+es:
+  errors:
+    not_authorized: "No tienes permiso para realizar esta acción."
+
+  flash:
+    request_created:   "Solicitud creada."
+    request_submitted: "Solicitud enviada. Te notificaremos cuando sea revisada."
+    request_updated:   "Solicitud actualizada."
+    request_deleted:   "Solicitud eliminada."
+    payment_confirmed: "Pago confirmado. Tu solicitud está en proceso."
+    user_updated:      "Perfil actualizado."
+    message_sent:      "Mensaje enviado."
+
+  requests:
+    status:
+      draft:             "Borrador"
+      submitted:         "Enviada"
+      in_review:         "En revisión"
+      awaiting_reply:    "Esperando respuesta"
+      awaiting_payment:  "Pendiente de pago"
+      payment_confirmed: "Pago confirmado"
+      in_progress:       "En proceso"
+      resolved:          "Resuelta"
+      closed:            "Cerrada"
+
+  roles:
+    super_admin: "Administrador"
+    student:     "Estudiante"
+
+  actions:
+    view:   "Ver"
+    edit:   "Editar"
+    delete: "Eliminar"
+    cancel: "Cancelar"
+    save:   "Guardar"
+    submit: "Enviar"
+    back:   "Volver"
+    send:   "Enviar"
+
+  nav:
+    dashboard:     "Panel"
+    requests:      "Solicitudes"
+    conversations: "Mensajes"
+    profile:       "Perfil"
+    sign_out:      "Cerrar sesión"

@@ -18,7 +18,22 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1"
+
+# Authorization
+gem "pundit"
+
+# Pagination
+gem "pagy"
+
+# Locale data for dates, numbers, currencies across all languages
+gem "rails-i18n"
+
+# Prevent dangerous migrations (missing null constraints, locking migrations, etc.)
+gem "strong_migrations"
+
+# Rate limiting (brute force protection on login)
+gem "rack-attack"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -57,10 +72,22 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Preview emails in browser instead of sending
+  gem "letter_opener"
+
+  # Hot-reload HTML/CSS changes without server restart [https://github.com/basecamp/hotwire-spark]
+  gem "hotwire-spark"
+
+  # Detect N+1 queries and unused eager loading
+  gem "bullet"
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Mock HTTP requests (Stripe, Telegram)
+  gem "webmock"
 end

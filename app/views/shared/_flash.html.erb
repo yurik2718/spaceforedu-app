@@ -1,0 +1,9 @@
+<% if flash.any? %>
+  <div id="flash" class="container mx-auto px-4 pt-4 space-y-2">
+    <% flash.each do |type, message| %>
+      <div class="alert <%= flash_alert_class(type) %> shadow-sm">
+        <span><%= message %></span>
+      </div>
+    <% end %>
+  </div>
+<% end %>
