@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_26_080005) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_26_080006) do
   create_table "conversations", force: :cascade do |t|
     t.datetime "admin_last_read_at"
     t.datetime "created_at", null: false
@@ -35,6 +35,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_080005) do
     t.decimal "payment_amount", precision: 10, scale: 2
     t.datetime "payment_confirmed_at"
     t.integer "payment_confirmed_by"
+    t.datetime "pipeline_changed_at"
+    t.integer "pipeline_changed_by"
     t.text "pipeline_notes"
     t.string "pipeline_stage"
     t.boolean "privacy_accepted", default: false, null: false
@@ -52,6 +54,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_080005) do
     t.integer "user_id", null: false
     t.integer "year"
     t.index ["discarded_at"], name: "index_homologation_requests_on_discarded_at"
+    t.index ["pipeline_changed_at"], name: "index_homologation_requests_on_pipeline_changed_at"
     t.index ["pipeline_stage"], name: "index_homologation_requests_on_pipeline_stage"
     t.index ["status"], name: "index_homologation_requests_on_status"
     t.index ["updated_at"], name: "index_homologation_requests_on_updated_at"
@@ -130,6 +133,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_080005) do
   add_foreign_key "conversations", "homologation_requests"
   add_foreign_key "homologation_requests", "users"
   add_foreign_key "homologation_requests", "users", column: "payment_confirmed_by"
+  add_foreign_key "homologation_requests", "users", column: "pipeline_changed_by"
   add_foreign_key "homologation_requests", "users", column: "status_changed_by"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"

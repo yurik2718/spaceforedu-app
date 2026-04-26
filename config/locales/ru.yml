@@ -3,13 +3,26 @@ ru:
     not_authorized: "У вас нет прав для выполнения этого действия."
 
   flash:
-    request_created:   "Заявка создана."
-    request_submitted: "Заявка отправлена. Мы уведомим вас после проверки."
-    request_updated:   "Заявка обновлена."
-    request_deleted:   "Заявка удалена."
-    payment_confirmed: "Оплата подтверждена. Ваша заявка в работе."
-    user_updated:      "Профиль обновлён."
-    message_sent:      "Сообщение отправлено."
+    request_created:    "Заявка создана."
+    request_submitted:  "Заявка отправлена. Мы уведомим вас после проверки."
+    request_updated:    "Заявка обновлена."
+    request_deleted:    "Заявка удалена."
+    payment_confirmed:  "Оплата подтверждена. Ваша заявка в работе."
+    user_updated:       "Профиль обновлён."
+    message_sent:       "Сообщение отправлено."
+    pipeline_advanced:  "Передвинуто на следующий этап."
+    pipeline_retreated: "Возвращено на предыдущий этап."
+
+  pipeline:
+    stages:
+      pago_recibido:     "Оплата получена"
+      documentos:        "Документы"
+      traduccion:        "Перевод"
+      tasas_volantes:    "Тасы и воланты"
+      redsara:           "Подача в RedSARA"
+      cotejo_ministerio: "Cotejo (министерство)"
+      cotejo_delegacion: "Cotejo (делегация)"
+      completado:        "Завершено"
 
   requests:
     status:

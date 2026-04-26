@@ -3,13 +3,26 @@ es:
     not_authorized: "No tienes permiso para realizar esta acción."
 
   flash:
-    request_created:   "Solicitud creada."
-    request_submitted: "Solicitud enviada. Te notificaremos cuando sea revisada."
-    request_updated:   "Solicitud actualizada."
-    request_deleted:   "Solicitud eliminada."
-    payment_confirmed: "Pago confirmado. Tu solicitud está en proceso."
-    user_updated:      "Perfil actualizado."
-    message_sent:      "Mensaje enviado."
+    request_created:    "Solicitud creada."
+    request_submitted:  "Solicitud enviada. Te notificaremos cuando sea revisada."
+    request_updated:    "Solicitud actualizada."
+    request_deleted:    "Solicitud eliminada."
+    payment_confirmed:  "Pago confirmado. Tu solicitud está en proceso."
+    user_updated:       "Perfil actualizado."
+    message_sent:       "Mensaje enviado."
+    pipeline_advanced:  "Avanzada a la siguiente etapa."
+    pipeline_retreated: "Devuelta a la etapa anterior."
+
+  pipeline:
+    stages:
+      pago_recibido:     "Pago recibido"
+      documentos:        "Documentos"
+      traduccion:        "Traducción"
+      tasas_volantes:    "Tasas y volantes"
+      redsara:           "Envío RedSARA"
+      cotejo_ministerio: "Cotejo (Ministerio)"
+      cotejo_delegacion: "Cotejo (Delegación)"
+      completado:        "Completado"
 
   requests:
     status:

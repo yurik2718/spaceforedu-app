@@ -9,6 +9,47 @@ Rails 8 application for international students seeking document-equivalence (hom
 
 **Never run `git commit`. Only the human owner commits.** Edit files, run `git status` / `git diff` / `git log`, and `git add` only when explicitly asked. Leave finished work in the working tree and report the diff.
 
+## TDD — IRON RULE
+
+**NOT A SINGLE LINE OF CODE WITHOUT QUALITY TESTS FIRST. NON-NEGOTIABLE.**
+
+Every behavior change goes through Red → Green → Refactor. There is no other way to write code in this project.
+
+**The cycle, every time:**
+
+1. **Red** — write one minimal test that describes the desired contract. Run it. It must fail. Show the failing test to the user before writing any implementation.
+2. **Green** — write the simplest implementation that turns that one test green. No extra code. No anticipation of the next test. No "while I'm here" cleanups.
+3. **Refactor** — clean up with the green test bar held throughout. Run tests after every change. If nothing needs cleaning, skip this step.
+
+**Hard rules — these are violations of doctrine:**
+
+- **No implementation without a failing test in front of it.** Writing the model method first and then "adding tests to cover it" is test-after, not TDD. It is forbidden.
+- **One test per iteration.** Never write 5 tests up front and then 5 implementations. Red → Green → Refactor → next test. The discipline only works one cycle at a time.
+- **Tests describe observable behavior, not implementation details.** A test that asserts "after `confirm_payment!`, `pipeline_stage` equals `pago_recibido`" is a contract. A test that asserts "the YAML hash has 8 keys" is internal trivia. Write the first kind, never the second.
+- **Tests must be high-quality, not just present.** A test is high-quality when: (a) it would fail if the behavior broke, (b) its name describes the behavior in plain language, (c) the arrange/act/assert structure is obvious at a glance, (d) it does not duplicate another test's coverage. A test that passes regardless of the implementation is not a test — it is theatre. Delete it.
+- **Minimum viable implementation in the Green step.** If the test says "advance from `documentos` returns `traduccion`", `def advance = "traduccion"` is correct on that step. Generalization comes from the next test, not from imagined needs.
+- **Bug fix = failing test first.** Reproduce the bug as a red test, then fix. A bug fix without a regression test is not done.
+- **Refactor never changes behavior.** If you need to change behavior, that's a new Red test. The same suite must pass before and after refactoring, byte-for-byte.
+- **Do not skip TDD because something is "trivial".** Renames are trivial; getters are trivial; constants are trivial. The discipline is the point. Slipping on small things is how the dam breaks.
+
+**Pause points — agent must stop and show the user:**
+
+- After Red: show the failing test and its output, *before* writing implementation.
+- After Green: show the diff and the green test run.
+- After Refactor: show the diff and the green test run.
+
+The user approves each step. The agent does not chain Red → Green → next Red without the user seeing the green in between.
+
+**Coverage requirements:**
+
+- Every model method that changes state — model test.
+- Every controller action — controller test (status, redirect/render, side effects).
+- Every Pundit policy method — policy test.
+- Every Turbo Stream broadcast — system test that watches the DOM update.
+- Every background job — job test that asserts the work was performed.
+
+If a piece of behavior cannot be tested, that is a design problem — fix the design, not the test.
+
 ## MVP Scope
 
 Ship and validate the core homologation flow with real students before adding anything else.
@@ -102,14 +143,18 @@ Single `role` string column on `users`, enforced by a DB check constraint.
 - Telegram opt-in: `telegram_chat_id`, `telegram_link_token`, `notification_telegram`
 - GDPR: `deletion_requested_at` flags a pending erasure; the row is kept, PII is nullified or re-encrypted, `discarded_at` is set.
 
-**HomologationRequest** — core model. Status flow:
+**HomologationRequest** — core model. Two parallel lifecycles:
 
-```
-draft → submitted → in_review ⇄ awaiting_reply → awaiting_payment
-       → payment_confirmed → in_progress → resolved | closed
-```
+1. **Status** (visible to student) — request lifecycle:
+   ```
+   draft → submitted → in_review ⇄ awaiting_reply → awaiting_payment
+          → payment_confirmed → in_progress → resolved | closed
+   ```
+2. **Pipeline** (super_admin only) — physical processing of documents *after payment*. See `### Pipeline (super_admin)` below.
 
-The DB check constraint enforces the *set* of valid statuses. Allowed *transitions* are policed inside `transition_to!(new_status, changed_by:)` — that is the only sanctioned write path. Never `update(status: ...)` directly. Add a new edge in `transition_to!`, not at the call site. Audit columns `status_changed_by` / `status_changed_at` are written by the same method; `payment_confirmed_by` / `payment_confirmed_at` are written by `confirm_payment!`.
+The DB check constraint enforces the *set* of valid statuses. The model's `transition_to!(new_status, changed_by:)` is the only sanctioned write path for `status`. Never `update(status: ...)` directly. Today the method validates the set; transition edges are policed by callers — when reverse edges become a real concern, the edge map moves into `transition_to!`. Audit columns `status_changed_by` / `status_changed_at` are written by the same method; `payment_confirmed_by` / `payment_confirmed_at` are written by `confirm_payment!`.
+
+`confirm_payment!(confirmed_by:)` does three things atomically: sets payment audit columns, transitions status to `payment_confirmed`, and seeds `pipeline_stage` with `PipelineFlow::STARTING_STAGE` ("pago_recibido"). Pipeline never starts without a confirmed payment.
 
 Soft delete via `discarded_at`. Always query through `.kept`.
 
@@ -118,11 +163,49 @@ Three Active Storage attachments:
 - `originals` — `has_many_attached`, original certificates/diplomas
 - `documents` — `has_many_attached`, supporting paperwork
 
+`document_checklist` is a JSON column (text + `serialize :document_checklist, coder: JSON`) — boolean flags keyed by short codes from `config/pipeline.yml#checklist_keys`. View access through `request.checklist_done?(key)`, never `dig` from a template.
+
 **Conversation** — one per `HomologationRequest`. `last_message_at` for ordering. `student_last_read_at` and `admin_last_read_at` columns drive unread counts (no join table).
 
 **Message** — `belongs_to :conversation`, `belongs_to :user`, `has_many_attached :attachments`. Broadcasts via `after_create_commit`.
 
 **Notification** — in-app, polymorphic on `notifiable` (`notifiable_type` / `notifiable_id`; today: `HomologationRequest`, `Message`). Broadcasts via Turbo Streams on create. Delivered async to email and Telegram via `NotificationDeliveryJob`. `read_at` and `emailed_at` track delivery.
+
+### Pipeline (super_admin)
+
+Pipeline is the admin's **physical processing workflow** over a request *after payment is confirmed*. It is **not** `status` — `status` is the request's visible lifecycle to the student; `pipeline_stage` is the admin's internal map of where the paperwork is.
+
+Stages live in `config/pipeline.yml`, grouped by `display`:
+
+| `display: kanban` (linear path) | `display: horizontal` (final group) |
+|---|---|
+| `pago_recibido` → `documentos` → `traduccion` → `tasas_volantes` → `redsara` | `cotejo_ministerio` / `cotejo_delegacion` → `completado` |
+
+After `redsara` the path branches by `user.country`: countries listed in `config/pipeline.yml#cotejo.ministerio_countries` go to `cotejo_ministerio`; everyone else routes to `cotejo.default` (`cotejo_delegacion`). Both cotejo branches converge on `completado`.
+
+`PipelineFlow` is the single source of truth for stage traversal. It reads `config/pipeline.yml` once per process (`PipelineFlow.reload!` for tests) and exposes:
+- `next_stage(current, country:)` / `previous_stage(current, country:)` — branching is hidden from callers
+- `kanban_stages` / `horizontal_stages` / `all_stages` — derived from YAML, not hard-coded in views or controllers
+- `cotejo_for(country)` — branch resolver
+
+Two write methods on `HomologationRequest`, both stamping `pipeline_changed_at` / `pipeline_changed_by`:
+- `advance_pipeline!(changed_by:)` — moves to the next stage; raises `InvalidTransition` past `completado`. Bound to the `→` button on the kanban card.
+- `retreat_pipeline!(changed_by:, reason:)` — moves back one stage. **`reason` is required** (`ArgumentError` on blank). The retreat is appended to `pipeline_notes` as `[ts] email old_stage → new_stage: reason` so the audit trail is permanent. Bound to a separate "↩ откат" button that opens a form requiring the reason — never a one-click action.
+
+Each pipeline transition is its own resource:
+```ruby
+namespace :admin do
+  resource :pipeline, only: :show
+  resources :homologation_requests, only: [], module: :homologation_requests do
+    resource :pipeline_advance, only: :create
+    resource :pipeline_retreat, only: :create
+  end
+end
+```
+
+Drag-and-drop is deliberately not implemented. If kanban-buttons stop being enough after real usage, drag is added as a second iteration: explicit edge map in `advance_pipeline!`, server-side validation of the drop, optimistic UI rollback on error, system test with real `drag_to`.
+
+Authorization: `PipelinePolicy#show?` and `HomologationRequestPolicy#manage_pipeline?` — both `super_admin?` only. Index controller uses `policy_scope` so `verify_policy_scoped` is satisfied.
 
 ### Real-time
 
@@ -403,6 +486,8 @@ end
 
 ## Testing
 
+The TDD discipline is defined at the top of this document under **TDD — IRON RULE**. That section is the contract; what follows here is the toolchain.
+
 - Minitest for unit, controller, integration, and mailer tests
 - Capybara + Selenium for system tests covering the 5 MVP flow steps
 - Rails fixtures (YAML) — no FactoryBot, no Faker
@@ -410,10 +495,11 @@ end
 - Tests run in parallel by default; fixtures are written to be parallel-safe
 - `bin/rails test` for unit/controller; `bin/rails test:system` for system; `bin/ci` runs everything
 
-Every controller action gets a controller test. Every Pundit policy gets a policy test. Every Turbo Stream broadcast gets a system test that watches the DOM update.
-
 ## Banned
 
+- **Writing implementation code without a failing test in front of it** — see TDD — IRON RULE at the top
+- **Test-after** (writing tests for code that already exists) — that is not TDD, it is theatre
+- **Skipping the user-visible Red → Green → Refactor pause points** — the agent must show the failing test, then the green diff, then the refactor (if any), waiting for user acknowledgment between phases
 - `fetch()` / `axios` — use Turbo + `button_to` / `form_with`
 - `render json:` outside the Stripe webhook controller — no API mode; respond with HTML or `turbo_stream`
 - `window.location` — use `redirect_to` or Turbo
@@ -427,5 +513,9 @@ Every controller action gets a controller test. Every Pundit policy gets a polic
 - `update_column` / `update_columns` / `update_all` / `delete_all` — bypasses callbacks, validations, and soft delete
 - Hard-deleting `User`, `HomologationRequest`, `Message`, or payment rows
 - Writing `status` directly — go through `transition_to!`
+- Writing `pipeline_stage` directly — go through `advance_pipeline!` / `retreat_pipeline!`. `confirm_payment!` is the only other writer (it seeds the pipeline)
+- One-click pipeline retreat — `retreat_pipeline!` requires a non-blank `reason`; the UI must collect it through a form, not pass a hardcoded string
+- Hard-coded pipeline stage lists in controllers or views — read from `PipelineFlow` (`kanban_stages`, `horizontal_stages`, `all_stages`)
+- `dig`-ing into `document_checklist` from a template — call `request.checklist_done?(key)`
 - New `app/javascript/` files for behavior expressible as a Stimulus controller
 - Secrets in ENV beyond `RAILS_MASTER_KEY` — use Rails encrypted credentials
