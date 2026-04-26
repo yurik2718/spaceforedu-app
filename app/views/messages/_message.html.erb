@@ -1,4 +1,7 @@
-<div id="<%= dom_id(message) %>" class="chat <%= message.user.super_admin? ? 'chat-end' : 'chat-start' %>">
+<div id="<%= dom_id(message) %>"
+     class="chat chat-start"
+     data-controller="message"
+     data-user-id="<%= message.user_id %>">
   <div class="chat-header">
     <%= message.user.name %>
     <time class="text-xs opacity-50"><%= l message.created_at, format: :short %></time>

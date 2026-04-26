@@ -34,6 +34,7 @@ ru:
       completado:        "Завершено"
 
   requests:
+    empty: "У вас пока нет заявок."
     status:
       draft:             "Черновик"
       submitted:         "Отправлена"
@@ -59,10 +60,14 @@ ru:
     back:   "Назад"
     send:   "Отправить"
 
+  messages:
+    placeholder: "Введите сообщение..."
+
   nav:
     dashboard:     "Панель"
     requests:      "Заявки"
     conversations: "Сообщения"
     pipeline:      "Пайплайн"
     profile:       "Профиль"
+    sign_in:       "Войти"
     sign_out:      "Выйти"

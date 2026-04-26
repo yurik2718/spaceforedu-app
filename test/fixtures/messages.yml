@@ -3,3 +3,9 @@ old_admin_hello:
   user: admin
   body: "Welcome, please send your diploma."
   created_at: <%= 3.days.ago %>
+
+student_reply:
+  conversation: in_pipeline_es
+  user: student_es
+  body: "Thank you! I will send them today."
+  created_at: <%= 2.days.ago %>

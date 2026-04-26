@@ -6,3 +6,6 @@ at_redsara_es:
 
 at_completado:
   homologation_request: at_completado
+
+at_redsara_other:
+  homologation_request: at_redsara_other

@@ -65,6 +65,7 @@ class ConversationTest < ActiveSupport::TestCase
   end
 
   test "destroying a conversation destroys its messages" do
-    assert_difference("Message.count", -1) { @conversation.destroy }
+    expected = -@conversation.messages.count
+    assert_difference("Message.count", expected) { @conversation.destroy }
   end
 end

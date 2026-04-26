@@ -34,6 +34,7 @@ es:
       completado:        "Completado"
 
   requests:
+    empty: "Todavía no tienes ninguna solicitud."
     status:
       draft:             "Borrador"
       submitted:         "Enviada"
@@ -59,10 +60,14 @@ es:
     back:   "Volver"
     send:   "Enviar"
 
+  messages:
+    placeholder: "Escribe un mensaje..."
+
   nav:
     dashboard:     "Panel"
     requests:      "Solicitudes"
     conversations: "Mensajes"
     pipeline:      "Pipeline"
     profile:       "Perfil"
+    sign_in:       "Iniciar sesión"
     sign_out:      "Cerrar sesión"

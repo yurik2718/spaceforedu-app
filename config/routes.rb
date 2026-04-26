@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
-  resource :session
-  resource :registration, only: %i[new create]
+  resource  :session
+  resource  :registration, only: %i[new create]
   resources :passwords, param: :token
+
+  resources :conversations, only: :show do
+    resources :messages, only: :create
+  end
 
   namespace :admin do
     resource :pipeline, only: :show

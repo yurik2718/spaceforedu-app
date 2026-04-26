@@ -28,8 +28,8 @@ class MessageTest < ActiveSupport::TestCase
     assert_equal later.created_at, @conversation.reload.last_message_at
   end
 
-  test "body NOT NULL: creating a message without body raises NotNullViolation" do
-    assert_raises(ActiveRecord::NotNullViolation) do
+  test "creating a message without body is invalid" do
+    assert_raises(ActiveRecord::RecordInvalid) do
       @conversation.messages.create!(user: @student, body: nil)
     end
   end

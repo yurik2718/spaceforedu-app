@@ -8,6 +8,19 @@ module ApplicationHelper
     end
   end
 
+  def status_badge_class(status)
+    case status
+    when "draft"                        then "badge-neutral"
+    when "submitted", "in_review"       then "badge-info"
+    when "awaiting_reply",
+         "awaiting_payment"             then "badge-warning"
+    when "payment_confirmed", "resolved" then "badge-success"
+    when "in_progress"                  then "badge-primary"
+    when "closed"                       then "badge-neutral"
+    else                                     "badge-neutral"
+    end
+  end
+
   def nav_link_class(section)
     current_page_section?(section) ? "active" : ""
   end

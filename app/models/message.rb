@@ -3,6 +3,8 @@ class Message < ApplicationRecord
   belongs_to :user
   has_many_attached :attachments
 
+  validates :body, presence: true
+
   after_create_commit -> { broadcast_append_to conversation }
   after_create_commit :touch_conversation
 

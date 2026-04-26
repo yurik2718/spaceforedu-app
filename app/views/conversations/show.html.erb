@@ -1,0 +1,16 @@
+<%= turbo_stream_from @conversation %>
+
+<div class="flex flex-col h-[calc(100vh-4rem)] max-w-2xl mx-auto">
+  <div class="border-b border-base-300 px-4 py-3 flex-shrink-0">
+    <h2 class="font-semibold text-lg"><%= @conversation.homologation_request.subject %></h2>
+    <p class="text-sm text-base-content/60"><%= @conversation.student.name %></p>
+  </div>
+
+  <div id="messages"
+       class="flex-1 overflow-y-auto p-4 flex flex-col gap-1"
+       data-current-user-id="<%= Current.user.id %>">
+    <%= render @messages %>
+  </div>
+
+  <%= render "messages/form", conversation: @conversation, message: @message %>
+</div>
