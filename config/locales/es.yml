@@ -62,6 +62,15 @@ es:
       US: "Estados Unidos"
       OTHER: "Otro"
 
+  auth:
+    password:               "Contraseña"
+    new_password:           "Nueva contraseña"
+    repeat_password:        "Repetir nueva contraseña"
+    forgot_password:        "¿Olvidaste tu contraseña?"
+    password_reset_title:   "Recuperar contraseña"
+    password_reset_submit:  "Enviar instrucciones"
+    password_update_title:  "Establecer nueva contraseña"
+
   registrations:
     title:          "Crea tu cuenta"
     submit:         "Registrarse"
