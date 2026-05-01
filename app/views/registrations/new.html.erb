@@ -5,7 +5,7 @@
 <%= form_with model: @user, url: registration_path, class: "card bg-base-100 shadow max-w-md mx-auto" do |f| %>
   <div class="card-body">
     <% if @user.errors.any? %>
-      <div class="alert alert-error mb-4">
+      <div class="alert alert-error">
         <ul>
           <% @user.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
@@ -14,38 +14,40 @@
       </div>
     <% end %>
 
-    <div class="form-control mb-3">
-      <%= f.label :name, class: "label" %>
+    <fieldset class="fieldset">
+      <label class="label" for="<%= f.field_id(:name) %>"><%= t("profile.fields.name") %></label>
       <%= f.text_field :name, class: "input input-bordered w-full", required: true %>
-    </div>
+    </fieldset>
 
-    <div class="form-control mb-3">
-      <%= f.label :email_address, class: "label" %>
-      <%= f.email_field :email_address, class: "input input-bordered w-full", required: true %>
-    </div>
+    <fieldset class="fieldset">
+      <label class="label" for="<%= f.field_id(:email_address) %>"><%= t("profile.fields.email_address") %></label>
+      <%= f.email_field :email_address, class: "input input-bordered w-full", required: true, autocomplete: "username" %>
+    </fieldset>
 
-    <div class="form-control mb-3">
-      <%= f.label :password, class: "label" %>
-      <%= f.password_field :password, class: "input input-bordered w-full", required: true %>
-    </div>
+    <fieldset class="fieldset">
+      <label class="label" for="<%= f.field_id(:password) %>"><%= t("auth.password") %></label>
+      <%= f.password_field :password, class: "input input-bordered w-full", required: true, autocomplete: "new-password", maxlength: 72 %>
+    </fieldset>
 
-    <div class="form-control mb-3">
-      <%= f.label :password_confirmation, class: "label" %>
-      <%= f.password_field :password_confirmation, class: "input input-bordered w-full", required: true %>
-    </div>
+    <fieldset class="fieldset">
+      <label class="label" for="<%= f.field_id(:password_confirmation) %>"><%= t("auth.repeat_password") %></label>
+      <%= f.password_field :password_confirmation, class: "input input-bordered w-full", required: true, autocomplete: "new-password", maxlength: 72 %>
+    </fieldset>
 
-    <div class="form-control mb-4">
+    <fieldset class="fieldset">
       <label class="label cursor-pointer justify-start gap-2">
         <%= f.check_box :privacy_accepted, { class: "checkbox" }, "1", "0" %>
         <span><%= t("registrations.privacy_accept") %></span>
       </label>
+    </fieldset>
+
+    <div class="card-actions justify-end pt-2">
+      <%= f.submit t("registrations.submit"), class: "btn btn-primary" %>
     </div>
 
-    <%= f.submit t("registrations.submit"), class: "btn btn-primary w-full" %>
-
-    <p class="text-sm text-center mt-4">
+    <p class="text-sm text-center opacity-70 pt-2">
       <%= t("registrations.have_account") %>
-      <%= link_to t("nav.sign_in", default: "Sign in"), new_session_path, class: "link" %>
+      <%= link_to t("nav.sign_in"), new_session_path, class: "link" %>
     </p>
   </div>
 <% end %>
