@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "message_form" do %>
-  <div class="border-t border-base-300 p-4">
+  <div class="border-t border-base-300 p-3 flex-shrink-0 bg-base-100">
     <%= form_with model: [ conversation, message ] do |f| %>
       <div class="flex gap-2 items-end">
         <%= f.text_area :body,
@@ -8,7 +8,7 @@
               rows: 2,
               required: true,
               autofocus: true %>
-        <%= f.submit t("actions.send"), class: "btn btn-primary self-end" %>
+        <%= f.submit t("actions.send"), class: "btn btn-primary" %>
       </div>
       <% if message.errors.any? %>
         <p class="text-error text-sm mt-1"><%= message.errors.full_messages.to_sentence %></p>

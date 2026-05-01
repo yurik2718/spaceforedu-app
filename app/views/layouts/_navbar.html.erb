@@ -1,12 +1,30 @@
 <nav class="navbar bg-base-100 shadow-sm">
   <div class="navbar-start">
+    <% if current_user %>
+      <div class="dropdown lg:hidden">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-sm btn-circle" aria-label="<%= t("nav.menu") %>">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </div>
+        <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
+          <% if current_user.super_admin? %>
+            <li><%= link_to t("nav.pipeline"), admin_pipeline_path %></li>
+          <% elsif current_user.student? %>
+            <li><%= link_to t("nav.my_requests"), root_path %></li>
+            <li><%= link_to t("nav.new_request"), new_homologation_request_path %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <%= link_to "Homologation", root_path, class: "btn btn-ghost text-lg font-semibold" %>
   </div>
 
   <% unless current_user %>
     <div class="navbar-end gap-2">
       <%= render "layouts/locale_switcher" %>
-      <%= link_to t("nav.sign_in", default: "Sign in"), new_session_path, class: "btn btn-ghost btn-sm" %>
+      <%= link_to t("nav.sign_in"), new_session_path, class: "btn btn-ghost btn-sm" %>
       <%= link_to t("registrations.submit"), new_registration_path, class: "btn btn-primary btn-sm" %>
     </div>
   <% end %>
@@ -43,8 +61,6 @@
           <span class="badge badge-sm badge-error indicator-item"><%= unread_count %></span>
         <% end %>
       <% end %>
-
-      <div id="notifications" class="hidden"></div>
 
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">

@@ -2,9 +2,10 @@
      class="chat chat-start"
      data-controller="message"
      data-user-id="<%= message.user_id %>">
-  <div class="chat-header">
+  <div class="chat-header opacity-70">
     <%= message.user.name %>
-    <time class="text-xs opacity-50"><%= l message.created_at, format: :short %></time>
+    <span class="opacity-40 mx-1">·</span>
+    <time class="text-xs opacity-60"><%= l message.created_at, format: :short %></time>
   </div>
-  <div class="chat-bubble"><%= message.body %></div>
+  <div class="chat-bubble"><%= simple_format message.body %></div>
 </div>

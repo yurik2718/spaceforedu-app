@@ -14,10 +14,10 @@
     <%= javascript_importmap_tags %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
   </head>
-  <body class="h-full bg-base-200">
+  <body class="h-full flex flex-col bg-base-200">
     <%= render "layouts/navbar" %>
     <%= render "shared/flash" %>
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-6 flex-1 min-h-0">
       <%= yield %>
     </main>
   </body>

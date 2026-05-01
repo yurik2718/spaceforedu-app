@@ -65,6 +65,11 @@ es:
       US: "Estados Unidos"
       OTHER: "Otro"
 
+  home:
+    hero:
+      title:    "Homologación de títulos universitarios"
+      subtitle: "Gestionamos el reconocimiento de tu título en España de forma eficiente, transparente y con seguimiento en tiempo real."
+
   auth:
     password:               "Contraseña"
     new_password:           "Nueva contraseña"
@@ -110,6 +115,9 @@ es:
       chat:      "Chat"
       status:    "Estado"
       pipeline_notes: "Notas del pipeline"
+      diploma:   "Título"
+      language:  "Idioma"
+      request:   "Solicitud"
     fields:
       subject:              "Asunto"
       description:          "Descripción"
@@ -211,3 +219,4 @@ es:
     sign_in:       "Iniciar sesión"
     sign_out:      "Cerrar sesión"
     language:      "Idioma"
+    menu:          "Menú"

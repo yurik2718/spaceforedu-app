@@ -3,10 +3,8 @@
   <div class="hero min-h-[60vh]">
     <div class="hero-content text-center">
       <div class="max-w-lg">
-        <h1 class="text-4xl font-bold">Homologación de títulos universitarios</h1>
-        <p class="py-6 text-base-content/70">
-          Gestionamos el reconocimiento de tu título en España de forma eficiente, transparente y con seguimiento en tiempo real.
-        </p>
+        <h1 class="text-4xl font-bold"><%= t("home.hero.title") %></h1>
+        <p class="py-6 opacity-70"><%= t("home.hero.subtitle") %></p>
         <div class="flex gap-3 justify-center">
           <%= link_to t("nav.sign_in"), new_session_path, class: "btn btn-primary" %>
           <%= link_to t("registrations.submit"), new_registration_path, class: "btn btn-ghost" %>
@@ -17,40 +15,39 @@
 
 <% else %>
 
-  <%= render "shared/page_header", title: t("nav.dashboard") %>
+  <%= render "shared/page_header",
+        title: t("nav.dashboard"),
+        actions: capture {
+          concat link_to(t("requests.actions.new"), new_homologation_request_path, class: "btn btn-primary btn-sm")
+        } %>
 
   <% if @requests.empty? %>
     <div class="card bg-base-100 shadow">
-      <div class="card-body items-center text-center py-16">
-        <p class="text-base-content/50 text-lg"><%= t("requests.empty") %></p>
+      <div class="card-body items-center text-center py-16 gap-4">
+        <p class="opacity-60"><%= t("requests.empty") %></p>
+        <%= link_to t("requests.actions.new"), new_homologation_request_path, class: "btn btn-primary" %>
       </div>
     </div>
   <% else %>
-    <div class="card bg-base-100 shadow">
-      <div class="overflow-x-auto">
-        <table class="table">
-          <tbody>
-            <% @requests.each do |r| %>
-              <tr class="hover">
-                <td>
-                  <p class="font-medium"><%= r.subject %></p>
-                  <p class="text-sm text-base-content/50"><%= r.university %></p>
-                </td>
-                <td>
-                  <span class="badge <%= status_badge_class(r.status) %>">
-                    <%= t("requests.status.#{r.status}") %>
-                  </span>
-                </td>
-                <td class="text-right">
-                  <% if r.conversation %>
-                    <%= link_to t("nav.conversations"), conversation_path(r.conversation), class: "btn btn-sm btn-ghost" %>
-                  <% end %>
-                </td>
-              </tr>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <% @requests.each do |r| %>
+        <%= link_to homologation_request_path(r), class: "card bg-base-100 shadow hover:shadow-md transition", id: dom_id(r) do %>
+          <div class="card-body">
+            <header class="flex items-start justify-between gap-2">
+              <h3 class="font-semibold truncate" title="<%= r.subject %>"><%= r.subject %></h3>
+              <span class="badge <%= status_badge_class(r.status) %> shrink-0">
+                <%= t("requests.status.#{r.status}") %>
+              </span>
+            </header>
+
+            <% if r.university.present? %>
+              <p class="text-sm opacity-60 truncate"><%= r.university %></p>
             <% end %>
-          </tbody>
-        </table>
-      </div>
+
+            <time class="text-xs opacity-50 mt-2"><%= l r.updated_at, format: :short %></time>
+          </div>
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 

@@ -1,7 +1,16 @@
-<div id="<%= dom_id(notification) %>" class="alert <%= notification.read_at? ? 'opacity-60' : 'alert-info' %>">
-  <div>
-    <h4 class="font-bold"><%= notification.title %></h4>
-    <p class="text-sm"><%= notification.body %></p>
-    <time class="text-xs opacity-70"><%= l notification.created_at, format: :short %></time>
+<div id="<%= dom_id(notification) %>"
+     class="card card-compact bg-base-100 shadow-sm border-l-4 <%= notification.read_at? ? 'border-base-300 opacity-70' : 'border-primary' %>">
+  <div class="card-body">
+    <header class="flex items-start justify-between gap-3">
+      <h4 class="font-semibold text-sm"><%= notification.title %></h4>
+      <time class="text-xs opacity-60 shrink-0">
+        <% if notification.created_at.today? %>
+          <%= time_ago_in_words(notification.created_at) %>
+        <% else %>
+          <%= l notification.created_at, format: :short %>
+        <% end %>
+      </time>
+    </header>
+    <p class="text-sm opacity-80"><%= notification.body %></p>
   </div>
 </div>

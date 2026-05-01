@@ -1,15 +1,33 @@
 <%= turbo_stream_from @conversation %>
 
-<div class="flex flex-col h-[calc(100vh-4rem)] max-w-2xl mx-auto">
-  <div class="border-b border-base-300 px-4 py-3 flex-shrink-0">
-    <h2 class="font-semibold text-lg"><%= @conversation.homologation_request.subject %></h2>
-    <p class="text-sm text-base-content/60"><%= @conversation.student.name %></p>
-  </div>
+<% hr = @conversation.homologation_request %>
+<% back_path = Current.user.super_admin? ? admin_homologation_request_path(hr) : homologation_request_path(hr) %>
+
+<div class="flex flex-col h-full max-w-2xl mx-auto bg-base-100 rounded-box shadow overflow-hidden">
+  <header class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-3 flex-shrink-0">
+    <div class="min-w-0">
+      <%= link_to hr.subject, back_path, class: "font-semibold link link-hover truncate block" %>
+      <% if Current.user.super_admin? %>
+        <p class="text-sm opacity-60 truncate"><%= @conversation.student.name %></p>
+      <% end %>
+    </div>
+    <span class="badge <%= status_badge_class(hr.status) %> shrink-0">
+      <%= t("requests.status.#{hr.status}") %>
+    </span>
+  </header>
 
   <div id="messages"
        class="flex-1 overflow-y-auto p-4 flex flex-col gap-1"
+       data-controller="scroll-to-bottom"
        data-current-user-id="<%= Current.user.id %>">
-    <%= render @messages %>
+    <% prev_date = nil %>
+    <% @messages.each do |m| %>
+      <% if prev_date != m.created_at.to_date %>
+        <div class="divider text-xs opacity-60 my-2"><%= l m.created_at.to_date, format: :long %></div>
+        <% prev_date = m.created_at.to_date %>
+      <% end %>
+      <%= render m %>
+    <% end %>
   </div>
 
   <%= render "messages/form", conversation: @conversation, message: @message %>

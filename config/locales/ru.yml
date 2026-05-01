@@ -65,6 +65,11 @@ ru:
       US: "США"
       OTHER: "Другая"
 
+  home:
+    hero:
+      title:    "Омологация университетских дипломов"
+      subtitle: "Помогаем признать ваш диплом в Испании — эффективно, прозрачно, с отслеживанием в реальном времени."
+
   auth:
     password:               "Пароль"
     new_password:           "Новый пароль"
@@ -110,6 +115,9 @@ ru:
       chat:      "Чат"
       status:    "Статус"
       pipeline_notes: "Заметки пайплайна"
+      diploma:   "Диплом"
+      language:  "Язык"
+      request:   "Заявка"
     fields:
       subject:              "Тема"
       description:          "Описание"
@@ -211,3 +219,4 @@ ru:
     sign_in:       "Войти"
     sign_out:      "Выйти"
     language:      "Язык"
+    menu:          "Меню"

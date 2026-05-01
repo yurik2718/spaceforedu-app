@@ -8,17 +8,30 @@
   </div>
 
   <% if @pagy.pages > 1 %>
-    <div class="flex justify-center mt-6 gap-1">
-      <% (1..@pagy.pages).each do |page| %>
-        <%= link_to page, url_for(page: page),
-              class: "btn btn-sm #{'btn-primary' if page == @pagy.page}" %>
-      <% end %>
+    <div class="flex justify-center mt-6">
+      <div class="join">
+        <% if @pagy.page > 1 %>
+          <%= link_to "«", url_for(page: @pagy.page - 1), class: "btn btn-sm join-item" %>
+        <% else %>
+          <span class="btn btn-sm join-item btn-disabled">«</span>
+        <% end %>
+
+        <span class="btn btn-sm join-item pointer-events-none">
+          <%= @pagy.page %> / <%= @pagy.pages %>
+        </span>
+
+        <% if @pagy.page < @pagy.pages %>
+          <%= link_to "»", url_for(page: @pagy.page + 1), class: "btn btn-sm join-item" %>
+        <% else %>
+          <span class="btn btn-sm join-item btn-disabled">»</span>
+        <% end %>
+      </div>
     </div>
   <% end %>
 <% else %>
   <div class="card bg-base-100 shadow">
     <div class="card-body items-center text-center py-16">
-      <p class="text-base-content/60"><%= t("notifications.empty") %></p>
+      <p class="opacity-60"><%= t("notifications.empty") %></p>
     </div>
   </div>
 <% end %>

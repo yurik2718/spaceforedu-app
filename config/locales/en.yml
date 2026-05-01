@@ -65,6 +65,11 @@ en:
       US: "United States"
       OTHER: "Other"
 
+  home:
+    hero:
+      title:    "University degree homologation"
+      subtitle: "We handle the recognition of your degree in Spain — efficient, transparent, with real-time tracking."
+
   auth:
     password:               "Password"
     new_password:           "New password"
@@ -110,6 +115,9 @@ en:
       chat:      "Chat"
       status:    "Status"
       pipeline_notes: "Pipeline notes"
+      diploma:   "Diploma"
+      language:  "Language"
+      request:   "Request"
     fields:
       subject:              "Subject"
       description:          "Description"
@@ -211,3 +219,4 @@ en:
     sign_in:       "Sign in"
     sign_out:      "Sign out"
     language:      "Language"
+    menu:          "Menu"
