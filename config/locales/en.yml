@@ -42,6 +42,9 @@ en:
       guardian_name:         "Guardian name"
       guardian_email:        "Guardian email"
       guardian_phone:        "Guardian phone"
+    toggle:
+      on:  "On"
+      off: "Off"
     locales:
       es: "Spanish"
       en: "English"

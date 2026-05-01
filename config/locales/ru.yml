@@ -42,6 +42,9 @@ ru:
       guardian_name:         "Имя опекуна"
       guardian_email:        "Email опекуна"
       guardian_phone:        "Телефон опекуна"
+    toggle:
+      on:  "Вкл"
+      off: "Выкл"
     locales:
       es: "Испанский"
       en: "Английский"

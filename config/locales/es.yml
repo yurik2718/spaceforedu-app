@@ -42,6 +42,9 @@ es:
       guardian_name:         "Nombre del tutor"
       guardian_email:        "Email del tutor"
       guardian_phone:        "Teléfono del tutor"
+    toggle:
+      on:  "Activado"
+      off: "Desactivado"
     locales:
       es: "Español"
       en: "Inglés"

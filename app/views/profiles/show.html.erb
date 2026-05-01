@@ -3,81 +3,90 @@
 <%= render "shared/page_header",
       title: @user.name,
       actions: capture {
-        concat link_to(t("actions.edit"), edit_profile_path, class: "btn btn-primary btn-sm")
+        concat link_to(t("actions.edit"), edit_profile_path, class: "btn btn-ghost btn-sm")
       } %>
 
 <div class="grid gap-6 md:grid-cols-2">
+
+  <%# ACCOUNT — vCard style %>
   <div class="card bg-base-100 shadow">
     <div class="card-body">
       <h3 class="card-title text-base"><%= t("profile.sections.account") %></h3>
-      <table class="table">
-        <tbody>
-          <tr>
-            <th><%= t("profile.fields.email_address") %></th>
-            <td><%= @user.email_address %></td>
-          </tr>
-          <tr>
-            <th><%= t("profile.fields.country") %></th>
-            <td><%= @user.country.presence || "—" %></td>
-          </tr>
-          <tr>
-            <th><%= t("profile.fields.birthday") %></th>
-            <td><%= @user.birthday ? l(@user.birthday, format: :long) : "—" %></td>
-          </tr>
-          <tr>
-            <th><%= t("profile.fields.phone") %></th>
-            <td><%= masked_phone(@user.phone) %></td>
-          </tr>
-          <tr>
-            <th><%= t("profile.fields.locale") %></th>
-            <td><%= t("profile.locales.#{@user.locale}", default: @user.locale) %></td>
-          </tr>
-          <tr>
-            <th><%= t("profile.fields.privacy_accepted_at") %></th>
-            <td><%= @user.privacy_accepted_at ? l(@user.privacy_accepted_at, format: :long) : "—" %></td>
-          </tr>
-        </tbody>
-      </table>
+
+      <div class="flex items-center gap-3 mt-2">
+        <div class="avatar placeholder">
+          <div class="bg-neutral text-neutral-content w-12 rounded-full">
+            <span><%= @user.initials %></span>
+          </div>
+        </div>
+        <div class="min-w-0">
+          <p class="font-semibold truncate"><%= @user.name %></p>
+          <p class="text-sm opacity-60 truncate"><%= @user.email_address %></p>
+        </div>
+      </div>
+
+      <div class="divider my-2"></div>
+
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+        <dt class="opacity-60"><%= t("profile.fields.country") %></dt>
+        <dd><%= @user.country.present? ? t("profile.countries.#{@user.country}", default: @user.country) : "—" %></dd>
+
+        <dt class="opacity-60"><%= t("profile.fields.birthday") %></dt>
+        <dd><%= @user.birthday ? l(@user.birthday, format: :long) : "—" %></dd>
+
+        <dt class="opacity-60"><%= t("profile.fields.phone") %></dt>
+        <dd><%= masked_phone(@user.phone) %></dd>
+
+        <dt class="opacity-60"><%= t("profile.fields.locale") %></dt>
+        <dd><%= t("profile.locales.#{@user.locale}", default: @user.locale) %></dd>
+
+        <dt class="opacity-60"><%= t("profile.fields.privacy_accepted_at") %></dt>
+        <dd><%= @user.privacy_accepted_at ? l(@user.privacy_accepted_at, format: :long) : "—" %></dd>
+      </dl>
     </div>
   </div>
 
+  <%# NOTIFICATIONS %>
   <div class="card bg-base-100 shadow">
     <div class="card-body">
       <h3 class="card-title text-base"><%= t("profile.sections.notifications") %></h3>
-      <ul class="space-y-2">
-        <li class="flex items-center gap-2">
-          <input type="checkbox" class="checkbox checkbox-sm" disabled <%= "checked" if @user.notification_email %>>
-          <span><%= t("profile.fields.notification_email") %></span>
-        </li>
-        <li class="flex items-center gap-2">
-          <input type="checkbox" class="checkbox checkbox-sm" disabled <%= "checked" if @user.notification_telegram %>>
-          <span><%= t("profile.fields.notification_telegram") %></span>
-        </li>
-      </ul>
+
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm mt-2">
+        <dt class="opacity-60"><%= t("profile.fields.notification_email") %></dt>
+        <dd>
+          <span class="badge <%= @user.notification_email ? 'badge-success' : 'badge-ghost' %> badge-sm">
+            <%= t(@user.notification_email ? "profile.toggle.on" : "profile.toggle.off") %>
+          </span>
+        </dd>
+
+        <dt class="opacity-60"><%= t("profile.fields.notification_telegram") %></dt>
+        <dd>
+          <span class="badge <%= @user.notification_telegram ? 'badge-success' : 'badge-ghost' %> badge-sm">
+            <%= t(@user.notification_telegram ? "profile.toggle.on" : "profile.toggle.off") %>
+          </span>
+        </dd>
+      </dl>
     </div>
   </div>
 
+  <%# GUARDIAN — only for minors %>
   <% if @user.is_minor %>
     <div class="card bg-base-100 shadow md:col-span-2">
       <div class="card-body">
         <h3 class="card-title text-base"><%= t("profile.sections.guardian") %></h3>
-        <table class="table">
-          <tbody>
-            <tr>
-              <th><%= t("profile.fields.guardian_name") %></th>
-              <td><%= @user.guardian_name.presence || "—" %></td>
-            </tr>
-            <tr>
-              <th><%= t("profile.fields.guardian_email") %></th>
-              <td><%= @user.guardian_email.presence || "—" %></td>
-            </tr>
-            <tr>
-              <th><%= t("profile.fields.guardian_phone") %></th>
-              <td><%= masked_phone(@user.guardian_phone) %></td>
-            </tr>
-          </tbody>
-        </table>
+
+        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm mt-2">
+          <dt class="opacity-60"><%= t("profile.fields.guardian_name") %></dt>
+          <dd><%= @user.guardian_name.presence || "—" %></dd>
+
+          <dt class="opacity-60"><%= t("profile.fields.guardian_email") %></dt>
+          <dd><%= @user.guardian_email.presence || "—" %></dd>
+
+          <dt class="opacity-60"><%= t("profile.fields.guardian_phone") %></dt>
+          <dd><%= masked_phone(@user.guardian_phone) %></dd>
+        </dl>
       </div>
     </div>
   <% end %>
+
 </div>
