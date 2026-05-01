@@ -1,0 +1,22 @@
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1" aria-label="<%= t("nav.language") %>">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.6 9h16.8M3.6 15h16.8M11 3a16 16 0 000 18M13 3a16 16 0 010 18"/>
+      <circle cx="12" cy="12" r="9" stroke-width="2" fill="none"/>
+    </svg>
+    <span class="font-semibold"><%= locale_label(I18n.locale) %></span>
+  </div>
+  <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-40 p-2 shadow">
+    <% available_locales.each do |loc| %>
+      <li>
+        <%= button_to locale_path(locale: loc),
+              method: :patch,
+              form: { data: { turbo_frame: "_top" } },
+              class: "w-full text-left #{'menu-active' if I18n.locale == loc}" do %>
+          <span class="font-mono text-xs opacity-60 w-6"><%= locale_label(loc) %></span>
+          <span><%= t("profile.locales.#{loc}") %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

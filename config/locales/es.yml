@@ -1,20 +1,66 @@
 es:
   errors:
-    not_authorized:     "No tienes permiso para realizar esta acción."
-    privacy_required:   "debe ser aceptada para registrarse"
-    rate_limited:       "Demasiados intentos. Inténtalo más tarde."
+    not_authorized:        "No tienes permiso para realizar esta acción."
+    privacy_required:      "debe ser aceptada para registrarse"
+    rate_limited:          "Demasiados intentos. Inténtalo más tarde."
+    unknown_checklist_key: "Clave de lista de documentos desconocida."
 
   flash:
-    request_created:    "Solicitud creada."
-    request_submitted:  "Solicitud enviada. Te notificaremos cuando sea revisada."
-    request_updated:    "Solicitud actualizada."
-    request_deleted:    "Solicitud eliminada."
-    payment_confirmed:  "Pago confirmado. Tu solicitud está en proceso."
-    user_updated:       "Perfil actualizado."
-    message_sent:       "Mensaje enviado."
-    pipeline_advanced:  "Avanzada a la siguiente etapa."
-    pipeline_retreated: "Devuelta a la etapa anterior."
-    registered:         "Bienvenido a bordo."
+    request_created:        "Solicitud creada."
+    request_submitted:      "Solicitud enviada. Te notificaremos cuando sea revisada."
+    request_updated:        "Solicitud actualizada."
+    request_deleted:        "Solicitud eliminada."
+    request_not_editable:   "Esta solicitud ya no se puede editar."
+    request_not_submittable: "Esta solicitud no se puede enviar."
+    payment_confirmed:      "Pago confirmado. Tu solicitud está en proceso."
+    user_updated:           "Perfil actualizado."
+    message_sent:           "Mensaje enviado."
+    pipeline_advanced:      "Avanzada a la siguiente etapa."
+    pipeline_retreated:     "Devuelta a la etapa anterior."
+    status_changed:         "Estado actualizado."
+    document_checklist_updated: "Lista actualizada."
+    conversation_started:   "Conversación iniciada."
+    registered:             "Bienvenido a bordo."
+
+  profile:
+    edit_title: "Editar perfil"
+    sections:
+      account:        "Cuenta"
+      notifications:  "Notificaciones"
+      guardian:       "Tutor"
+    fields:
+      name:                  "Nombre"
+      email_address:         "Email"
+      country:               "País"
+      birthday:              "Fecha de nacimiento"
+      phone:                 "Teléfono"
+      whatsapp:              "WhatsApp"
+      locale:                "Idioma"
+      notification_email:    "Notificaciones por email"
+      notification_telegram: "Notificaciones por Telegram"
+      privacy_accepted_at:   "Privacidad aceptada el"
+      guardian_name:         "Nombre del tutor"
+      guardian_email:        "Email del tutor"
+      guardian_phone:        "Teléfono del tutor"
+    locales:
+      es: "Español"
+      en: "Inglés"
+      ru: "Ruso"
+    countries:
+      ES: "España"
+      AR: "Argentina"
+      MX: "México"
+      CO: "Colombia"
+      RU: "Rusia"
+      UA: "Ucrania"
+      BY: "Bielorrusia"
+      KZ: "Kazajistán"
+      PE: "Perú"
+      CL: "Chile"
+      VE: "Venezuela"
+      EC: "Ecuador"
+      US: "Estados Unidos"
+      OTHER: "Otro"
 
   registrations:
     title:          "Crea tu cuenta"
@@ -23,6 +69,9 @@ es:
     have_account:   "¿Ya tienes una cuenta?"
 
   pipeline:
+    active:  "Activas"
+    revenue: "Ingresos"
+    empty:   "No hay solicitudes en esta etapa."
     stages:
       pago_recibido:     "Pago recibido"
       documentos:        "Documentos"
@@ -35,6 +84,53 @@ es:
 
   requests:
     empty: "Todavía no tienes ninguna solicitud."
+    new_title:  "Nueva solicitud"
+    edit_title: "Editar solicitud"
+    actions:
+      submit:  "Enviar solicitud"
+      new:     "Nueva solicitud"
+    sections:
+      info:      "Información de la solicitud"
+      documents: "Documentos"
+      payment:   "Pago"
+      student:   "Estudiante"
+      pipeline:  "Pipeline"
+      chat:      "Chat"
+      status:    "Estado"
+      pipeline_notes: "Notas del pipeline"
+    fields:
+      subject:              "Asunto"
+      description:          "Descripción"
+      service_type:         "Tipo de servicio"
+      education_system:     "Sistema educativo"
+      university:           "Universidad"
+      year:                 "Año"
+      studies_finished:     "¿Estudios finalizados?"
+      language_knowledge:   "Nivel de idioma"
+      language_certificate: "Certificado de idioma"
+      privacy_accepted:     "Acepto la política de privacidad."
+      payment_amount:       "Importe"
+    studies_finished:
+      yes_label: "Sí"
+      no_label:  "No"
+    language_knowledge:
+      A1:     "A1"
+      A2:     "A2"
+      B1:     "B1"
+      B2:     "B2"
+      C1:     "C1"
+      C2:     "C2"
+      native: "Nativo"
+    checklist:
+      sol: "Solicitud"
+      vol: "Volante"
+      tas: "Tasas"
+      cer: "Certificado académico"
+      tit: "Título"
+    payment:
+      not_set:      "Importe aún no fijado."
+      confirmed_at: "Confirmado el"
+      confirmed_by: "Confirmado por"
     status:
       draft:             "Borrador"
       submitted:         "Enviada"
@@ -63,11 +159,43 @@ es:
   messages:
     placeholder: "Escribe un mensaje..."
 
+  notifications:
+    empty: "Aún no tienes notificaciones."
+
+  admin:
+    requests:
+      sections:
+        student:        "Estudiante"
+        status:         "Estado"
+        payment:        "Pago"
+        pipeline:       "Pipeline"
+        checklist:      "Lista de documentos"
+        chat:           "Chat"
+        pipeline_notes: "Notas del pipeline"
+      actions:
+        change_status:    "Cambiar estado"
+        confirm_payment:  "Confirmar pago"
+        advance:          "Avanzar"
+        retreat:          "Retroceder"
+        retreat_modal:    "Retroceder a la etapa anterior"
+        start_chat:       "Iniciar conversación"
+        open_chat:        "Abrir conversación"
+      labels:
+        changed_at:    "Cambiado el"
+        changed_by:    "Cambiado por"
+        confirmed_at:  "Confirmado el"
+        confirmed_by:  "Confirmado por"
+        retreat_reason: "Motivo"
+
   nav:
     dashboard:     "Panel"
     requests:      "Solicitudes"
+    my_requests:   "Mis solicitudes"
+    new_request:   "Nueva solicitud"
     conversations: "Mensajes"
     pipeline:      "Pipeline"
     profile:       "Perfil"
+    notifications: "Notificaciones"
     sign_in:       "Iniciar sesión"
     sign_out:      "Cerrar sesión"
+    language:      "Idioma"

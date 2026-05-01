@@ -1,0 +1,24 @@
+<% content_for :title, t("nav.notifications") %>
+
+<%= render "shared/page_header", title: t("nav.notifications") %>
+
+<% if @notifications.any? %>
+  <div id="notifications" class="space-y-2">
+    <%= render @notifications %>
+  </div>
+
+  <% if @pagy.pages > 1 %>
+    <div class="flex justify-center mt-6 gap-1">
+      <% (1..@pagy.pages).each do |page| %>
+        <%= link_to page, url_for(page: page),
+              class: "btn btn-sm #{'btn-primary' if page == @pagy.page}" %>
+      <% end %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body items-center text-center py-16">
+      <p class="text-base-content/60"><%= t("notifications.empty") %></p>
+    </div>
+  </div>
+<% end %>

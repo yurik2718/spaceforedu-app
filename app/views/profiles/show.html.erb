@@ -1,0 +1,83 @@
+<% content_for :title, @user.name %>
+
+<%= render "shared/page_header",
+      title: @user.name,
+      actions: capture {
+        concat link_to(t("actions.edit"), edit_profile_path, class: "btn btn-primary btn-sm")
+      } %>
+
+<div class="grid gap-6 md:grid-cols-2">
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("profile.sections.account") %></h3>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><%= t("profile.fields.email_address") %></th>
+            <td><%= @user.email_address %></td>
+          </tr>
+          <tr>
+            <th><%= t("profile.fields.country") %></th>
+            <td><%= @user.country.presence || "—" %></td>
+          </tr>
+          <tr>
+            <th><%= t("profile.fields.birthday") %></th>
+            <td><%= @user.birthday ? l(@user.birthday, format: :long) : "—" %></td>
+          </tr>
+          <tr>
+            <th><%= t("profile.fields.phone") %></th>
+            <td><%= masked_phone(@user.phone) %></td>
+          </tr>
+          <tr>
+            <th><%= t("profile.fields.locale") %></th>
+            <td><%= t("profile.locales.#{@user.locale}", default: @user.locale) %></td>
+          </tr>
+          <tr>
+            <th><%= t("profile.fields.privacy_accepted_at") %></th>
+            <td><%= @user.privacy_accepted_at ? l(@user.privacy_accepted_at, format: :long) : "—" %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("profile.sections.notifications") %></h3>
+      <ul class="space-y-2">
+        <li class="flex items-center gap-2">
+          <input type="checkbox" class="checkbox checkbox-sm" disabled <%= "checked" if @user.notification_email %>>
+          <span><%= t("profile.fields.notification_email") %></span>
+        </li>
+        <li class="flex items-center gap-2">
+          <input type="checkbox" class="checkbox checkbox-sm" disabled <%= "checked" if @user.notification_telegram %>>
+          <span><%= t("profile.fields.notification_telegram") %></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <% if @user.is_minor %>
+    <div class="card bg-base-100 shadow md:col-span-2">
+      <div class="card-body">
+        <h3 class="card-title text-base"><%= t("profile.sections.guardian") %></h3>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th><%= t("profile.fields.guardian_name") %></th>
+              <td><%= @user.guardian_name.presence || "—" %></td>
+            </tr>
+            <tr>
+              <th><%= t("profile.fields.guardian_email") %></th>
+              <td><%= @user.guardian_email.presence || "—" %></td>
+            </tr>
+            <tr>
+              <th><%= t("profile.fields.guardian_phone") %></th>
+              <td><%= masked_phone(@user.guardian_phone) %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>

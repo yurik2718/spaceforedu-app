@@ -1,5 +1,8 @@
 class HomologationRequestPolicy < ApplicationPolicy
   def show?            = user&.super_admin? || record.user_id == user&.id
+  def create?          = user.present?
+  def update?          = record.user_id == user&.id
+  def submit?          = record.user_id == user&.id
   def manage_pipeline? = user&.super_admin?
 
   class Scope < ApplicationPolicy::Scope

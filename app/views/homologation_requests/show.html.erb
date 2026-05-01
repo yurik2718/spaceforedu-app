@@ -1,0 +1,109 @@
+<% content_for :title, @homologation_request.subject %>
+
+<%= render "shared/page_header",
+      title: @homologation_request.subject,
+      actions: capture {
+        if @homologation_request.conversation
+          concat link_to(t("nav.conversations"), conversation_path(@homologation_request.conversation), class: "btn btn-ghost btn-sm")
+        end
+        if policy(@homologation_request).update? && HomologationRequestsController::EDITABLE_STATUSES.include?(@homologation_request.status)
+          concat link_to(t("actions.edit"), edit_homologation_request_path(@homologation_request), class: "btn btn-ghost btn-sm")
+        end
+        if policy(@homologation_request).submit? && @homologation_request.status == "draft"
+          concat button_to(t("requests.actions.submit"), homologation_request_submission_path(@homologation_request), method: :post, class: "btn btn-primary btn-sm")
+        end
+      } %>
+
+<div class="flex items-center gap-3 mb-6">
+  <span class="badge <%= status_badge_class(@homologation_request.status) %>">
+    <%= t("requests.status.#{@homologation_request.status}") %>
+  </span>
+  <time class="text-sm text-base-content/60">
+    <%= l @homologation_request.created_at, format: :long %>
+  </time>
+</div>
+
+<div class="grid gap-6 md:grid-cols-2">
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("requests.sections.info") %></h3>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th><%= t("requests.fields.university") %></th>
+            <td><%= @homologation_request.university.presence || "—" %></td>
+          </tr>
+          <tr>
+            <th><%= t("requests.fields.education_system") %></th>
+            <td><%= @homologation_request.education_system.presence || "—" %></td>
+          </tr>
+          <tr>
+            <th><%= t("requests.fields.year") %></th>
+            <td><%= @homologation_request.year || "—" %></td>
+          </tr>
+          <tr>
+            <th><%= t("requests.fields.studies_finished") %></th>
+            <td>
+              <% if @homologation_request.studies_finished.present? %>
+                <%= t("requests.studies_finished.#{@homologation_request.studies_finished}_label", default: @homologation_request.studies_finished) %>
+              <% else %>—<% end %>
+            </td>
+          </tr>
+          <tr>
+            <th><%= t("requests.fields.language_knowledge") %></th>
+            <td>
+              <% if @homologation_request.language_knowledge.present? %>
+                <%= t("requests.language_knowledge.#{@homologation_request.language_knowledge}", default: @homologation_request.language_knowledge) %>
+              <% else %>—<% end %>
+            </td>
+          </tr>
+          <tr>
+            <th><%= t("requests.fields.language_certificate") %></th>
+            <td><%= @homologation_request.language_certificate.presence || "—" %></td>
+          </tr>
+          <% if @homologation_request.description.present? %>
+            <tr>
+              <th><%= t("requests.fields.description") %></th>
+              <td class="whitespace-pre-line"><%= @homologation_request.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("requests.sections.documents") %></h3>
+      <ul class="space-y-2">
+        <% PipelineFlow.checklist_keys.each do |key| %>
+          <li class="flex items-center gap-2">
+            <input type="checkbox" class="checkbox checkbox-sm" disabled
+                   <%= "checked" if @homologation_request.checklist_done?(key) %>>
+            <span><%= t("requests.checklist.#{key}") %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card bg-base-100 shadow md:col-span-2">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("requests.sections.payment") %></h3>
+      <% if @homologation_request.payment_amount.present? %>
+        <p>
+          <span class="text-base-content/60"><%= t("requests.fields.payment_amount") %>:</span>
+          <span class="font-medium"><%= number_to_currency @homologation_request.payment_amount %></span>
+        </p>
+      <% else %>
+        <p class="text-base-content/60"><%= t("requests.payment.not_set") %></p>
+      <% end %>
+      <% if @homologation_request.payment_confirmed_at %>
+        <p class="text-sm text-base-content/60">
+          <%= t("requests.payment.confirmed_at") %>:
+          <%= l @homologation_request.payment_confirmed_at, format: :long %>
+        </p>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<% content_for :title, t("profile.edit_title") %>
+
+<%= render "shared/page_header", title: t("profile.edit_title") %>
+
+<%= form_with model: @user, url: profile_path, class: "card bg-base-100 shadow" do |f| %>
+  <div class="card-body space-y-4">
+    <% if @user.errors.any? %>
+      <div class="alert alert-error">
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <fieldset class="fieldset">
+        <label class="label" for="<%= f.field_id(:name) %>"><%= t("profile.fields.name") %></label>
+        <%= f.text_field :name, class: "input input-bordered w-full", required: true %>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <label class="label" for="<%= f.field_id(:country) %>"><%= t("profile.fields.country") %></label>
+        <%= f.select :country,
+              %w[ES AR MX CO RU UA BY KZ PE CL VE EC US OTHER].map { |code| [t("profile.countries.#{code}", default: code), code] },
+              { include_blank: true },
+              class: "select select-bordered w-full" %>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <label class="label" for="<%= f.field_id(:locale) %>"><%= t("profile.fields.locale") %></label>
+        <%= f.select :locale,
+              %w[es en ru].map { |loc| [t("profile.locales.#{loc}"), loc] },
+              {}, class: "select select-bordered w-full" %>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <label class="label" for="<%= f.field_id(:phone) %>"><%= t("profile.fields.phone") %></label>
+        <%= f.telephone_field :phone, class: "input input-bordered w-full" %>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <label class="label" for="<%= f.field_id(:whatsapp) %>"><%= t("profile.fields.whatsapp") %></label>
+        <%= f.telephone_field :whatsapp, class: "input input-bordered w-full" %>
+      </fieldset>
+    </div>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend"><%= t("profile.sections.notifications") %></legend>
+      <label class="label cursor-pointer justify-start gap-2">
+        <%= f.check_box :notification_email, class: "checkbox" %>
+        <span><%= t("profile.fields.notification_email") %></span>
+      </label>
+      <label class="label cursor-pointer justify-start gap-2">
+        <%= f.check_box :notification_telegram, class: "checkbox" %>
+        <span><%= t("profile.fields.notification_telegram") %></span>
+      </label>
+    </fieldset>
+
+    <% if @user.is_minor %>
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend"><%= t("profile.sections.guardian") %></legend>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="label" for="<%= f.field_id(:guardian_name) %>"><%= t("profile.fields.guardian_name") %></label>
+            <%= f.text_field :guardian_name, class: "input input-bordered w-full" %>
+          </div>
+          <div>
+            <label class="label" for="<%= f.field_id(:guardian_email) %>"><%= t("profile.fields.guardian_email") %></label>
+            <%= f.email_field :guardian_email, class: "input input-bordered w-full" %>
+          </div>
+          <div>
+            <label class="label" for="<%= f.field_id(:guardian_phone) %>"><%= t("profile.fields.guardian_phone") %></label>
+            <%= f.telephone_field :guardian_phone, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+      </fieldset>
+    <% end %>
+
+    <div class="card-actions justify-end">
+      <%= link_to t("actions.cancel"), profile_path, class: "btn btn-ghost" %>
+      <%= f.submit t("actions.save"), class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

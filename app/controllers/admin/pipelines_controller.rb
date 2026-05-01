@@ -2,9 +2,7 @@ class Admin::PipelinesController < ApplicationController
   def show
     authorize :pipeline
 
-    scope = policy_scope(HomologationRequest).kept
-              .where.not(pipeline_stage: nil)
-              .includes(:user)
+    scope = policy_scope(HomologationRequest).kept.where.not(pipeline_stage: nil)
     scope = scope.where(year: params[:year]) if params[:year].present?
 
     @kanban_stages     = PipelineFlow.kanban_stages
@@ -16,7 +14,8 @@ class Admin::PipelinesController < ApplicationController
   private
     def group_by_stage(scope)
       PipelineFlow.all_stages.index_with do |stage|
-        scope.where(pipeline_stage: stage).order(updated_at: :desc)
+        relation = scope.where(pipeline_stage: stage).order(updated_at: :desc)
+        PipelineFlow.kanban_stages.include?(stage) ? relation.includes(:user) : relation
       end
     end
 

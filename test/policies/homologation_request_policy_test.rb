@@ -30,6 +30,23 @@ class HomologationRequestPolicyTest < ActiveSupport::TestCase
     refute HomologationRequestPolicy.new(nil,      @owned).manage_pipeline?
   end
 
+  test "create? is true for any signed-in student" do
+    assert HomologationRequestPolicy.new(@student, HomologationRequest.new).create?
+    refute HomologationRequestPolicy.new(nil,      HomologationRequest.new).create?
+  end
+
+  test "update? is true for the owner only" do
+    assert HomologationRequestPolicy.new(@student, @owned).update?
+    refute HomologationRequestPolicy.new(@other,   @owned).update?
+    refute HomologationRequestPolicy.new(nil,      @owned).update?
+  end
+
+  test "submit? is true for the owner only" do
+    assert HomologationRequestPolicy.new(@student, @owned).submit?
+    refute HomologationRequestPolicy.new(@other,   @owned).submit?
+    refute HomologationRequestPolicy.new(nil,      @owned).submit?
+  end
+
   test "Scope#resolve returns all requests for super_admin" do
     resolved = HomologationRequestPolicy::Scope.new(@admin, HomologationRequest.all).resolve
 

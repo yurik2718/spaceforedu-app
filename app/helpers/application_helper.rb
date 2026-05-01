@@ -25,6 +25,21 @@ module ApplicationHelper
     current_page_section?(section) ? "active" : ""
   end
 
+  def available_locales
+    I18n.available_locales
+  end
+
+  def locale_label(locale)
+    locale.to_s.upcase
+  end
+
+  def masked_phone(value)
+    return "—" if value.blank?
+    digits = value.to_s.gsub(/\D/, "")
+    return "•" * value.to_s.length if digits.length < 4
+    "#{'•' * (digits.length - 4)}#{digits.last(4)}"
+  end
+
   private
     def current_page_section?(section)
       request.path.start_with?("/#{section}")

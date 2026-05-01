@@ -1,20 +1,66 @@
 en:
   errors:
-    not_authorized:     "You are not authorized to perform this action."
-    privacy_required:   "must be accepted to register"
-    rate_limited:       "Too many attempts. Try again later."
+    not_authorized:        "You are not authorized to perform this action."
+    privacy_required:      "must be accepted to register"
+    rate_limited:          "Too many attempts. Try again later."
+    unknown_checklist_key: "Unknown checklist key."
 
   flash:
-    request_created:    "Request created."
-    request_submitted:  "Request submitted. We'll notify you when it's reviewed."
-    request_updated:    "Request updated."
-    request_deleted:    "Request deleted."
-    payment_confirmed:  "Payment confirmed. Your request is now in progress."
-    user_updated:       "Profile updated."
-    message_sent:       "Message sent."
-    pipeline_advanced:  "Moved to next stage."
-    pipeline_retreated: "Moved back to previous stage."
-    registered:         "Welcome aboard."
+    request_created:        "Request created."
+    request_submitted:      "Request submitted. We'll notify you when it's reviewed."
+    request_updated:        "Request updated."
+    request_deleted:        "Request deleted."
+    request_not_editable:   "This request can no longer be edited."
+    request_not_submittable: "This request cannot be submitted."
+    payment_confirmed:      "Payment confirmed. Your request is now in progress."
+    user_updated:           "Profile updated."
+    message_sent:           "Message sent."
+    pipeline_advanced:      "Moved to next stage."
+    pipeline_retreated:     "Moved back to previous stage."
+    status_changed:         "Status updated."
+    document_checklist_updated: "Checklist updated."
+    conversation_started:   "Conversation started."
+    registered:             "Welcome aboard."
+
+  profile:
+    edit_title: "Edit profile"
+    sections:
+      account:        "Account"
+      notifications:  "Notifications"
+      guardian:       "Guardian"
+    fields:
+      name:                  "Name"
+      email_address:         "Email"
+      country:               "Country"
+      birthday:              "Date of birth"
+      phone:                 "Phone"
+      whatsapp:              "WhatsApp"
+      locale:                "Language"
+      notification_email:    "Email notifications"
+      notification_telegram: "Telegram notifications"
+      privacy_accepted_at:   "Privacy accepted at"
+      guardian_name:         "Guardian name"
+      guardian_email:        "Guardian email"
+      guardian_phone:        "Guardian phone"
+    locales:
+      es: "Spanish"
+      en: "English"
+      ru: "Russian"
+    countries:
+      ES: "Spain"
+      AR: "Argentina"
+      MX: "Mexico"
+      CO: "Colombia"
+      RU: "Russia"
+      UA: "Ukraine"
+      BY: "Belarus"
+      KZ: "Kazakhstan"
+      PE: "Peru"
+      CL: "Chile"
+      VE: "Venezuela"
+      EC: "Ecuador"
+      US: "United States"
+      OTHER: "Other"
 
   registrations:
     title:          "Create your account"
@@ -23,6 +69,9 @@ en:
     have_account:   "Already have an account?"
 
   pipeline:
+    active:  "Active"
+    revenue: "Revenue"
+    empty:   "No requests in this stage."
     stages:
       pago_recibido:     "Payment received"
       documentos:        "Documents"
@@ -35,6 +84,53 @@ en:
 
   requests:
     empty: "You don't have any requests yet."
+    new_title:  "New request"
+    edit_title: "Edit request"
+    actions:
+      submit:  "Submit request"
+      new:     "New request"
+    sections:
+      info:      "Request information"
+      documents: "Documents"
+      payment:   "Payment"
+      student:   "Student"
+      pipeline:  "Pipeline"
+      chat:      "Chat"
+      status:    "Status"
+      pipeline_notes: "Pipeline notes"
+    fields:
+      subject:              "Subject"
+      description:          "Description"
+      service_type:         "Service type"
+      education_system:     "Education system"
+      university:           "University"
+      year:                 "Year"
+      studies_finished:     "Studies finished?"
+      language_knowledge:   "Language knowledge"
+      language_certificate: "Language certificate"
+      privacy_accepted:     "I accept the privacy policy."
+      payment_amount:       "Amount"
+    studies_finished:
+      yes_label: "Yes"
+      no_label:  "No"
+    language_knowledge:
+      A1:     "A1"
+      A2:     "A2"
+      B1:     "B1"
+      B2:     "B2"
+      C1:     "C1"
+      C2:     "C2"
+      native: "Native"
+    checklist:
+      sol: "Application form (solicitud)"
+      vol: "Reply slip (volante)"
+      tas: "Fees (tasas)"
+      cer: "Academic certificate"
+      tit: "Diploma"
+    payment:
+      not_set:      "No amount set yet."
+      confirmed_at: "Confirmed at"
+      confirmed_by: "Confirmed by"
     status:
       draft:             "Draft"
       submitted:         "Submitted"
@@ -63,11 +159,43 @@ en:
   messages:
     placeholder: "Type a message..."
 
+  notifications:
+    empty: "You have no notifications yet."
+
+  admin:
+    requests:
+      sections:
+        student:        "Student"
+        status:         "Status"
+        payment:        "Payment"
+        pipeline:       "Pipeline"
+        checklist:      "Document checklist"
+        chat:           "Chat"
+        pipeline_notes: "Pipeline notes"
+      actions:
+        change_status:    "Change status"
+        confirm_payment:  "Confirm payment"
+        advance:          "Advance"
+        retreat:          "Retreat"
+        retreat_modal:    "Retreat to previous stage"
+        start_chat:       "Start conversation"
+        open_chat:        "Open conversation"
+      labels:
+        changed_at:    "Changed at"
+        changed_by:    "Changed by"
+        confirmed_at:  "Confirmed at"
+        confirmed_by:  "Confirmed by"
+        retreat_reason: "Reason"
+
   nav:
     dashboard:     "Dashboard"
     requests:      "Requests"
+    my_requests:   "My requests"
+    new_request:   "New request"
     conversations: "Messages"
     pipeline:      "Pipeline"
     profile:       "Profile"
+    notifications: "Notifications"
     sign_in:       "Sign in"
     sign_out:      "Sign out"
+    language:      "Language"

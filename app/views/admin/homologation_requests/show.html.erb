@@ -1,0 +1,212 @@
+<% content_for :title, @homologation_request.subject %>
+
+<% hr      = @homologation_request %>
+<% student = hr.user %>
+
+<%= render "shared/page_header",
+      title: hr.subject,
+      actions: capture {
+        if hr.conversation
+          concat link_to(t("admin.requests.actions.open_chat"), conversation_path(hr.conversation), class: "btn btn-ghost btn-sm")
+        else
+          concat button_to(t("admin.requests.actions.start_chat"), admin_homologation_request_conversation_path(hr), method: :post, class: "btn btn-ghost btn-sm")
+        end
+        concat link_to(t("actions.back"), admin_pipeline_path, class: "btn btn-ghost btn-sm")
+      } %>
+
+<div class="grid gap-6 md:grid-cols-2">
+
+  <%# STUDENT — vCard style %>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("admin.requests.sections.student") %></h3>
+
+      <div class="flex items-center gap-3 mt-2">
+        <div class="avatar placeholder">
+          <div class="bg-neutral text-neutral-content w-12 rounded-full">
+            <span><%= student.initials %></span>
+          </div>
+        </div>
+        <div class="min-w-0">
+          <p class="font-semibold truncate"><%= student.name %></p>
+          <p class="text-sm opacity-60 truncate"><%= student.email_address %></p>
+        </div>
+      </div>
+
+      <div class="divider my-2"></div>
+
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+        <dt class="opacity-60"><%= t("profile.fields.country") %></dt>
+        <dd><%= student.country.presence || "—" %></dd>
+        <dt class="opacity-60"><%= t("profile.fields.phone") %></dt>
+        <dd><%= student.phone.presence || "—" %></dd>
+      </dl>
+    </div>
+  </div>
+
+  <%# CONTROL PANEL — Status + Pipeline tabs %>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body p-4">
+      <div role="tablist" class="tabs tabs-border">
+        <input type="radio" name="control_tabs" role="tab" class="tab" aria-label="<%= t('admin.requests.sections.status') %>" checked>
+        <div role="tabpanel" class="tab-content pt-4 space-y-3">
+          <p>
+            <span class="badge badge-lg <%= status_badge_class(hr.status) %>">
+              <%= t("requests.status.#{hr.status}") %>
+            </span>
+          </p>
+
+          <% if hr.status_changed_at %>
+            <p class="text-xs opacity-60">
+              <%= l hr.status_changed_at, format: :long %>
+              <% if hr.status_changer %>· <%= hr.status_changer.email_address %><% end %>
+            </p>
+          <% end %>
+
+          <%= form_with url: admin_homologation_request_status_transitions_path(hr),
+                        scope: :status_transition,
+                        class: "join w-full" do |f| %>
+            <%= f.select :status,
+                  HomologationRequest::STATUSES.map { |s| [t("requests.status.#{s}"), s] },
+                  { selected: hr.status },
+                  class: "select select-bordered join-item flex-1" %>
+            <%= f.submit t("admin.requests.actions.change_status"), class: "btn btn-primary join-item" %>
+          <% end %>
+        </div>
+
+        <input type="radio" name="control_tabs" role="tab" class="tab" aria-label="<%= t('admin.requests.sections.pipeline') %>">
+        <div role="tabpanel" class="tab-content pt-4 space-y-3">
+          <% if hr.pipeline_stage %>
+            <p>
+              <span class="badge badge-lg badge-primary">
+                <%= t("pipeline.stages.#{hr.pipeline_stage}") %>
+              </span>
+            </p>
+
+            <% if hr.pipeline_changed_at %>
+              <p class="text-xs opacity-60">
+                <%= l hr.pipeline_changed_at, format: :long %>
+                <% if hr.pipeline_changer %>· <%= hr.pipeline_changer.email_address %><% end %>
+              </p>
+            <% end %>
+
+            <div class="flex gap-2 justify-end pt-2" data-controller="dialog">
+              <button type="button" data-action="dialog#open" class="btn btn-ghost btn-sm">
+                ← <%= t("admin.requests.actions.retreat") %>
+              </button>
+              <%= button_to t("admin.requests.actions.advance") + " →",
+                    admin_homologation_request_pipeline_advance_path(hr),
+                    method: :post,
+                    class: "btn btn-primary btn-sm" %>
+
+              <dialog data-dialog-target="dialog" class="modal">
+                <div class="modal-box">
+                  <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                  </form>
+                  <h3 class="font-bold text-lg mb-4"><%= t("admin.requests.actions.retreat_modal") %></h3>
+                  <%= form_with url: admin_homologation_request_pipeline_retreat_path(hr),
+                                scope: :pipeline_retreat do |f| %>
+                    <fieldset class="fieldset">
+                      <label class="label" for="<%= f.field_id(:reason) %>"><%= t("admin.requests.labels.retreat_reason") %></label>
+                      <%= f.text_area :reason, class: "textarea textarea-bordered w-full", rows: 3, required: true %>
+                    </fieldset>
+                    <div class="modal-action">
+                      <%= f.submit t("admin.requests.actions.retreat"), class: "btn btn-warning" %>
+                    </div>
+                  <% end %>
+                </div>
+                <form method="dialog" class="modal-backdrop"><button>close</button></form>
+              </dialog>
+            </div>
+          <% else %>
+            <p class="opacity-60"><%= t("requests.payment.not_set") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# PAYMENT %>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <h3 class="card-title text-base"><%= t("admin.requests.sections.payment") %></h3>
+
+      <% if hr.payment_amount.present? %>
+        <p class="text-2xl font-semibold mt-1"><%= number_to_currency hr.payment_amount %></p>
+      <% else %>
+        <p class="opacity-60"><%= t("requests.payment.not_set") %></p>
+      <% end %>
+
+      <% if hr.payment_confirmed_at %>
+        <p class="text-xs opacity-60 mt-1">
+          <%= t("admin.requests.labels.confirmed_at") %>:
+          <%= l hr.payment_confirmed_at, format: :long %>
+          <% if hr.payment_confirmer %>· <%= hr.payment_confirmer.email_address %><% end %>
+        </p>
+      <% end %>
+
+      <% if hr.status == "awaiting_payment" %>
+        <%= form_with url: admin_homologation_request_payment_confirmations_path(hr),
+                      scope: :payment_confirmation,
+                      class: "join w-full mt-4" do |f| %>
+          <% if hr.payment_amount.blank? %>
+            <%= f.number_field :payment_amount,
+                  step: 0.01,
+                  placeholder: t("requests.fields.payment_amount"),
+                  class: "input input-bordered join-item flex-1" %>
+          <% end %>
+          <%= f.submit t("admin.requests.actions.confirm_payment"), class: "btn btn-success join-item" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <%# CHECKLIST — with progress %>
+  <% checklist_keys  = PipelineFlow.checklist_keys %>
+  <% checklist_done  = checklist_keys.count { |k| hr.checklist_done?(k) } %>
+  <% checklist_total = checklist_keys.size %>
+  <div class="card bg-base-100 shadow">
+    <div class="card-body">
+      <header class="flex items-center justify-between gap-2">
+        <h3 class="card-title text-base"><%= t("admin.requests.sections.checklist") %></h3>
+        <span class="text-sm font-mono opacity-70"><%= checklist_done %>/<%= checklist_total %></span>
+      </header>
+
+      <progress class="progress <%= checklist_done == checklist_total ? 'progress-success' : 'progress-primary' %> w-full"
+                value="<%= checklist_done %>" max="<%= checklist_total %>"></progress>
+
+      <ul class="mt-2 space-y-1">
+        <% checklist_keys.each do |key| %>
+          <li>
+            <%= form_with url: admin_homologation_request_document_checklist_path(hr),
+                          method: :patch,
+                          scope: :document_checklist,
+                          data: { controller: "auto-submit" },
+                          class: "flex items-center gap-2" do |f| %>
+              <%= f.hidden_field :key, value: key %>
+              <%= f.hidden_field :value, value: (hr.checklist_done?(key) ? "0" : "1") %>
+              <input type="checkbox" class="checkbox checkbox-sm"
+                     <%= "checked" if hr.checklist_done?(key) %>
+                     data-action="auto-submit#submit">
+              <span class="text-sm <%= 'line-through opacity-50' if hr.checklist_done?(key) %>">
+                <%= t("requests.checklist.#{key}") %>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <%# PIPELINE NOTES — full width, natural prose %>
+  <% if hr.pipeline_notes.present? %>
+    <div class="card bg-base-100 shadow md:col-span-2">
+      <div class="card-body">
+        <h3 class="card-title text-base"><%= t("admin.requests.sections.pipeline_notes") %></h3>
+        <div class="text-sm whitespace-pre-wrap leading-relaxed opacity-80"><%= hr.pipeline_notes %></div>
+      </div>
+    </div>
+  <% end %>
+
+</div>

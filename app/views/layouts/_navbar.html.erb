@@ -5,6 +5,7 @@
 
   <% unless current_user %>
     <div class="navbar-end gap-2">
+      <%= render "layouts/locale_switcher" %>
       <%= link_to t("nav.sign_in", default: "Sign in"), new_session_path, class: "btn btn-ghost btn-sm" %>
       <%= link_to t("registrations.submit"), new_registration_path, class: "btn btn-primary btn-sm" %>
     </div>
@@ -19,14 +20,41 @@
       </div>
     <% end %>
 
+    <% if current_user.student? %>
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal gap-1 px-1">
+          <li><%= link_to t("nav.my_requests"), root_path, class: nav_link_class("") %></li>
+          <li><%= link_to t("nav.new_request"), new_homologation_request_path, class: nav_link_class("homologation_requests/new") %></li>
+        </ul>
+      </div>
+    <% end %>
+
     <div class="navbar-end gap-2">
+      <%= turbo_stream_from current_user %>
+
+      <%= render "layouts/locale_switcher" %>
+
+      <%= link_to notifications_path, class: "btn btn-ghost btn-circle indicator", aria: { label: t("nav.notifications") } do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0"/>
+        </svg>
+        <% unread_count = current_user.notifications.unread.count %>
+        <% if unread_count > 0 %>
+          <span class="badge badge-sm badge-error indicator-item"><%= unread_count %></span>
+        <% end %>
+      <% end %>
+
+      <div id="notifications" class="hidden"></div>
+
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
-          <div class="bg-primary text-primary-content w-9 rounded-full">
+          <div class="bg-neutral text-neutral-content w-9 rounded-full">
             <span class="text-sm"><%= current_user.initials %></span>
           </div>
         </div>
         <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
+          <li><%= link_to t("nav.profile"), profile_path %></li>
+          <li><%= link_to t("nav.notifications"), notifications_path %></li>
           <li><%= button_to t("nav.sign_out"), session_path, method: :delete, class: "w-full text-left" %></li>
         </ul>
       </div>

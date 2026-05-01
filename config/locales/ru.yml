@@ -1,20 +1,66 @@
 ru:
   errors:
-    not_authorized:     "У вас нет прав для выполнения этого действия."
-    privacy_required:   "должна быть принята для регистрации"
-    rate_limited:       "Слишком много попыток. Попробуйте позже."
+    not_authorized:        "У вас нет прав для выполнения этого действия."
+    privacy_required:      "должна быть принята для регистрации"
+    rate_limited:          "Слишком много попыток. Попробуйте позже."
+    unknown_checklist_key: "Неизвестный ключ чеклиста."
 
   flash:
-    request_created:    "Заявка создана."
-    request_submitted:  "Заявка отправлена. Мы уведомим вас после проверки."
-    request_updated:    "Заявка обновлена."
-    request_deleted:    "Заявка удалена."
-    payment_confirmed:  "Оплата подтверждена. Ваша заявка в работе."
-    user_updated:       "Профиль обновлён."
-    message_sent:       "Сообщение отправлено."
-    pipeline_advanced:  "Передвинуто на следующий этап."
-    pipeline_retreated: "Возвращено на предыдущий этап."
-    registered:         "Добро пожаловать."
+    request_created:        "Заявка создана."
+    request_submitted:      "Заявка отправлена. Мы уведомим вас после проверки."
+    request_updated:        "Заявка обновлена."
+    request_deleted:        "Заявка удалена."
+    request_not_editable:   "Эту заявку больше нельзя редактировать."
+    request_not_submittable: "Эту заявку нельзя отправить."
+    payment_confirmed:      "Оплата подтверждена. Ваша заявка в работе."
+    user_updated:           "Профиль обновлён."
+    message_sent:           "Сообщение отправлено."
+    pipeline_advanced:      "Передвинуто на следующий этап."
+    pipeline_retreated:     "Возвращено на предыдущий этап."
+    status_changed:         "Статус обновлён."
+    document_checklist_updated: "Чеклист обновлён."
+    conversation_started:   "Чат создан."
+    registered:             "Добро пожаловать."
+
+  profile:
+    edit_title: "Редактировать профиль"
+    sections:
+      account:        "Аккаунт"
+      notifications:  "Уведомления"
+      guardian:       "Опекун"
+    fields:
+      name:                  "Имя"
+      email_address:         "Email"
+      country:               "Страна"
+      birthday:              "Дата рождения"
+      phone:                 "Телефон"
+      whatsapp:              "WhatsApp"
+      locale:                "Язык"
+      notification_email:    "Уведомления по email"
+      notification_telegram: "Уведомления в Telegram"
+      privacy_accepted_at:   "Политика принята"
+      guardian_name:         "Имя опекуна"
+      guardian_email:        "Email опекуна"
+      guardian_phone:        "Телефон опекуна"
+    locales:
+      es: "Испанский"
+      en: "Английский"
+      ru: "Русский"
+    countries:
+      ES: "Испания"
+      AR: "Аргентина"
+      MX: "Мексика"
+      CO: "Колумбия"
+      RU: "Россия"
+      UA: "Украина"
+      BY: "Беларусь"
+      KZ: "Казахстан"
+      PE: "Перу"
+      CL: "Чили"
+      VE: "Венесуэла"
+      EC: "Эквадор"
+      US: "США"
+      OTHER: "Другая"
 
   registrations:
     title:          "Создайте аккаунт"
@@ -23,6 +69,9 @@ ru:
     have_account:   "Уже есть аккаунт?"
 
   pipeline:
+    active:  "Активные"
+    revenue: "Выручка"
+    empty:   "Нет заявок на этом этапе."
     stages:
       pago_recibido:     "Оплата получена"
       documentos:        "Документы"
@@ -35,6 +84,53 @@ ru:
 
   requests:
     empty: "У вас пока нет заявок."
+    new_title:  "Новая заявка"
+    edit_title: "Редактировать заявку"
+    actions:
+      submit:  "Подать заявку"
+      new:     "Новая заявка"
+    sections:
+      info:      "Информация о заявке"
+      documents: "Документы"
+      payment:   "Оплата"
+      student:   "Студент"
+      pipeline:  "Пайплайн"
+      chat:      "Чат"
+      status:    "Статус"
+      pipeline_notes: "Заметки пайплайна"
+    fields:
+      subject:              "Тема"
+      description:          "Описание"
+      service_type:         "Тип услуги"
+      education_system:     "Система образования"
+      university:           "Университет"
+      year:                 "Год"
+      studies_finished:     "Учёба завершена?"
+      language_knowledge:   "Уровень языка"
+      language_certificate: "Сертификат о языке"
+      privacy_accepted:     "Принимаю политику конфиденциальности."
+      payment_amount:       "Сумма"
+    studies_finished:
+      yes_label: "Да"
+      no_label:  "Нет"
+    language_knowledge:
+      A1:     "A1"
+      A2:     "A2"
+      B1:     "B1"
+      B2:     "B2"
+      C1:     "C1"
+      C2:     "C2"
+      native: "Носитель"
+    checklist:
+      sol: "Заявление (solicitud)"
+      vol: "Волант (volante)"
+      tas: "Тасы (tasas)"
+      cer: "Академическая справка"
+      tit: "Диплом"
+    payment:
+      not_set:      "Сумма пока не задана."
+      confirmed_at: "Подтверждено"
+      confirmed_by: "Подтвердил"
     status:
       draft:             "Черновик"
       submitted:         "Отправлена"
@@ -63,11 +159,43 @@ ru:
   messages:
     placeholder: "Введите сообщение..."
 
+  notifications:
+    empty: "У вас пока нет уведомлений."
+
+  admin:
+    requests:
+      sections:
+        student:        "Студент"
+        status:         "Статус"
+        payment:        "Оплата"
+        pipeline:       "Пайплайн"
+        checklist:      "Чеклист документов"
+        chat:           "Чат"
+        pipeline_notes: "Заметки пайплайна"
+      actions:
+        change_status:    "Сменить статус"
+        confirm_payment:  "Подтвердить оплату"
+        advance:          "Дальше"
+        retreat:          "Назад"
+        retreat_modal:    "Откатить на предыдущий этап"
+        start_chat:       "Начать чат"
+        open_chat:        "Открыть чат"
+      labels:
+        changed_at:    "Изменено"
+        changed_by:    "Изменил"
+        confirmed_at:  "Подтверждено"
+        confirmed_by:  "Подтвердил"
+        retreat_reason: "Причина"
+
   nav:
     dashboard:     "Панель"
     requests:      "Заявки"
+    my_requests:   "Мои заявки"
+    new_request:   "Новая заявка"
     conversations: "Сообщения"
     pipeline:      "Пайплайн"
     profile:       "Профиль"
+    notifications: "Уведомления"
     sign_in:       "Войти"
     sign_out:      "Выйти"
+    language:      "Язык"

@@ -7,12 +7,26 @@ Rails.application.routes.draw do
     resources :messages, only: :create
   end
 
+  resources :homologation_requests, only: %i[new create show edit update] do
+    resource :submission, only: :create, controller: "homologation_request_submissions"
+  end
+
+  resource  :profile, only: %i[show edit update]
+  resources :notifications, only: :index
+  resource  :locale, only: :update
+
   namespace :admin do
     resource :pipeline, only: :show
 
-    resources :homologation_requests, only: [], module: :homologation_requests do
-      resource :pipeline_advance, only: :create
-      resource :pipeline_retreat, only: :create
+    resources :homologation_requests, only: :show do
+      scope module: :homologation_requests do
+        resource  :pipeline_advance,     only: :create
+        resource  :pipeline_retreat,     only: :create
+        resources :status_transitions,   only: :create
+        resources :payment_confirmations, only: :create
+        resource  :document_checklist,   only: :update
+        resource  :conversation,         only: :create
+      end
     end
   end
 
