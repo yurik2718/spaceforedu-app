@@ -14,8 +14,7 @@ class Admin::PipelinesController < ApplicationController
   private
     def group_by_stage(scope)
       PipelineFlow.all_stages.index_with do |stage|
-        relation = scope.where(pipeline_stage: stage).order(updated_at: :desc)
-        PipelineFlow.kanban_stages.include?(stage) ? relation.includes(:user) : relation
+        scope.where(pipeline_stage: stage).order(updated_at: :desc).includes(:user)
       end
     end
 

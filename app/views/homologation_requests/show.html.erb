@@ -7,7 +7,14 @@
       actions: capture {
         concat content_tag(:span, t("requests.status.#{hr.status}"), class: "badge badge-lg #{status_badge_class(hr.status)}")
         if hr.conversation
-          concat link_to(t("nav.conversations"), conversation_path(hr.conversation), class: "btn btn-ghost btn-sm")
+          unread_count = hr.conversation.unread_for?(Current.user) ? 1 : 0
+          concat(link_to(conversation_path(hr.conversation), class: "btn btn-secondary btn-sm gap-1.5") do
+            chat_icon = content_tag(:svg, '<path stroke-linecap="round" stroke-linejoin="round" d="M21 12a8 8 0 01-11.5 7.2L4 21l1.8-5.5A8 8 0 1121 12z"/>'.html_safe,
+              viewBox: "0 0 24 24", class: "w-4 h-4", fill: "none", stroke: "currentColor", "stroke-width": 2, "aria-hidden": true)
+            label = content_tag(:span, t("requests.actions.open_chat"))
+            badge = unread_count.positive? ? content_tag(:span, "•", class: "text-primary text-base leading-none ml-1") : "".html_safe
+            chat_icon + label + badge
+          end)
         end
         if policy(hr).update? && HomologationRequestsController::EDITABLE_STATUSES.include?(hr.status)
           concat link_to(t("actions.edit"), edit_homologation_request_path(hr), class: "btn btn-ghost btn-sm")
@@ -20,7 +27,7 @@
 <div class="grid gap-6 md:grid-cols-2">
 
   <%# REQUEST INFO %>
-  <div class="card bg-base-100 shadow">
+  <div class="card bg-white shadow">
     <div class="card-body">
       <h3 class="card-title text-base"><%= t("requests.sections.info") %></h3>
 
@@ -63,7 +70,7 @@
   <% checklist_keys  = PipelineFlow.checklist_keys %>
   <% checklist_done  = checklist_keys.count { |k| hr.checklist_done?(k) } %>
   <% checklist_total = checklist_keys.size %>
-  <div class="card bg-base-100 shadow">
+  <div class="card bg-white shadow">
     <div class="card-body">
       <header class="flex items-center justify-between gap-2">
         <h3 class="card-title text-base"><%= t("requests.sections.documents") %></h3>
@@ -87,9 +94,13 @@
     </div>
   </div>
 
+  <%# DOCUMENTS — student uploads %>
+  <% can_edit = policy(hr).update? && HomologationRequestsController::EDITABLE_STATUSES.include?(hr.status) %>
+  <%= render "homologation_requests/documents", hr: hr, can_edit: can_edit %>
+
   <%# PAYMENT — only when relevant %>
   <% if hr.payment_amount.present? || hr.status == "awaiting_payment" %>
-    <div class="card bg-base-100 shadow md:col-span-2">
+    <div class="card bg-white shadow md:col-span-2">
       <div class="card-body">
         <h3 class="card-title text-base"><%= t("requests.sections.payment") %></h3>
 

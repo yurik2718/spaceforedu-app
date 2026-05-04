@@ -21,6 +21,11 @@ en:
     document_checklist_updated: "Checklist updated."
     conversation_started:   "Conversation started."
     registered:             "Welcome aboard."
+    documents_uploaded:
+      one:   "File uploaded."
+      other: "%{count} files uploaded."
+    document_removed:       "File removed."
+    no_files_selected:      "No files selected."
 
   profile:
     edit_title: "Edit profile"
@@ -104,12 +109,25 @@ en:
     new_title:  "New request"
     edit_title: "Edit request"
     actions:
-      submit:  "Submit request"
-      new:     "New request"
+      submit:    "Submit request"
+      new:       "New request"
+      open_chat: "Open chat"
+    attachments:
+      intro:           "Upload scans of your diploma, passport and other documents."
+      empty:           "No documents attached yet."
+      drop_here:       "Drop files here"
+      or:              "or"
+      choose:          "choose manually"
+      formats_hint:    "PDF, JPG, PNG · up to 50 MB per file"
+      download:        "Download"
+      remove:          "Remove"
+      confirm_remove:  "Remove this file?"
+      uploading:       "Uploading %{count}…"
     sections:
-      info:      "Request information"
-      documents: "Documents"
-      payment:   "Payment"
+      info:        "Request information"
+      documents:   "Verification checklist"
+      attachments: "Documents"
+      payment:     "Payment"
       student:   "Student"
       pipeline:  "Pipeline"
       chat:      "Chat"

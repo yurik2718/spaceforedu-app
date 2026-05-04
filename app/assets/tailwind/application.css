@@ -1,10 +1,707 @@
 @import "tailwindcss";
 
-@source not "./daisyui{,*}.mjs";
+/* ==========================================================================
+   Self-hosted variable fonts — no third-party calls, no privacy leaks.
+   Files live in app/assets/fonts/ and are fingerprinted by Propshaft.
+   Inter (SIL OFL 1.1) — github.com/rsms/inter
+   Inter Tight (SIL OFL 1.1) — github.com/itfoundry/inter-tight
+   ========================================================================== */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("Inter-Variable.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("Inter-Variable-Italic.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Inter Tight";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("InterTight-Variable.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+                 U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Tight";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("InterTight-Variable-Italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+                 U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Tight";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("InterTight-Cyrillic.woff2") format("woff2-variations");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
 
-@plugin "./daisyui.mjs";
+/* ==========================================================================
+   Space for Edu × Pin — Design tokens
+   Warm-cream/coral system (Pinterest-inspired) tuned to SFE coral #E8453C.
+   ========================================================================== */
+@theme {
+  --font-sans: "Inter", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Inter Tight", "Inter", -apple-system, system-ui, sans-serif;
 
-/* Optional for custom themes – Docs: https://daisyui.com/docs/themes/#how-to-add-a-new-custom-theme */
-@plugin "./daisyui-theme.mjs"{
-  /* custom theme here */
+  /* Brand & accent */
+  --color-primary:          #E8453C;
+  --color-primary-hover:    #C9342C;
+  --color-primary-pressed:  #C9342C;
+  --color-primary-light:    #fde6e4;
+  --color-primary-text:     #9e0a0a;
+  --color-on-primary:       #ffffff;
+
+  --color-accent-blue:      #2D7FF9;
+  --color-accent-blue-deep: #1F5FCF;
+  --color-accent-purple:    #7e238b;
+  --color-accent-purple-deep:#6845ab;
+
+  /* Surfaces — warm-cream chrome */
+  --color-canvas:           #ffffff;
+  --color-surface-soft:     #fbfbf9;
+  --color-surface-card:     #f6f6f3;
+  --color-surface-elevated: #ffffff;
+  --color-surface-dark:     #262622;
+  --color-secondary-bg:     #e5e5e0;
+  --color-secondary-pressed:#c8c8c1;
+
+  /* Hairlines */
+  --color-hairline:         #dadad3;
+  --color-hairline-soft:    #e5e5e0;
+
+  /* Text — warm-grey ramp */
+  --color-ink:              #000000;
+  --color-ink-soft:          #211922;
+  --color-body:             #33332e;
+  --color-charcoal:         #262622;
+  --color-mute:             #62625b;
+  --color-ash:              #91918c;
+  --color-stone:            #c8c8c1;
+  --color-on-dark:          #ffffff;
+
+  /* Semantic */
+  --color-success:          oklch(60% 0.15 150);
+  --color-success-light:    #c7f0da;
+  --color-success-deep:     #103c25;
+
+  --color-warning:          #b76b00;
+  --color-warning-light:    oklch(94% 0.05 80);
+
+  --color-error:            #9e0a0a;
+  --color-error-light:      #fde6e4;
+  --color-error-deep:       #C9342C;
+
+  --color-info:             #2D7FF9;
+  --color-info-light:       #e1ecfd;
+
+  /* Focus stack */
+  --color-focus:            #435ee5;
+
+  /* Radii — only 3 in active use */
+  --radius-sm:   8px;
+  --radius-md:  16px;
+  --radius-lg:  32px;
+
+  /* DaisyUI-compat color aliases — so legacy class names resolve to the SFE palette */
+  --color-base-100:         #ffffff;
+  --color-base-200:         #f6f6f3;
+  --color-base-300:         #e5e5e0;
+  --color-base-content:     #33332e;
+  --color-neutral:          #262622;
+  --color-neutral-content:  #ffffff;
+  --color-primary-content:  #ffffff;
+  --color-secondary:        #e5e5e0;
+  --color-secondary-content:#262622;
+  --color-accent:           #2D7FF9;
+  --color-accent-content:   #ffffff;
+}
+
+:root {
+  /* Mirrors of the Pin design tokens for direct CSS usage */
+  --primary:           #E8453C;
+  --primary-pressed:   #C9342C;
+  --on-primary:        #ffffff;
+
+  --canvas:            #ffffff;
+  --surface-soft:      #fbfbf9;
+  --surface-card:      #f6f6f3;
+  --surface-elevated:  #ffffff;
+  --surface-dark:      #262622;
+  --secondary-bg:      #e5e5e0;
+  --secondary-pressed: #c8c8c1;
+
+  --hairline:          #dadad3;
+  --hairline-soft:     #e5e5e0;
+
+  --ink:               #000000;
+  --ink-soft:          #211922;
+  --body:              #33332e;
+  --charcoal:          #262622;
+  --mute:              #62625b;
+  --ash:               #91918c;
+  --stone:             #c8c8c1;
+  --on-dark:           #ffffff;
+  --on-dark-mute:      rgba(255,255,255,0.7);
+
+  --r-none:  0;
+  --r-sm:    8px;
+  --r-md:   16px;
+  --r-lg:   32px;
+  --r-full: 9999px;
+
+  --shadow-modal:  0 16px 32px rgba(0,0,0,.18), 0 2px 6px rgba(0,0,0,.10);
+  --shadow-card:   0 1px 2px rgba(0,0,0,.04);
+  --scrim:         rgba(0,0,0,.50);
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--body);
+  background: var(--surface-soft);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Buttons ──────────────────────────────────────── */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 40px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+@utility btn-sm       { height: 32px; padding-inline: 12px; font-size: 13px; }
+@utility btn-circle   { width: 40px; height: 40px; padding: 0; border-radius: var(--r-full); background: var(--surface-card); color: var(--ink); }
+@utility btn-primary  { background: var(--primary); color: var(--on-primary); &:hover { background: var(--primary-pressed); } }
+@utility btn-secondary{ background: var(--secondary-bg); color: var(--ink); &:hover { background: var(--secondary-pressed); } }
+@utility btn-ghost    { background: transparent; color: var(--ink); &:hover { background: var(--surface-card); } }
+@utility btn-warning  { background: var(--color-warning); color: #fff; }
+@utility btn-success  { background: var(--color-success); color: #fff; }
+@utility btn-disabled { background: var(--surface-card); color: var(--ash); cursor: not-allowed; opacity: 1; pointer-events: none; }
+@utility btn-pill     { border-radius: var(--r-full); height: auto; padding: 8px 14px; background: var(--canvas); color: var(--ink); }
+
+/* ── Nav pill links (used by navbar) ──────────────── */
+@utility nav-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--r-full);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--body);
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+@utility nav-pill-active {
+  background: var(--ink);
+  color: var(--on-dark);
+}
+
+/* ── Badges ───────────────────────────────────────── */
+@utility badge {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.5rem;
+  height: 1.25rem;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+}
+@utility badge-sm      { height: 1rem; padding-inline: 0.375rem; font-size: 11px; }
+@utility badge-lg      { height: 1.5rem; padding-inline: 0.625rem; font-size: 13px; }
+@utility badge-neutral { background: var(--secondary-bg); color: var(--charcoal); }
+@utility badge-primary { background: var(--color-primary-light); color: var(--color-primary-text); }
+@utility badge-success { background: var(--color-success-light); color: var(--color-success-deep); }
+@utility badge-warning { background: var(--color-warning-light); color: var(--color-warning); }
+@utility badge-error   { background: var(--color-error-light);   color: var(--color-error); }
+@utility badge-info    { background: var(--color-info-light);    color: var(--color-accent-blue-deep); }
+@utility badge-ghost   { background: transparent; border: 1px solid var(--hairline); color: var(--mute); }
+
+/* ── Cards ────────────────────────────────────────── */
+@utility card         { background: var(--canvas); border-radius: var(--r-md); }
+@utility card-soft    { background: var(--surface-card); border-radius: var(--r-md); }
+@utility card-compact { --card-body-pad: 0.75rem; }
+@utility card-body    { padding: var(--card-body-pad, 1.25rem); display: flex; flex-direction: column; gap: 0.5rem; }
+@utility card-title   { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+@utility card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
+/* ── Forms ────────────────────────────────────────── */
+@utility fieldset        { border: none; padding: 0; margin: 0; }
+@utility fieldset-legend { font-size: 14px; font-weight: 600; color: var(--mute); margin-bottom: 0.75rem; }
+@utility label           { display: flex; align-items: center; font-size: 14px; font-weight: 500; margin-bottom: 0.25rem; color: var(--body); }
+@utility label-text-alt  { font-size: 12px; color: var(--mute); }
+
+@utility input {
+  height: 44px;
+  padding: 11px 15px;
+  font-size: 16px;
+  border: 1px solid var(--ash);
+  border-radius: var(--r-md);
+  background: var(--canvas);
+  color: var(--ink);
+  outline: none;
+  &:focus { border: 2px solid var(--ink); box-shadow: 0 0 0 4px var(--color-focus); padding: 10px 14px; }
+}
+@utility input-bordered { border: 1px solid var(--ash); }
+@utility input-sm       { height: 36px; padding-inline: 12px; font-size: 14px; }
+@utility input-error    { border-color: var(--color-error); &:focus { border-color: var(--color-error); box-shadow: 0 0 0 4px var(--color-error-light); } }
+
+@utility select {
+  height: 44px;
+  padding: 0 15px;
+  font-size: 16px;
+  border: 1px solid var(--ash);
+  border-radius: var(--r-md);
+  background: var(--canvas);
+  color: var(--ink);
+  appearance: auto;
+  outline: none;
+  &:focus { border-color: var(--ink); }
+}
+@utility select-bordered { border: 1px solid var(--ash); }
+@utility select-sm       { height: 36px; font-size: 14px; }
+
+@utility textarea {
+  padding: 11px 15px;
+  font-size: 16px;
+  border: 1px solid var(--ash);
+  border-radius: var(--r-md);
+  background: var(--canvas);
+  color: var(--ink);
+  outline: none;
+  resize: vertical;
+  &:focus { border-color: var(--ink); }
+}
+@utility textarea-bordered { border: 1px solid var(--ash); }
+
+@utility checkbox    { width: 1.125rem; height: 1.125rem; border-radius: 0.25rem; accent-color: var(--primary); }
+@utility checkbox-sm { width: 0.875rem; height: 0.875rem; }
+
+/* ── Search bar ───────────────────────────────────── */
+@utility search-bar {
+  height: 48px;
+  padding: 11px 15px;
+  border-radius: var(--r-full);
+  background: var(--surface-card);
+  font-size: 16px;
+  color: var(--ink);
+  border: 0;
+  outline: none;
+  &:focus { background: var(--canvas); border: 1px solid var(--ash); padding: 10px 14px; }
+}
+
+/* ── Alerts ───────────────────────────────────────── */
+@utility alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  border: 1px solid transparent;
+}
+@utility alert-success { background: var(--color-success-light); color: var(--color-success-deep); border-color: oklch(78% 0.12 150); }
+@utility alert-warning { background: var(--color-warning-light); color: var(--color-warning);      border-color: oklch(84% 0.13 80); }
+@utility alert-error   { background: var(--color-error-light);   color: var(--color-error);        border-color: oklch(80% 0.13 25); }
+@utility alert-info    { background: var(--color-info-light);    color: var(--color-accent-blue-deep); border-color: oklch(79% 0.10 240); }
+
+/* ── Progress ─────────────────────────────────────── */
+@utility progress {
+  height: 0.5rem;
+  border-radius: var(--r-full);
+  background: var(--secondary-bg);
+  overflow: hidden;
+  appearance: none;
+  border: none;
+  &::-webkit-progress-bar   { background: transparent; }
+  &::-webkit-progress-value { border-radius: var(--r-full); transition: width 300ms; }
+  &::-moz-progress-bar      { border-radius: var(--r-full); }
+}
+@utility progress-primary {
+  &::-webkit-progress-value { background: var(--primary); }
+  &::-moz-progress-bar      { background: var(--primary); }
+}
+@utility progress-success {
+  &::-webkit-progress-value { background: var(--color-success); }
+  &::-moz-progress-bar      { background: var(--color-success); }
+}
+
+/* ── Avatar ───────────────────────────────────────── */
+@utility avatar      { display: inline-flex; }
+@utility placeholder { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ── Misc ─────────────────────────────────────────── */
+@utility link       { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+@utility link-hover { text-decoration: none; &:hover { text-decoration: underline; } }
+
+@utility divider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  color: var(--ash);
+  &::before,
+  &::after { content: ""; flex: 1; border-top: 1px solid var(--hairline-soft); }
+}
+
+/* ── Type roles ──────────────────────────────────── */
+@utility t-display-xl {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 70px;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  color: var(--ink);
+}
+@utility t-display-lg {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  color: var(--ink);
+}
+@utility t-heading-xl {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+  color: var(--ink);
+}
+@utility t-heading-lg {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+@utility t-heading-md {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+@utility t-body-md  { font-size: 16px; line-height: 1.4; color: var(--body); }
+@utility t-body-sm  { font-size: 14px; line-height: 1.4; color: var(--body); }
+@utility t-caption  { font-size: 12px; line-height: 1.5; color: var(--mute); font-weight: 500; }
+
+/* ==========================================================================
+   DaisyUI-compat utilities — give legacy class names visual weight using the
+   warm-cream/coral SFE palette. Not full DaisyUI parity, just what the views
+   actually use today.
+   ========================================================================== */
+
+/* ── Rounded-box token (alias of r-md) ───────────────── */
+@utility rounded-box { border-radius: var(--r-md); }
+
+/* ── Navbar (legacy DaisyUI structure) ───────────────── */
+@utility navbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 56px;
+  padding: 10px 20px;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+@utility navbar-start  { display: flex; align-items: center; gap: 6px; }
+@utility navbar-end    { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+@utility navbar-center { display: flex; align-items: center; gap: 6px; margin-inline: auto; }
+
+/* ── Stats / stat ────────────────────────────────────── */
+@utility stats {
+  display: grid;
+  grid-auto-flow: column;
+  background: var(--canvas);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--hairline-soft);
+}
+@utility stats-vertical   { grid-auto-flow: row; }
+@utility stats-horizontal { grid-auto-flow: column; }
+@utility stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 22px;
+  border-inline-end: 1px solid var(--hairline-soft);
+}
+.stats-vertical > .stat,
+.stats > .stat:last-child { border-inline-end: 0; }
+.stats-vertical > .stat   { border-bottom: 1px solid var(--hairline-soft); }
+.stats-vertical > .stat:last-child { border-bottom: 0; }
+@utility stat-title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mute);
+  text-transform: none;
+  letter-spacing: 0;
+}
+@utility stat-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.6px;
+}
+@utility stat-desc    { font-size: 12px; color: var(--mute); }
+@utility stat-figure  { color: var(--ink); }
+@utility stat-actions { margin-top: 8px; }
+
+/* ── Dropdown — click-toggle via Stimulus (data-open) ─── */
+@utility dropdown {
+  position: relative;
+  display: inline-block;
+}
+@utility dropdown-end { display: inline-block; }
+@utility dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  min-width: 12rem;
+  background: var(--canvas);
+  border: 1px solid var(--hairline-soft);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-modal);
+  padding: 6px;
+  z-index: 30;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 120ms ease, transform 120ms ease, visibility 120ms;
+}
+.dropdown-end > .dropdown-content { left: auto; right: 0; }
+.dropdown[data-open="true"] > .dropdown-content {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Menu (used inside dropdowns) ─────────────────────── */
+@utility menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.menu > li > a,
+.menu > li > button,
+.menu > li > form > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  color: var(--body);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color 120ms ease;
+}
+.menu > li > a:hover,
+.menu > li > button:hover,
+.menu > li > form > button:hover { background: var(--surface-card); }
+@utility menu-active { background: var(--surface-card); font-weight: 600; color: var(--ink); }
+
+/* ── Indicator (notification badges over icons) ──────── */
+@utility indicator { position: relative; display: inline-flex; }
+@utility indicator-item {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  z-index: 1;
+}
+
+/* ── Join (segmented controls) ───────────────────────── */
+@utility join {
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--hairline-soft);
+  background: var(--canvas);
+}
+@utility join-vertical   { flex-direction: column; }
+@utility join-horizontal { flex-direction: row; }
+@utility join-item {
+  border-radius: 0;
+  border: 0;
+  border-inline-end: 1px solid var(--hairline-soft);
+}
+.join-vertical > .join-item { border-inline-end: 0; border-bottom: 1px solid var(--hairline-soft); }
+.join > .join-item:last-child { border-inline-end: 0; }
+.join-vertical > .join-item:last-child { border-bottom: 0; }
+
+/* ── Tabs ────────────────────────────────────────────── */
+@utility tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-card);
+  border-radius: var(--r-full);
+  padding: 4px;
+}
+@utility tab {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--r-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--body);
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+}
+@utility tab-active { background: var(--ink); color: var(--on-dark); }
+
+/* ── Toggle ─────────────────────────────────────────── */
+@utility toggle {
+  appearance: none;
+  width: 40px;
+  height: 22px;
+  border-radius: var(--r-full);
+  background: var(--secondary-bg);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  border: 0;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--canvas);
+  border-radius: var(--r-full);
+  transition: transform 150ms ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.toggle:checked          { background: var(--primary); }
+.toggle:checked::after   { transform: translateX(18px); }
+
+/* ── Hero ────────────────────────────────────────────── */
+@utility hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  background: var(--surface-soft);
+}
+@utility hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  max-width: 80rem;
+  width: 100%;
+  padding: 32px 24px;
+}
+
+/* ── Footer (DaisyUI-style alias) ────────────────────── */
+@utility footer {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 16px;
+  padding: 24px 20px;
+  background: var(--surface-card);
+  color: var(--mute);
+  font-size: 14px;
+}
+
+/* ── Chat bubbles ────────────────────────────────────── */
+@utility chat {
+  display: grid;
+  grid-template-columns: auto;
+  column-gap: 8px;
+  row-gap: 2px;
+  padding: 4px 0;
+}
+@utility chat-start {
+  justify-items: start;
+  grid-template-areas: "header" "bubble" "footer";
+}
+@utility chat-end {
+  justify-items: end;
+  grid-template-areas: "header" "bubble" "footer";
+}
+@utility chat-header { grid-area: header; font-size: 12px; color: var(--mute); }
+@utility chat-footer { grid-area: footer; font-size: 11px; color: var(--ash); }
+@utility chat-bubble {
+  grid-area: bubble;
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.chat-end > .chat-bubble {
+  border-bottom-right-radius: 4px;
+}
+.chat-start > .chat-bubble {
+  border-bottom-left-radius: 4px;
+}
+@utility chat-bubble-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+@utility chat-image { grid-area: image; }
+
+/* ── Step (used by status timeline) ──────────────────── */
+@utility step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--r-full);
+  background: var(--surface-card);
+  color: var(--body);
+  font-size: 13px;
+  font-weight: 500;
 }

@@ -2,7 +2,7 @@
 
 <%= render "shared/page_header", title: t("auth.password_reset_title") %>
 
-<%= form_with url: passwords_path, class: "card bg-base-100 shadow max-w-md mx-auto" do |f| %>
+<%= form_with url: passwords_path, class: "card bg-white shadow max-w-md mx-auto" do |f| %>
   <div class="card-body">
     <fieldset class="fieldset">
       <label class="label" for="<%= f.field_id(:email_address) %>"><%= t("profile.fields.email_address") %></label>

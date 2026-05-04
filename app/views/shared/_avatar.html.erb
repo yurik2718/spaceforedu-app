@@ -1,0 +1,8 @@
+<%# Renders the user's avatar.
+    Locals:
+      user        — required, responds to #initials and #name
+      size        — :xs | :sm | :md (default) | :lg | :xl
+      extra_class — extra Tailwind classes to merge onto the <svg> %>
+<%= avatar_svg(user,
+      size: local_assigns[:size] || :md,
+      extra_class: local_assigns[:extra_class]) %>

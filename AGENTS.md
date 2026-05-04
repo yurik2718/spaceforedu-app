@@ -259,6 +259,57 @@ Daisy classes directly in ERB. Extract a partial when something repeats — no v
 
 Helpers are reserved for view-only formatting that takes a value and returns a string (an icon name, a date band). Anything that needs the database, the current user, or a method chain longer than two stops belongs on the model. View-only data *about* a record (the CSS class for a status, a humanized label) lives on the model so views stay declarative.
 
+### UI Guidelines — visual system
+
+The DaisyUI theme is **`corporate`** (set in `app/views/layouts/application.html.erb` via `data-theme`). Clean blue primary, sharp `0.25rem` radii, no default shadows. The look is "official document service" — banking/government-adjacent, not playful.
+
+**Hierarchy.** One H1 per page (`text-2xl font-bold`). One subtitle level — `text-sm uppercase tracking-wide opacity-60`. Never mix three weights/sizes for headings on the same screen. If you want emphasis, use color (`text-primary`, `text-error`), not another size.
+
+**Cards.** `bg-base-100 border border-base-300`. **No shadows.** If everything has shadow, shadow conveys nothing. Use `card` for the container; `card-body` for padding. Don't reach for `card-title` — write a normal `<header>` with `text-sm uppercase` label so cards stay consistent.
+
+**Borders, not shadows.** Separation between elements is a `border` (1px), `divide-y`, or `divide-x`. Reserve shadow for ephemeral overlays only (modals, dropdowns).
+
+**Spacing scale (memorize this).**
+- Page sections: `gap-6`
+- Within a card section: `space-y-3`
+- Form fields in a row: `gap-2`
+- Inline meta (badge + label): `gap-3`
+- Between rows in a list: `divide-y` (no `gap`)
+
+**Density.** Admin pages favor density. Use `btn-sm`, `select-sm`, `input-sm` by default. `btn` (default size) only for primary page actions. No `btn-lg` outside marketing.
+
+**Color tokens.** Use DaisyUI semantic tokens only: `bg-base-100`/`200`/`300`, `text-base-content`, `border-base-300`, `primary`/`success`/`warning`/`error`/`info`. **Never** raw Tailwind colors like `bg-blue-500`, `text-gray-700`, `border-slate-200`. For muted text use `opacity-60`, never two opacities stacked (parent `opacity-70` + child `opacity-60` compounds to 0.42 — invisible).
+
+**One accent per card.** If status is `success`, the badge is `badge-success` — buttons stay `btn-primary` or `btn-ghost`. Don't paint three semantic colors in one card.
+
+**Badges.** `badge` (default size) for counts and inline labels. `badge-lg` only for the **primary status indicator** of a page or card — one per card max. `badge-sm` only for tight inline counts inside dense lists.
+
+**Buttons.** `btn-primary` for the **one** main action. `btn` (no modifier) for secondary. `btn-ghost btn-sm` for tertiary nav-like actions. Destructive — `btn-error` (only on confirmed destructive operations, never on "Cancel"). Never `btn-success` for "Save" — primary is for save.
+
+**Icons.** Heroicons inline-SVG, `h-4 w-4` or `h-5 w-5`. Stroke width `1.5` or `2`, never mixed within a page. Don't add icons to text buttons unless the icon clarifies the action (▶ "Advance" is OK; 💾 "Save" is noise).
+
+**Hover and transitions.** `hover:bg-base-200 transition` on rows; `hover:border-primary` on selectable cards. **Don't** add hover to non-interactive surfaces — hover on a static card lies about affordance. Transitions are `transition` (~150ms), no longer.
+
+**Forms.**
+- `input input-bordered`, `select select-bordered`, `textarea textarea-bordered` — always with `-bordered`.
+- Use Tailwind `flex gap-2 items-end` for input + submit, never DaisyUI `join` (it stretches all children to max height, breaking buttons next to textareas).
+- Validation errors: `text-error text-sm` under the field.
+
+**Layout.**
+- Page-level layout uses Tailwind utilities (`grid`, `flex`, `gap-*`).
+- DaisyUI layout helpers (`hero`, `drawer`, `join`) are forbidden in app pages — they constrain composition for marketing patterns we don't have.
+- **Heights**: avoid `h-[calc(100vh-...)]`. Use the flex chain `html.h-full → body.flex flex-col → main.flex-1 min-h-0 → container.h-full flex flex-col` and let children take `flex-1`.
+
+**DaisyUI components — the safe set.**
+Use freely: `btn`, `badge`, `card`, `input`, `select`, `textarea`, `checkbox`, `progress`, `avatar`, `modal`, `divider`, `dropdown`, `menu`, `navbar`, `stats`, `table`.
+**Avoid (fragile in DaisyUI 5):** `tabs` (broken with radio inputs in some configs — prefer stacked sections), `chat` (inflexible — wrap in plain Tailwind for our chat needs), `join` (kills cross-axis sizing), `hero`, `drawer`.
+
+**When in doubt, simplify.**
+- Remove a card border before adding one.
+- Remove a heading level before adding one.
+- Remove an icon before adding one.
+- Two visible-state indicators on the same row = one too many. Pick one.
+
 **Page header:**
 ```erb
 <%= render "shared/page_header", title: t("nav.requests") %>
@@ -266,11 +317,14 @@ Helpers are reserved for view-only formatting that takes a value and returns a s
 
 **Card:**
 ```erb
-<div class="card bg-base-100 shadow">
+<div class="card bg-base-100 border border-base-300">
   <div class="card-body">
-    <h2 class="card-title"><%= @request.subject %></h2>
-    <p class="text-base-content/70 text-sm"><%= l @request.created_at, format: :short %></p>
-    <div class="card-actions justify-end">
+    <header class="flex items-center justify-between">
+      <h3 class="text-sm font-semibold uppercase tracking-wide opacity-60"><%= t("requests.sections.summary") %></h3>
+      <span class="badge <%= @request.status_badge_class %>"><%= t("requests.status.#{@request.status}") %></span>
+    </header>
+    <p class="mt-2 text-base-content/70 text-sm"><%= l @request.created_at, format: :short %></p>
+    <div class="card-actions justify-end mt-3">
       <%= link_to t("actions.view"), @request, class: "btn btn-primary btn-sm" %>
     </div>
   </div>
@@ -279,8 +333,8 @@ Helpers are reserved for view-only formatting that takes a value and returns a s
 
 **Table:**
 ```erb
-<div class="overflow-x-auto">
-  <table class="table bg-base-100 rounded-box shadow">
+<div class="overflow-x-auto rounded-box border border-base-300">
+  <table class="table">
     <thead>
       <tr>
         <th><%= t("requests.subject") %></th>

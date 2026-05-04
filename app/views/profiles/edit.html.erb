@@ -2,7 +2,7 @@
 
 <%= render "shared/page_header", title: t("profile.edit_title") %>
 
-<%= form_with model: @user, url: profile_path, class: "card bg-base-100 shadow" do |f| %>
+<%= form_with model: @user, url: profile_path, class: "card bg-white shadow" do |f| %>
   <div class="card-body space-y-6">
     <% if @user.errors.any? %>
       <div class="alert alert-error">

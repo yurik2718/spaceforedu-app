@@ -33,6 +33,18 @@ module ApplicationHelper
     locale.to_s.upcase
   end
 
+  # Language name in its OWN language — UX convention for language switchers.
+  # Lets a user who doesn't know the current locale still find their language.
+  NATIVE_LOCALE_LABELS = {
+    en: "English",
+    es: "Español",
+    ru: "Русский"
+  }.freeze
+
+  def native_locale_label(locale)
+    NATIVE_LOCALE_LABELS.fetch(locale.to_sym, locale.to_s.upcase)
+  end
+
   def masked_phone(value)
     return "—" if value.blank?
     digits = value.to_s.gsub(/\D/, "")

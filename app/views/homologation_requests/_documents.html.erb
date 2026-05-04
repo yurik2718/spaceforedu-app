@@ -1,0 +1,95 @@
+<%# Locals:
+      hr      — HomologationRequest
+      can_edit — boolean (uploader + delete buttons visible only when true) %>
+<%
+  attachments = hr.documents.attachments.includes(:blob).order(created_at: :desc)
+%>
+<div class="card bg-canvas border border-hairline-soft md:col-span-2">
+  <div class="card-body">
+    <header class="flex items-center justify-between gap-3">
+      <div>
+        <h3 class="card-title text-base"><%= t("requests.sections.attachments") %></h3>
+        <p class="text-sm text-mute mt-1"><%= t("requests.attachments.intro") %></p>
+      </div>
+      <span class="text-sm font-mono text-mute tabular-nums"><%= attachments.size %></span>
+    </header>
+
+    <% if attachments.any? %>
+      <ul class="mt-4 divide-y divide-hairline-soft border border-hairline-soft rounded-2xl overflow-hidden">
+        <% attachments.each do |attachment| %>
+          <li class="flex items-center gap-3 px-4 py-3 bg-canvas hover:bg-surface-soft transition-colors">
+            <span class="w-9 h-9 rounded-xl bg-surface-card inline-flex items-center justify-center shrink-0 text-mute" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M8 3h7l5 5v13H4V3h4z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 13h8M8 17h6"/>
+              </svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-semibold text-ink truncate"><%= attachment.filename.to_s %></p>
+              <p class="text-xs text-mute">
+                <%= number_to_human_size(attachment.byte_size) %>
+                <span class="mx-1.5">·</span>
+                <%= l(attachment.created_at, format: :short) %>
+              </p>
+            </div>
+            <%= link_to rails_blob_path(attachment, disposition: "attachment"),
+                  class: "btn btn-ghost btn-sm gap-1.5 shrink-0" do %>
+              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/>
+              </svg>
+              <span class="hidden sm:inline"><%= t("requests.attachments.download") %></span>
+            <% end %>
+            <% if can_edit %>
+              <%= button_to homologation_request_document_path(hr, attachment.id),
+                    method: :delete,
+                    form: { data: { turbo_confirm: t("requests.attachments.confirm_remove") } },
+                    class: "btn btn-ghost btn-sm shrink-0",
+                    aria: { label: t("requests.attachments.remove") } do %>
+                <svg viewBox="0 0 24 24" class="w-4 h-4 text-mute" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12M9 7V4h6v3m-7 0v13a1 1 0 001 1h6a1 1 0 001-1V7"/>
+                </svg>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <% unless can_edit %>
+        <p class="text-sm text-ash text-center py-6 mt-3 border border-dashed border-hairline-soft rounded-2xl">
+          <%= t("requests.attachments.empty") %>
+        </p>
+      <% end %>
+    <% end %>
+
+    <% if can_edit %>
+      <div class="mt-4 rounded-2xl border-2 border-dashed border-hairline transition-colors data-[over=true]:border-ink data-[over=true]:bg-surface-soft"
+           data-controller="dropzone"
+           data-dropzone-busy-message="<%= t('requests.attachments.uploading', count: '%{count}') %>">
+        <%= form_with url: homologation_request_documents_path(hr),
+              multipart: true,
+              data: { dropzone_target: "form" },
+              class: "p-6 flex flex-col items-center justify-center gap-2 text-center" do |f| %>
+          <span class="w-10 h-10 rounded-full bg-surface-card text-ink inline-flex items-center justify-center" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16"/>
+            </svg>
+          </span>
+          <p class="text-sm font-semibold text-ink" data-dropzone-target="label">
+            <%= t("requests.attachments.drop_here") %>
+          </p>
+          <label class="text-sm">
+            <span class="text-mute"><%= t("requests.attachments.or") %></span>
+            <span class="font-semibold text-ink underline underline-offset-2 cursor-pointer">
+              <%= t("requests.attachments.choose") %>
+            </span>
+            <%= file_field_tag "files[]",
+                  multiple: true,
+                  class: "sr-only",
+                  data: { dropzone_target: "input", action: "change->dropzone#selected" } %>
+          </label>
+          <p class="text-xs text-ash mt-1"><%= t("requests.attachments.formats_hint") %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

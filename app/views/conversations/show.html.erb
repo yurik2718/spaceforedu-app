@@ -3,8 +3,8 @@
 <% hr = @conversation.homologation_request %>
 <% back_path = Current.user.super_admin? ? admin_homologation_request_path(hr) : homologation_request_path(hr) %>
 
-<div class="flex flex-col h-full max-w-2xl mx-auto bg-base-100 rounded-box shadow overflow-hidden">
-  <header class="flex items-center justify-between gap-3 border-b border-base-300 px-4 py-3 flex-shrink-0">
+<div class="flex flex-col h-full max-w-2xl mx-auto bg-white rounded-lg shadow overflow-hidden">
+  <header class="flex items-center justify-between gap-3 border-b border-gray-200 px-4 py-3 flex-shrink-0">
     <div class="min-w-0">
       <%= link_to hr.subject, back_path, class: "font-semibold link link-hover truncate block" %>
       <% if Current.user.super_admin? %>

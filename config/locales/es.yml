@@ -21,6 +21,11 @@ es:
     document_checklist_updated: "Lista actualizada."
     conversation_started:   "Conversación iniciada."
     registered:             "Bienvenido a bordo."
+    documents_uploaded:
+      one:   "Archivo cargado."
+      other: "%{count} archivos cargados."
+    document_removed:       "Archivo eliminado."
+    no_files_selected:      "No has seleccionado ningún archivo."
 
   profile:
     edit_title: "Editar perfil"
@@ -104,12 +109,25 @@ es:
     new_title:  "Nueva solicitud"
     edit_title: "Editar solicitud"
     actions:
-      submit:  "Enviar solicitud"
-      new:     "Nueva solicitud"
+      submit:    "Enviar solicitud"
+      new:       "Nueva solicitud"
+      open_chat: "Abrir chat"
+    attachments:
+      intro:           "Sube escaneos de tu título, pasaporte y otros documentos."
+      empty:           "Aún no hay documentos adjuntos."
+      drop_here:       "Suelta los archivos aquí"
+      or:              "o"
+      choose:          "selecciona manualmente"
+      formats_hint:    "PDF, JPG, PNG · hasta 50 MB por archivo"
+      download:        "Descargar"
+      remove:          "Eliminar"
+      confirm_remove:  "¿Eliminar este archivo?"
+      uploading:       "Subiendo %{count}…"
     sections:
-      info:      "Información de la solicitud"
-      documents: "Documentos"
-      payment:   "Pago"
+      info:        "Información de la solicitud"
+      documents:   "Lista de verificación"
+      attachments: "Documentos"
+      payment:     "Pago"
       student:   "Estudiante"
       pipeline:  "Pipeline"
       chat:      "Chat"

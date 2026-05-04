@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   end
 
   resources :homologation_requests, only: %i[new create show edit update] do
-    resource :submission, only: :create, controller: "homologation_request_submissions"
+    resource  :submission, only: :create, controller: "homologation_request_submissions"
+    resources :documents,  only: %i[create destroy], controller: "homologation_request_documents"
   end
 
   resource  :profile, only: %i[show edit update]

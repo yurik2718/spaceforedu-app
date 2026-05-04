@@ -3,11 +3,11 @@
 Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
-    policy.font_src    :self, :data
+    policy.font_src    :self
     policy.img_src     :self, :https, :data, :blob
     policy.object_src  :none
-    policy.script_src  :self, :https
-    policy.style_src   :self, :https, :unsafe_inline  # Tailwind/DaisyUI requires inline styles
+    policy.script_src  :self
+    policy.style_src   :self, :unsafe_inline  # Tailwind requires inline styles
     policy.connect_src :self, :https,
                        "ws://localhost:3000",   # Action Cable in development
                        "wss://localhost:3000"

@@ -2,7 +2,7 @@
 
 <%= render "shared/page_header", title: t("registrations.title") %>
 
-<%= form_with model: @user, url: registration_path, class: "card bg-base-100 shadow max-w-md mx-auto" do |f| %>
+<%= form_with model: @user, url: registration_path, class: "card bg-white shadow max-w-md mx-auto" do |f| %>
   <div class="card-body">
     <% if @user.errors.any? %>
       <div class="alert alert-error">

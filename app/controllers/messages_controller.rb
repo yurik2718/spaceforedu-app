@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
 
     if @message.save
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream { head :no_content }
         format.html { redirect_to @conversation }
       end
     else

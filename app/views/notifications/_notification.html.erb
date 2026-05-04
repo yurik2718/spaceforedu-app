@@ -1,5 +1,5 @@
 <div id="<%= dom_id(notification) %>"
-     class="card card-compact bg-base-100 shadow-sm border-l-4 <%= notification.read_at? ? 'border-base-300 opacity-70' : 'border-primary' %>">
+     class="card card-compact bg-white shadow-sm border-l-4 <%= notification.read_at? ? 'border-gray-200 opacity-70' : 'border-primary' %>">
   <div class="card-body">
     <header class="flex items-start justify-between gap-3">
       <h4 class="font-semibold text-sm"><%= notification.title %></h4>

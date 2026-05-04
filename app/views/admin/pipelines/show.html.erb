@@ -1,38 +1,43 @@
 <%= render "shared/page_header", title: t("nav.pipeline") %>
 
-<div class="stats stats-vertical sm:stats-horizontal shadow mb-6">
-  <div class="stat py-3">
+<div class="stats stats-vertical sm:stats-horizontal w-full bg-canvas mb-6">
+  <div class="stat">
     <div class="stat-title"><%= t("pipeline.active") %></div>
-    <div class="stat-value text-2xl text-primary"><%= @stats[:active] %></div>
+    <div class="stat-value tabular-nums"><%= @stats[:active] %></div>
   </div>
-  <div class="stat py-3">
+  <div class="stat">
     <div class="stat-title"><%= t("pipeline.revenue") %></div>
-    <div class="stat-value text-2xl"><%= number_to_currency @stats[:revenue] %></div>
+    <div class="stat-value tabular-nums"><%= number_to_currency @stats[:revenue] %></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title"><%= t("pipeline.stages.completado") %></div>
+    <div class="stat-value tabular-nums"><%= @grouped[PipelineFlow::TERMINAL_STAGE].size %></div>
   </div>
 </div>
 
-<div class="flex gap-4 overflow-x-auto pb-4 snap-x">
+<%# KANBAN — sequential stages, horizontal scroll %>
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x">
   <% @kanban_stages.each do |stage| %>
     <% records = @grouped[stage] %>
-    <section class="card bg-base-200 w-72 shrink-0 snap-start" data-stage="<%= stage %>">
-      <div class="card-body p-4">
-        <header class="flex items-center justify-between gap-2 mb-3">
-          <h3 class="font-semibold text-sm uppercase tracking-wide opacity-70 truncate"><%= t("pipeline.stages.#{stage}") %></h3>
-          <span class="badge badge-neutral badge-sm shrink-0"><%= records.size %></span>
-        </header>
+    <section class="card bg-canvas border border-hairline-soft w-64 shrink-0 snap-start" data-stage="<%= stage %>">
+      <header class="flex items-start justify-between gap-2 px-4 py-3 border-b border-hairline-soft min-h-14">
+        <h3 class="font-semibold text-[11px] uppercase tracking-[0.06em] text-mute leading-tight"><%= t("pipeline.stages.#{stage}") %></h3>
+        <span class="badge badge-neutral badge-sm shrink-0"><%= records.size %></span>
+      </header>
 
+      <div class="p-3 min-h-32">
         <% if records.empty? %>
-          <p class="text-center text-xs opacity-30 py-2">—</p>
+          <p class="text-xs text-ash text-center py-6">
+            <%= t("pipeline.empty") %>
+          </p>
         <% else %>
           <div class="flex flex-col gap-2">
             <% records.each do |request_record| %>
-              <%= link_to admin_homologation_request_path(request_record), class: "block" do %>
-                <article class="card card-compact bg-base-100 shadow-sm hover:shadow-md transition" id="<%= dom_id(request_record) %>">
-                  <div class="card-body">
-                    <p class="font-medium text-sm truncate" title="<%= request_record.user.name %>"><%= request_record.user.name %></p>
-                    <p class="text-xs opacity-70 line-clamp-2"><%= request_record.subject %></p>
-                  </div>
-                </article>
+              <%= link_to admin_homologation_request_path(request_record),
+                    id: dom_id(request_record),
+                    class: "block rounded-xl border border-hairline-soft bg-canvas px-3 py-2 hover:border-ink hover:bg-surface-soft transition no-underline" do %>
+                <p class="font-medium text-sm text-ink truncate"><%= request_record.user.name %></p>
+                <p class="text-xs text-mute truncate mt-0.5"><%= request_record.subject %></p>
               <% end %>
             <% end %>
           </div>
@@ -42,28 +47,19 @@
   <% end %>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-  <% @horizontal_stages.each do |stage| %>
-    <% records = @grouped[stage] %>
-    <section class="card bg-base-100 border border-base-300" data-stage="<%= stage %>">
-      <header class="flex items-center justify-between gap-2 px-4 py-3 border-b border-base-300">
-        <h3 class="font-semibold text-sm uppercase tracking-wide opacity-70 truncate"><%= t("pipeline.stages.#{stage}") %></h3>
-        <span class="badge badge-ghost badge-sm shrink-0"><%= records.size %></span>
-      </header>
+<%# BRANCH + TERMINAL stages — outcomes after kanban %>
+<% cotejo_stages, terminal_stages = @horizontal_stages.partition { |s| PipelineFlow::COTEJO_STAGES.include?(s) } %>
 
-      <% if records.empty? %>
-        <p class="text-center text-xs opacity-30 py-3">—</p>
-      <% else %>
-        <ul class="divide-y divide-base-200">
-          <% records.each do |request_record| %>
-            <li>
-              <%= link_to request_record.subject,
-                    admin_homologation_request_path(request_record),
-                    class: "block px-4 py-2 text-sm hover:bg-base-200 truncate" %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-    </section>
-  <% end %>
-</div>
+<% if cotejo_stages.any? %>
+  <div class="grid gap-4 md:grid-cols-2 mt-6">
+    <% cotejo_stages.each do |stage| %>
+      <%= render "stage_section", stage: stage, records: @grouped[stage], accent: "info" %>
+    <% end %>
+  </div>
+<% end %>
+
+<% terminal_stages.each do |stage| %>
+  <div class="mt-4">
+    <%= render "stage_section", stage: stage, records: @grouped[stage], accent: "success" %>
+  </div>
+<% end %>

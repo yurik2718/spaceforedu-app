@@ -2,7 +2,7 @@
 
 <%= render "shared/page_header", title: t("auth.password_update_title") %>
 
-<%= form_with url: password_path(params[:token]), method: :put, class: "card bg-base-100 shadow max-w-md mx-auto" do |f| %>
+<%= form_with url: password_path(params[:token]), method: :put, class: "card bg-white shadow max-w-md mx-auto" do |f| %>
   <div class="card-body">
     <fieldset class="fieldset">
       <label class="label" for="<%= f.field_id(:password) %>"><%= t("auth.new_password") %></label>

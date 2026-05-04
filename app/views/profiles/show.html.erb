@@ -9,19 +9,15 @@
 <div class="grid gap-6 md:grid-cols-2">
 
   <%# ACCOUNT — vCard style %>
-  <div class="card bg-base-100 shadow">
+  <div class="card bg-white shadow">
     <div class="card-body">
       <h3 class="card-title text-base"><%= t("profile.sections.account") %></h3>
 
       <div class="flex items-center gap-3 mt-2">
-        <div class="avatar placeholder">
-          <div class="bg-neutral text-neutral-content w-12 rounded-full">
-            <span><%= @user.initials %></span>
-          </div>
-        </div>
+        <%= render "shared/avatar", user: @user, size: :lg %>
         <div class="min-w-0">
-          <p class="font-semibold truncate"><%= @user.name %></p>
-          <p class="text-sm opacity-60 truncate"><%= @user.email_address %></p>
+          <p class="font-semibold truncate text-ink"><%= @user.name %></p>
+          <p class="text-sm text-mute truncate"><%= @user.email_address %></p>
         </div>
       </div>
 
@@ -47,7 +43,7 @@
   </div>
 
   <%# NOTIFICATIONS %>
-  <div class="card bg-base-100 shadow">
+  <div class="card bg-white shadow">
     <div class="card-body">
       <h3 class="card-title text-base"><%= t("profile.sections.notifications") %></h3>
 
@@ -71,7 +67,7 @@
 
   <%# GUARDIAN — only for minors %>
   <% if @user.is_minor %>
-    <div class="card bg-base-100 shadow md:col-span-2">
+    <div class="card bg-white shadow md:col-span-2">
       <div class="card-body">
         <h3 class="card-title text-base"><%= t("profile.sections.guardian") %></h3>
 

@@ -19,6 +19,7 @@ class HomologationRequestsController < ApplicationController
     @homologation_request.status           = "draft"
 
     if @homologation_request.save
+      @homologation_request.create_conversation!
       redirect_to @homologation_request, notice: t("flash.request_created")
     else
       render :new, status: :unprocessable_entity
@@ -28,6 +29,7 @@ class HomologationRequestsController < ApplicationController
   def show
     @homologation_request = HomologationRequest.kept.includes(:conversation, :user).find(params[:id])
     authorize @homologation_request
+    @homologation_request.create_conversation! unless @homologation_request.conversation
   end
 
   def edit

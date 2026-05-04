@@ -34,6 +34,7 @@ gem "bootsnap",        "~> 1.23", require: false
 gem "kamal",           "~> 2.11", require: false
 gem "thruster",        "~> 0.1",  require: false
 gem "image_processing","~> 1.2"
+gem "heroicons",        "~> 1.0"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
