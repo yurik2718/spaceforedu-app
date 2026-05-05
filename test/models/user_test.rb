@@ -87,4 +87,31 @@ class UserTest < ActiveSupport::TestCase
     refute_equal "12345678A", raw
     refute_nil raw
   end
+
+  test "passport is stored encrypted at rest" do
+    user = User.create!(
+      email_address: "pp@example.com",
+      password:      "secret",
+      name:          "Pp",
+      passport:      "AB1234567"
+    )
+
+    assert_equal "AB1234567", user.reload.passport
+
+    raw = User.connection.select_value("SELECT passport FROM users WHERE id = #{user.id}")
+    refute_equal "AB1234567", raw
+    refute_nil raw
+  end
+
+  test "has_passport? is true when passport is present and false when blank" do
+    user = User.new(email_address: "x@example.com", name: "X")
+
+    refute user.has_passport?
+
+    user.passport = "AB1234567"
+    assert user.has_passport?
+
+    user.passport = ""
+    refute user.has_passport?
+  end
 end

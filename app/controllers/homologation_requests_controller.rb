@@ -1,6 +1,11 @@
 class HomologationRequestsController < ApplicationController
   EDITABLE_STATUSES = %w[draft awaiting_reply].freeze
 
+  def index
+    scope = policy_scope(HomologationRequest).kept.order(updated_at: :desc)
+    @pagy, @homologation_requests = pagy(scope)
+  end
+
   def new
     @homologation_request = Current.user.homologation_requests.new(service_type: "homologation")
     authorize @homologation_request

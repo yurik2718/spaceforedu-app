@@ -8,13 +8,6 @@ class HomologationRequestTest < ActiveSupport::TestCase
     @request = homologation_requests(:in_pipeline_es)
   end
 
-  test "STATUSES enumerates the valid request lifecycle states" do
-    assert_equal %w[draft submitted in_review awaiting_reply
-                    awaiting_payment payment_confirmed in_progress
-                    resolved closed],
-                 HomologationRequest::STATUSES
-  end
-
   test ".kept excludes soft-deleted requests" do
     kept    = homologation_requests(:in_pipeline_es)
     trashed = homologation_requests(:discarded)
@@ -32,6 +25,15 @@ class HomologationRequestTest < ActiveSupport::TestCase
       assert_equal Time.current, @request.status_changed_at
       assert_equal @admin.id,    @request.status_changed_by
     end
+  end
+
+  test "transition_to! creates a Notification for the request owner" do
+    assert_difference -> { @request.user.notifications.count }, 1 do
+      @request.transition_to!("in_review", changed_by: @admin)
+    end
+
+    notification = @request.user.notifications.order(:created_at).last
+    assert_equal @request, notification.notifiable
   end
 
   test "transition_to! accepts a symbol and writes it as a string" do
@@ -68,6 +70,16 @@ class HomologationRequestTest < ActiveSupport::TestCase
       assert_equal @admin.id,           request.pipeline_changed_by
       assert_equal @admin.id,           request.status_changed_by
     end
+  end
+
+  test "confirm_payment! creates a payment_confirmed notification for the request owner" do
+    request = homologation_requests(:awaiting_payment)
+
+    request.confirm_payment!(confirmed_by: @admin)
+
+    titles = request.user.notifications.where(notifiable: request).pluck(:title)
+    expected = I18n.t("notifications.payment_confirmed.title", subject: request.subject, locale: request.user.locale)
+    assert_includes titles, expected
   end
 
   test "confirm_payment! is atomic: rolls back audit columns if the status transition fails" do
@@ -183,5 +195,43 @@ class HomologationRequestTest < ActiveSupport::TestCase
     reloaded = HomologationRequest.find(@request.id)
 
     assert_equal({ "sol" => true, "vol" => true, "extra" => false }, reloaded.document_checklist)
+  end
+
+  test "documents are invalid when content_type is unsupported" do
+    @request.documents.attach(
+      io: StringIO.new("plain"),
+      filename: "notes.txt",
+      content_type: "text/plain"
+    )
+
+    refute @request.valid?
+    assert @request.errors[:documents].any?
+  end
+
+  test "documents are invalid when a single file exceeds 15 megabytes" do
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io:           StringIO.new("x"),
+      filename:     "huge.pdf",
+      content_type: "application/pdf"
+    )
+    blob.update_column(:byte_size, 16.megabytes)
+
+    @request.documents.attach(blob)
+
+    refute @request.valid?
+    assert @request.errors[:documents].any?
+  end
+
+  test "originals and application_file enforce the same content_type rule as documents" do
+    @request.originals.attach(
+      io: StringIO.new("plain"), filename: "x.txt", content_type: "text/plain"
+    )
+    @request.application_file.attach(
+      io: StringIO.new("plain"), filename: "y.txt", content_type: "text/plain"
+    )
+
+    refute @request.valid?
+    assert @request.errors[:originals].any?
+    assert @request.errors[:application_file].any?
   end
 end

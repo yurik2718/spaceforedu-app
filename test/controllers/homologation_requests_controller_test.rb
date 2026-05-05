@@ -9,6 +9,40 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
     @draft   = homologation_requests(:awaiting_payment) # status: awaiting_payment, owned by student_es
   end
 
+  # --- index ---
+
+  test "GET index lists the signed-in student's kept requests, newest first" do
+    sign_in_as @student
+    second = @student.homologation_requests.create!(
+      subject: "Second diploma", service_type: "homologation", status: "draft", privacy_accepted: true
+    )
+
+    get homologation_requests_path
+
+    assert_response :success
+    assert_select "##{ActionView::RecordIdentifier.dom_id(@owned)}"
+    assert_select "##{ActionView::RecordIdentifier.dom_id(second)}"
+  end
+
+  test "GET index excludes other students' requests" do
+    sign_in_as @other
+
+    get homologation_requests_path
+
+    assert_response :success
+    assert_select "##{ActionView::RecordIdentifier.dom_id(@owned)}", count: 0
+  end
+
+  test "GET index without any kept requests renders the empty state CTA" do
+    fresh = User.create!(email_address: "fresh@example.com", password: "secret", name: "Fresh", role: "student")
+    sign_in_as fresh
+
+    get homologation_requests_path
+
+    assert_response :success
+    assert_select "a[href=?]", new_homologation_request_path
+  end
+
   # --- new ---
 
   test "GET new renders the form for a signed-in student" do

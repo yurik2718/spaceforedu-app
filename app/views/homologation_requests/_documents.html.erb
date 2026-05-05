@@ -61,6 +61,15 @@
       <% end %>
     <% end %>
 
+    <% upload_errors = hr.errors[:documents] %>
+    <% if upload_errors.any? %>
+      <ul class="mt-4 text-sm text-error space-y-1">
+        <% upload_errors.each do |msg| %>
+          <li><%= t("requests.attachments.error_prefix") %> <%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
     <% if can_edit %>
       <div class="mt-4 rounded-2xl border-2 border-dashed border-hairline transition-colors data-[over=true]:border-ink data-[over=true]:bg-surface-soft"
            data-controller="dropzone"
@@ -83,12 +92,14 @@
               <%= t("requests.attachments.choose") %>
             </span>
             <%= file_field_tag "files[]",
-                  multiple: true,
+                  multiple:      true,
+                  direct_upload: true,
                   class: "sr-only",
                   data: { dropzone_target: "input", action: "change->dropzone#selected" } %>
           </label>
           <p class="text-xs text-ash mt-1"><%= t("requests.attachments.formats_hint") %></p>
         <% end %>
+        <ul class="px-6 pb-6 space-y-1.5 empty:hidden" data-dropzone-target="progress"></ul>
       </div>
     <% end %>
   </div>

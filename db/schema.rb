@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_04_192956) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_05_204953) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -56,10 +56,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_192956) do
     t.datetime "discarded_at"
     t.text "document_checklist", default: "{}"
     t.string "education_system"
-    t.string "identity_card"
     t.string "language_certificate"
     t.string "language_knowledge"
-    t.string "passport"
     t.decimal "payment_amount", precision: 10, scale: 2
     t.datetime "payment_confirmed_at"
     t.integer "payment_confirmed_by"

@@ -3,6 +3,7 @@ require "turbo/broadcastable/test_helper"
 
 class NotificationTest < ActiveSupport::TestCase
   include Turbo::Broadcastable::TestHelper
+  include ActiveJob::TestHelper
 
   setup do
     @student = users(:student_es)
@@ -43,6 +44,12 @@ class NotificationTest < ActiveSupport::TestCase
   test "title NOT NULL: creating a notification without title raises NotNullViolation" do
     assert_raises(ActiveRecord::NotNullViolation) do
       @student.notifications.create!(notifiable: @request, title: nil)
+    end
+  end
+
+  test "after_create_commit enqueues a NotificationJob to deliver email" do
+    assert_enqueued_with(job: NotificationJob) do
+      @student.notifications.create!(notifiable: @request, title: "Hi")
     end
   end
 end

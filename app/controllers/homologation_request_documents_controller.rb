@@ -10,8 +10,17 @@ class HomologationRequestDocumentsController < ApplicationController
       redirect_to @homologation_request, alert: t("flash.no_files_selected") and return
     end
 
+    before_ids = @homologation_request.documents.attachments.pluck(:id)
     files.each { |f| @homologation_request.documents.attach(f) }
-    redirect_to @homologation_request, notice: t("flash.documents_uploaded", count: files.size)
+
+    if @homologation_request.valid?
+      redirect_to @homologation_request, notice: t("flash.documents_uploaded", count: files.size)
+    else
+      @homologation_request.documents.attachments
+        .reject { |a| before_ids.include?(a.id) }
+        .each(&:purge)
+      render "homologation_requests/show", status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -25,7 +34,9 @@ class HomologationRequestDocumentsController < ApplicationController
 
   private
     def set_request
-      @homologation_request = HomologationRequest.kept.find(params[:homologation_request_id])
+      @homologation_request = HomologationRequest.kept
+        .includes(:conversation, :user)
+        .find(params[:homologation_request_id])
     end
 
     def guard_editable!

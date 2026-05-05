@@ -106,6 +106,7 @@ en:
 
   requests:
     empty: "You don't have any requests yet."
+    empty_heading: "Ready for liftoff"
     new_title:  "New request"
     edit_title: "Edit request"
     actions:
@@ -118,11 +119,12 @@ en:
       drop_here:       "Drop files here"
       or:              "or"
       choose:          "choose manually"
-      formats_hint:    "PDF, JPG, PNG · up to 50 MB per file"
+      formats_hint:    "PDF, JPG, PNG, WebP · up to 15 MB per file"
       download:        "Download"
       remove:          "Remove"
       confirm_remove:  "Remove this file?"
       uploading:       "Uploading %{count}…"
+      error_prefix:    "Document:"
     sections:
       info:        "Request information"
       documents:   "Verification checklist"
@@ -218,6 +220,7 @@ en:
         retreat_modal:    "Retreat to previous stage"
         start_chat:       "Start conversation"
         open_chat:        "Open conversation"
+        download_archive: "Download archive"
       labels:
         changed_at:    "Changed at"
         changed_by:    "Changed by"
@@ -238,3 +241,20 @@ en:
     sign_out:      "Sign out"
     language:      "Language"
     menu:          "Menu"
+
+  notification_mailer:
+    new_event:
+      greeting: "Hi, %{name}."
+      open_app: "Open Space for Edu"
+      footer:   "You're receiving this email because email notifications are on for your Space for Edu account."
+
+  notifications:
+    status_changed:
+      title: "Your request \"%{subject}\" changed status"
+      body:  "Current status: %{status}."
+    payment_confirmed:
+      title: "Payment confirmed for \"%{subject}\""
+      body:  "We've received your payment. Processing has started."
+    new_message:
+      title: "New message on \"%{subject}\""
+      body:  "You have a new message from %{sender}."

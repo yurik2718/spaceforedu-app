@@ -11,6 +11,7 @@
         else
           concat button_to(t("admin.requests.actions.start_chat"), admin_homologation_request_conversation_path(hr), method: :post, class: "btn btn-sm")
         end
+        concat link_to(t("admin.requests.actions.download_archive"), admin_homologation_request_archive_path(hr), class: "btn btn-sm")
         concat link_to(t("actions.back"), admin_pipeline_path, class: "btn btn-ghost btn-sm")
       } %>
 

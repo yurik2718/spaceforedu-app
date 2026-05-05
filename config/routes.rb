@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :messages, only: :create
   end
 
-  resources :homologation_requests, only: %i[new create show edit update] do
+  resources :homologation_requests, only: %i[index new create show edit update] do
     resource  :submission, only: :create, controller: "homologation_request_submissions"
     resources :documents,  only: %i[create destroy], controller: "homologation_request_documents"
   end
@@ -27,6 +27,7 @@ Rails.application.routes.draw do
         resources :payment_confirmations, only: :create
         resource  :document_checklist,   only: :update
         resource  :conversation,         only: :create
+        resource  :archive,              only: :show
       end
     end
   end

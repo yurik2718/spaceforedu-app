@@ -108,6 +108,7 @@ ru:
 
   requests:
     empty: "У вас пока нет заявок."
+    empty_heading: "Готовимся к старту"
     new_title:  "Новая заявка"
     edit_title: "Редактировать заявку"
     actions:
@@ -120,11 +121,12 @@ ru:
       drop_here:       "Перетащите файлы сюда"
       or:              "или"
       choose:          "выберите вручную"
-      formats_hint:    "PDF, JPG, PNG · до 50 МБ за файл"
+      formats_hint:    "PDF, JPG, PNG, WebP · до 15 МБ за файл"
       download:        "Скачать"
       remove:          "Удалить"
       confirm_remove:  "Удалить этот файл?"
       uploading:       "Загружаю %{count}…"
+      error_prefix:    "Документ:"
     sections:
       info:        "Информация о заявке"
       documents:   "Контрольный список"
@@ -220,6 +222,7 @@ ru:
         retreat_modal:    "Откатить на предыдущий этап"
         start_chat:       "Начать чат"
         open_chat:        "Открыть чат"
+        download_archive: "Скачать архив"
       labels:
         changed_at:    "Изменено"
         changed_by:    "Изменил"
@@ -240,3 +243,20 @@ ru:
     sign_out:      "Выйти"
     language:      "Язык"
     menu:          "Меню"
+
+  notification_mailer:
+    new_event:
+      greeting: "Здравствуйте, %{name}."
+      open_app: "Открыть Space for Edu"
+      footer:   "Вы получили это письмо, потому что у вас включены email-уведомления в Space for Edu."
+
+  notifications:
+    status_changed:
+      title: "Заявка «%{subject}» сменила статус"
+      body:  "Текущий статус: %{status}."
+    payment_confirmed:
+      title: "Оплата по заявке «%{subject}» подтверждена"
+      body:  "Мы получили оплату. Начинаем работу."
+    new_message:
+      title: "Новое сообщение в «%{subject}»"
+      body:  "У вас новое сообщение от %{sender}."

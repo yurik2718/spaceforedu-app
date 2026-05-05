@@ -106,6 +106,7 @@ es:
 
   requests:
     empty: "Todavía no tienes ninguna solicitud."
+    empty_heading: "Despeguemos juntos"
     new_title:  "Nueva solicitud"
     edit_title: "Editar solicitud"
     actions:
@@ -118,11 +119,12 @@ es:
       drop_here:       "Suelta los archivos aquí"
       or:              "o"
       choose:          "selecciona manualmente"
-      formats_hint:    "PDF, JPG, PNG · hasta 50 MB por archivo"
+      formats_hint:    "PDF, JPG, PNG, WebP · hasta 15 MB por archivo"
       download:        "Descargar"
       remove:          "Eliminar"
       confirm_remove:  "¿Eliminar este archivo?"
       uploading:       "Subiendo %{count}…"
+      error_prefix:    "Documento:"
     sections:
       info:        "Información de la solicitud"
       documents:   "Lista de verificación"
@@ -218,6 +220,7 @@ es:
         retreat_modal:    "Retroceder a la etapa anterior"
         start_chat:       "Iniciar conversación"
         open_chat:        "Abrir conversación"
+        download_archive: "Descargar archivo"
       labels:
         changed_at:    "Cambiado el"
         changed_by:    "Cambiado por"
@@ -238,3 +241,20 @@ es:
     sign_out:      "Cerrar sesión"
     language:      "Idioma"
     menu:          "Menú"
+
+  notification_mailer:
+    new_event:
+      greeting: "Hola, %{name}."
+      open_app: "Abrir Space for Edu"
+      footer:   "Recibes este correo porque tienes notificaciones activas en Space for Edu."
+
+  notifications:
+    status_changed:
+      title: "Tu solicitud «%{subject}» cambió de estado"
+      body:  "Estado actual: %{status}."
+    payment_confirmed:
+      title: "Pago confirmado para «%{subject}»"
+      body:  "Hemos recibido tu pago. Empezamos con la tramitación."
+    new_message:
+      title: "Nuevo mensaje en «%{subject}»"
+      body:  "Tienes un mensaje nuevo de %{sender}."

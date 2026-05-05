@@ -33,4 +33,56 @@ class MessageTest < ActiveSupport::TestCase
       @conversation.messages.create!(user: @student, body: nil)
     end
   end
+
+  test "student message notifies the request owner's counterpart, not the sender" do
+    admin   = users(:admin)
+    request = @conversation.homologation_request
+
+    assert_difference -> { admin.notifications.count }, 1 do
+      assert_no_difference -> { @student.notifications.count } do
+        @conversation.messages.create!(user: @student, body: "hello")
+      end
+    end
+
+    notification = admin.notifications.order(:created_at).last
+    assert_equal request, notification.notifiable
+  end
+
+  test "admin message notifies the student owner, not the admin sender" do
+    admin = users(:admin)
+
+    assert_difference -> { @student.notifications.count }, 1 do
+      assert_no_difference -> { admin.notifications.count } do
+        @conversation.messages.create!(user: admin, body: "hi back")
+      end
+    end
+  end
+
+  test "student message on an awaiting_reply request flips it to in_review" do
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: users(:admin).id, status_changed_at: 1.hour.ago)
+
+    @conversation.messages.create!(user: @student, body: "here you go")
+
+    assert_equal "in_review", request.reload.status
+  end
+
+  test "admin message on an awaiting_reply request leaves the status unchanged" do
+    admin   = users(:admin)
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: admin.id, status_changed_at: 1.hour.ago)
+
+    @conversation.messages.create!(user: admin, body: "still waiting")
+
+    assert_equal "awaiting_reply", request.reload.status
+  end
+
+  test "auto-advance from a student message does not self-notify the student" do
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: users(:admin).id, status_changed_at: 1.hour.ago)
+
+    assert_no_difference -> { @student.notifications.count } do
+      @conversation.messages.create!(user: @student, body: "here you go")
+    end
+  end
 end

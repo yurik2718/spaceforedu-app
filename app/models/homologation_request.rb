@@ -1,3 +1,5 @@
+require "zip"
+
 class HomologationRequest < ApplicationRecord
   belongs_to :user
   belongs_to :status_changer,    class_name: "User", optional: true, foreign_key: :status_changed_by
@@ -8,6 +10,10 @@ class HomologationRequest < ApplicationRecord
   has_one_attached  :application_file
   has_many_attached :originals
   has_many_attached :documents
+
+  validates :application_file, :originals, :documents,
+            content_type: %w[application/pdf image/jpeg image/png image/webp],
+            size:         { less_than: 15.megabytes }
 
   serialize :document_checklist, coder: JSON
 
@@ -24,11 +30,14 @@ class HomologationRequest < ApplicationRecord
       raise InvalidTransition, "Unknown status: #{new_status}"
     end
 
-    update!(
-      status:            new_status.to_s,
-      status_changed_at: Time.current,
-      status_changed_by: changed_by.id
-    )
+    transaction do
+      update!(
+        status:            new_status.to_s,
+        status_changed_at: Time.current,
+        status_changed_by: changed_by.id
+      )
+      notify_owner_of_status_change
+    end
   end
 
   def confirm_payment!(confirmed_by:)
@@ -41,6 +50,7 @@ class HomologationRequest < ApplicationRecord
         pipeline_changed_by:  confirmed_by.id
       )
       transition_to!("payment_confirmed", changed_by: confirmed_by)
+      notify_owner_of_payment_confirmed
     end
   end
 
@@ -75,5 +85,44 @@ class HomologationRequest < ApplicationRecord
     document_checklist.is_a?(Hash) && document_checklist[key.to_s]
   end
 
+  def zip_filename = "request_#{id}.zip"
+
+  def zip_archive
+    buffer = Zip::OutputStream.write_buffer do |zip|
+      documents.attachments.each { |a| write_zip_entry(zip, "documents",   a) }
+      originals.attachments.each { |a| write_zip_entry(zip, "originals",   a) }
+      write_zip_entry(zip, "application", application_file.attachment) if application_file.attached?
+    end
+    buffer.string
+  end
+
   class InvalidTransition < StandardError; end
+
+  private
+    def notify_owner_of_status_change
+      return if status_changed_by == user_id
+      owner = User.find(user_id)
+      owner.notify(
+        notifiable: self,
+        title_key:  "notifications.status_changed.title",
+        body_key:   "notifications.status_changed.body",
+        subject:    subject,
+        status:     I18n.t("requests.status.#{status}", locale: owner.locale)
+      )
+    end
+
+    def notify_owner_of_payment_confirmed
+      owner = User.find(user_id)
+      owner.notify(
+        notifiable: self,
+        title_key:  "notifications.payment_confirmed.title",
+        body_key:   "notifications.payment_confirmed.body",
+        subject:    subject
+      )
+    end
+
+    def write_zip_entry(zip, namespace, attachment)
+      zip.put_next_entry("#{namespace}/#{attachment.filename}")
+      attachment.blob.download { |chunk| zip.write(chunk) }
+    end
 end

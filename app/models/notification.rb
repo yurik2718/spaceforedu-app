@@ -5,6 +5,7 @@ class Notification < ApplicationRecord
   scope :unread, -> { where(read_at: nil) }
 
   after_create_commit -> { broadcast_prepend_to user, target: "notifications" }
+  after_create_commit -> { NotificationJob.perform_later(self) }
 
   def mark_read!
     return if read_at?

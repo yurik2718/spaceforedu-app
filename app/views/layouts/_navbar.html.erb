@@ -17,8 +17,8 @@
       <%= link_to t("nav.pipeline"), admin_pipeline_path,
             class: "nav-pill #{'nav-pill-active' if nav_link_class('admin/pipeline') == 'active'}" %>
     <% elsif current_user&.student? %>
-      <%= link_to t("nav.my_requests"), root_path,
-            class: "nav-pill #{'nav-pill-active' if nav_link_class('') == 'active'}" %>
+      <%= link_to t("nav.my_requests"), homologation_requests_path,
+            class: "nav-pill #{'nav-pill-active' if nav_link_class('homologation_requests') == 'active'}" %>
       <%= link_to t("nav.new_request"), new_homologation_request_path,
             class: "nav-pill #{'nav-pill-active' if nav_link_class('homologation_requests/new') == 'active'}" %>
     <% end %>
@@ -32,20 +32,7 @@
 
       <%= render "layouts/locale_switcher" %>
 
-      <%= link_to notifications_path,
-            class: "relative inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface-card text-ink hover:bg-secondary-bg transition-colors",
-            aria: { label: t("nav.notifications") } do %>
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0a3 3 0 11-6 0"/>
-        </svg>
-        <% unread_count = current_user.notifications.unread.count %>
-        <% if unread_count > 0 %>
-          <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-on-primary text-[11px] font-bold inline-flex items-center justify-center">
-            <%= unread_count %>
-          </span>
-        <% end %>
-      <% end %>
+      <%= render "shared/notifications_bell", user: current_user %>
 
       <div class="dropdown dropdown-end relative" data-controller="dropdown">
         <button type="button"

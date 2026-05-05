@@ -18,8 +18,19 @@ class User < ApplicationRecord
 
   def super_admin? = role == "super_admin"
   def student?     = role == "student"
+  def has_passport? = passport.present?
 
   def initials
     name.split.first(2).map { _1[0].upcase }.join.presence || email_address[0].upcase
+  end
+
+  def notify(notifiable:, title_key:, body_key:, **vars)
+    I18n.with_locale(locale) do
+      notifications.create!(
+        notifiable: notifiable,
+        title:      I18n.t(title_key, **vars),
+        body:       I18n.t(body_key,  **vars)
+      )
+    end
   end
 end
