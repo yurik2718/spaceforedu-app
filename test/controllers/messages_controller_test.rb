@@ -15,7 +15,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
            params: { message: { body: "Hola, aquí van mis documentos." } },
            as: :turbo_stream
     end
-    assert_response :ok
+    assert_response :no_content
   end
 
   test "student cannot send message to another student's conversation" do
@@ -35,7 +35,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
            params: { message: { body: "Por favor envíe el título original." } },
            as: :turbo_stream
     end
-    assert_response :ok
+    assert_response :no_content
   end
 
   test "empty body is rejected" do

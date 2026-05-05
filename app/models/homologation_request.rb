@@ -103,11 +103,11 @@ class HomologationRequest < ApplicationRecord
       return if status_changed_by == user_id
       owner = User.find(user_id)
       owner.notify(
-        notifiable: self,
-        title_key:  "notifications.status_changed.title",
-        body_key:   "notifications.status_changed.body",
-        subject:    subject,
-        status:     I18n.t("requests.status.#{status}", locale: owner.locale)
+        notifiable:  self,
+        title_key:   "notifications.status_changed.title",
+        body_key:    "notifications.status_changed.body",
+        subject:     subject,
+        status_code: status
       )
     end
 

@@ -10,15 +10,16 @@ class HomologationRequestDocumentsController < ApplicationController
       redirect_to @homologation_request, alert: t("flash.no_files_selected") and return
     end
 
-    before_ids = @homologation_request.documents.attachments.pluck(:id)
-    files.each { |f| @homologation_request.documents.attach(f) }
+    new_blobs = files.map do |f|
+      ActiveStorage::Blob.create_and_upload!(io: f, filename: f.original_filename, content_type: f.content_type)
+    end
+    new_blobs.each { |blob| @homologation_request.documents.attach(blob) }
 
     if @homologation_request.valid?
       redirect_to @homologation_request, notice: t("flash.documents_uploaded", count: files.size)
     else
-      @homologation_request.documents.attachments
-        .reject { |a| before_ids.include?(a.id) }
-        .each(&:purge)
+      new_blob_ids = new_blobs.map(&:id)
+      @homologation_request.documents.attachments.select { |a| new_blob_ids.include?(a.blob_id) }.each(&:purge_later)
       render "homologation_requests/show", status: :unprocessable_entity
     end
   end

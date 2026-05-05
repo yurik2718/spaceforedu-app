@@ -13,6 +13,13 @@ class BackfillAndDropPiiFromHomologationRequests < ActiveRecord::Migration[8.1]
         user = User.find_by(id: row["user_id"])
         next unless user
 
+        if user.identity_card.present? && row["identity_card"].present? && user.identity_card != row["identity_card"]
+          say "  conflict on user##{user.id} identity_card — keeping existing #{user.identity_card.inspect}, skipping #{row["identity_card"].inspect}"
+        end
+        if user.passport.present? && row["passport"].present? && user.passport != row["passport"]
+          say "  conflict on user##{user.id} passport — keeping existing #{user.passport.inspect}, skipping #{row["passport"].inspect}"
+        end
+
         user.identity_card = row["identity_card"] if user.identity_card.blank? && row["identity_card"].present?
         user.passport      = row["passport"]      if user.passport.blank?      && row["passport"].present?
         user.save!(validate: false) if user.changed?

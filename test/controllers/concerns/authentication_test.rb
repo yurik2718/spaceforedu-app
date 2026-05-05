@@ -8,6 +8,6 @@ class AuthenticationTest < ActionDispatch::IntegrationTest
     get admin_pipeline_path
 
     assert_response :success
-    assert_select ".avatar span", text: user.initials
+    assert_select "svg[aria-label=?] text", user.name, text: user.initials
   end
 end

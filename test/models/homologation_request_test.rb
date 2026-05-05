@@ -77,7 +77,7 @@ class HomologationRequestTest < ActiveSupport::TestCase
 
     request.confirm_payment!(confirmed_by: @admin)
 
-    titles = request.user.notifications.where(notifiable: request).pluck(:title)
+    titles = request.user.notifications.where(notifiable: request).map(&:title)
     expected = I18n.t("notifications.payment_confirmed.title", subject: request.subject, locale: request.user.locale)
     assert_includes titles, expected
   end

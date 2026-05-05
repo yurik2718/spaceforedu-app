@@ -37,6 +37,6 @@ class Message < ApplicationRecord
 
     def counterpart
       owner = conversation.homologation_request.user
-      user == owner ? User.kept.where(role: "super_admin").first : owner
+      user == owner ? User.kept.where(role: "super_admin").order(:id).first : owner
     end
 end

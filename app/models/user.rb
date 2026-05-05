@@ -25,12 +25,11 @@ class User < ApplicationRecord
   end
 
   def notify(notifiable:, title_key:, body_key:, **vars)
-    I18n.with_locale(locale) do
-      notifications.create!(
-        notifiable: notifiable,
-        title:      I18n.t(title_key, **vars),
-        body:       I18n.t(body_key,  **vars)
-      )
-    end
+    notifications.create!(
+      notifiable: notifiable,
+      title_key:  title_key,
+      body_key:   body_key,
+      i18n_vars:  vars
+    )
   end
 end

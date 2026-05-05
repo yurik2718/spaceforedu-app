@@ -41,10 +41,19 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test "title NOT NULL: creating a notification without title raises NotNullViolation" do
-    assert_raises(ActiveRecord::NotNullViolation) do
-      @student.notifications.create!(notifiable: @request, title: nil)
-    end
+  test "title resolves at render time from title_key + i18n_vars in the user's current locale" do
+    @student.update!(locale: "es")
+    notification = @student.notify(
+      notifiable: @request,
+      title_key:  "notifications.payment_confirmed.title",
+      body_key:   "notifications.payment_confirmed.body",
+      subject:    "Mi diploma"
+    )
+
+    assert_equal I18n.t("notifications.payment_confirmed.title", subject: "Mi diploma", locale: "es"), notification.title
+
+    @student.update!(locale: "en")
+    assert_equal I18n.t("notifications.payment_confirmed.title", subject: "Mi diploma", locale: "en"), notification.reload.title
   end
 
   test "after_create_commit enqueues a NotificationJob to deliver email" do
