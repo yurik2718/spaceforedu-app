@@ -12,7 +12,7 @@ class User < ApplicationRecord
   validates :email_address, presence: true, uniqueness: true
   validates :name,          presence: true
 
-  encrypts :phone, :whatsapp, :guardian_phone, :guardian_whatsapp
+  encrypts :phone, :whatsapp, :guardian_phone, :guardian_whatsapp, :identity_card, :passport
 
   scope :kept, -> { where(discarded_at: nil) }
 

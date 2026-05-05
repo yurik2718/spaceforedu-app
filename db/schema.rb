@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_26_165028) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_04_192956) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -138,11 +138,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_165028) do
     t.string "guardian_name"
     t.string "guardian_phone"
     t.string "guardian_whatsapp"
+    t.string "identity_card"
     t.boolean "is_minor", default: false, null: false
     t.string "locale", default: "es", null: false
     t.string "name", default: "", null: false
     t.boolean "notification_email", default: true, null: false
     t.boolean "notification_telegram", default: false, null: false
+    t.string "passport"
     t.string "password_digest", null: false
     t.string "phone"
     t.datetime "privacy_accepted_at"

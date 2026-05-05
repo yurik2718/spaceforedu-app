@@ -72,4 +72,19 @@ class UserTest < ActiveSupport::TestCase
     refute_equal "+34000000000", raw
     refute_nil raw
   end
+
+  test "identity_card is stored encrypted at rest" do
+    user = User.create!(
+      email_address: "id@example.com",
+      password:      "secret",
+      name:          "Id",
+      identity_card: "12345678A"
+    )
+
+    assert_equal "12345678A", user.reload.identity_card
+
+    raw = User.connection.select_value("SELECT identity_card FROM users WHERE id = #{user.id}")
+    refute_equal "12345678A", raw
+    refute_nil raw
+  end
 end
