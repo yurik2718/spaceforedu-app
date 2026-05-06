@@ -44,6 +44,22 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     assert_response :unprocessable_entity
   end
 
+  test "Turbo Stream response replaces the documents frame with the errors-bearing partial" do
+    sign_in_as @student
+    bad_file = Rack::Test::UploadedFile.new(StringIO.new("plain"), "text/plain", original_filename: "notes.txt")
+
+    post homologation_request_documents_path(@draft),
+         params:  { files: [ bad_file ] },
+         headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+    assert_response :unprocessable_entity
+    assert_equal "text/vnd.turbo-stream.html",
+                 response.media_type
+    assert_match %r{<turbo-stream\s+action="replace"\s+target="#{ActionView::RecordIdentifier.dom_id(@draft, :documents)}"},
+                 response.body
+    assert_match(/text-error/, response.body)
+  end
+
   test "a mixed-batch upload purges only the files attached in this request" do
     sign_in_as @student
     @draft.documents.attach(io: StringIO.new("%PDF pre-existing"), filename: "old.pdf", content_type: "application/pdf")

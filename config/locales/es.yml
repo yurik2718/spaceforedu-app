@@ -258,3 +258,6 @@ es:
     new_message:
       title: "Nuevo mensaje en «%{subject}»"
       body:  "Tienes un mensaje nuevo de %{sender}."
+    payment_failed:
+      title: "Pago fallido en «%{subject}»"
+      body:  "Stripe reporta que la intención de pago falló. Revisa y contacta al estudiante."

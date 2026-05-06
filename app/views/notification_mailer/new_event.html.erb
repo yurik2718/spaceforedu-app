@@ -6,6 +6,6 @@
   <p><%= @notification.body %></p>
 <% end %>
 
-<p><%= link_to t(".open_app"), root_url %></p>
+<p><%= link_to t(".open_app"), polymorphic_url(@notification.notifiable) %></p>
 
 <p><small><%= t(".footer") %></small></p>

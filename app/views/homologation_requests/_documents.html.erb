@@ -4,6 +4,7 @@
 <%
   attachments = hr.documents.attachments.includes(:blob).order(created_at: :desc)
 %>
+<%= turbo_frame_tag dom_id(hr, :documents) do %>
 <div class="card bg-canvas border border-hairline-soft md:col-span-2">
   <div class="card-body">
     <header class="flex items-center justify-between gap-3">
@@ -33,7 +34,8 @@
               </p>
             </div>
             <%= link_to rails_blob_path(attachment, disposition: "attachment"),
-                  class: "btn btn-ghost btn-sm gap-1.5 shrink-0" do %>
+                  class: "btn btn-ghost btn-sm gap-1.5 shrink-0",
+                  data:  { turbo_frame: "_top" } do %>
               <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/>
               </svg>
@@ -42,7 +44,7 @@
             <% if can_edit %>
               <%= button_to homologation_request_document_path(hr, attachment.id),
                     method: :delete,
-                    form: { data: { turbo_confirm: t("requests.attachments.confirm_remove") } },
+                    form: { data: { turbo_confirm: t("requests.attachments.confirm_remove"), turbo_frame: "_top" } },
                     class: "btn btn-ghost btn-sm shrink-0",
                     aria: { label: t("requests.attachments.remove") } do %>
                 <svg viewBox="0 0 24 24" class="w-4 h-4 text-mute" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -104,3 +106,4 @@
     <% end %>
   </div>
 </div>
+<% end %>

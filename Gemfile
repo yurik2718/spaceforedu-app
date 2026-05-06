@@ -42,6 +42,9 @@ gem "active_storage_validations", "~> 3.0"
 # Zip archive of a request's attachments (admin download)
 gem "rubyzip", "~> 3.0"
 
+# Payments — Stripe API client (signed webhooks, payment intents)
+gem "stripe", "~> 15.0"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

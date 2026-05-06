@@ -5,7 +5,7 @@
 <%= @notification.body %>
 <% end %>
 
-<%= t(".open_app") %>: <%= root_url %>
+<%= t(".open_app") %>: <%= polymorphic_url(@notification.notifiable) %>
 
 --
 <%= t(".footer") %>

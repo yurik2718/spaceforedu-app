@@ -222,6 +222,20 @@ class HomologationRequestTest < ActiveSupport::TestCase
     assert @request.errors[:documents].any?
   end
 
+  test "transition_to!(submitted) rejects a draft with no application_file or documents" do
+     draft = HomologationRequest.create!(
+      user:             users(:student_es),
+      subject:          "Empty draft",
+      service_type:     "homologation",
+      privacy_accepted: true
+    )
+
+    assert_raises(HomologationRequest::InvalidTransition) do
+      draft.transition_to!("submitted", changed_by: @admin)
+    end
+    assert_equal "draft", draft.reload.status
+  end
+
   test "originals and application_file enforce the same content_type rule as documents" do
     @request.originals.attach(
       io: StringIO.new("plain"), filename: "x.txt", content_type: "text/plain"

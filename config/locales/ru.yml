@@ -260,3 +260,6 @@ ru:
     new_message:
       title: "Новое сообщение в «%{subject}»"
       body:  "У вас новое сообщение от %{sender}."
+    payment_failed:
+      title: "Оплата по заявке «%{subject}» не прошла"
+      body:  "Stripe сообщает, что платёж не прошёл. Свяжитесь со студентом."

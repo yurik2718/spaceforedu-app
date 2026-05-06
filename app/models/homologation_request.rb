@@ -30,6 +30,10 @@ class HomologationRequest < ApplicationRecord
       raise InvalidTransition, "Unknown status: #{new_status}"
     end
 
+    if new_status.to_s == "submitted" && !ready_to_submit?
+      raise InvalidTransition, "Request needs an application file and at least one supporting document"
+    end
+
     transaction do
       update!(
         status:            new_status.to_s,
@@ -79,6 +83,10 @@ class HomologationRequest < ApplicationRecord
       pipeline_changed_by: changed_by.id,
       pipeline_notes:      [pipeline_notes.presence, log_entry].compact.join("\n\n")
     )
+  end
+
+  def ready_to_submit?
+    application_file.attached? && documents.attached?
   end
 
   def checklist_done?(key)

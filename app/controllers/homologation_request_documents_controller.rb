@@ -20,7 +20,17 @@ class HomologationRequestDocumentsController < ApplicationController
     else
       new_blob_ids = new_blobs.map(&:id)
       @homologation_request.documents.attachments.select { |a| new_blob_ids.include?(a.blob_id) }.each(&:purge_later)
-      render "homologation_requests/show", status: :unprocessable_entity
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            view_context.dom_id(@homologation_request, :documents),
+            partial: "homologation_requests/documents",
+            locals:  { hr: @homologation_request, can_edit: true }
+          ), status: :unprocessable_entity
+        end
+        format.html { render "homologation_requests/show", status: :unprocessable_entity }
+      end
     end
   end
 

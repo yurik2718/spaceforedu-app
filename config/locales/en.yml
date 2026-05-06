@@ -258,3 +258,6 @@ en:
     new_message:
       title: "New message on \"%{subject}\""
       body:  "You have a new message from %{sender}."
+    payment_failed:
+      title: "Payment failed for \"%{subject}\""
+      body:  "Stripe reports the payment intent failed. Investigate and contact the student."
