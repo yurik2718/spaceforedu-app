@@ -26,6 +26,7 @@ es:
       other: "%{count} archivos cargados."
     document_removed:       "Archivo eliminado."
     no_files_selected:      "No has seleccionado ningún archivo."
+    payment_processing:     "Pago recibido. Lo confirmaremos en breve."
 
   profile:
     edit_title: "Editar perfil"
@@ -171,6 +172,7 @@ es:
       not_set:      "Importe aún no fijado."
       confirmed_at: "Confirmado el"
       confirmed_by: "Confirmado por"
+      pay_now:      "Pagar ahora"
     status:
       draft:             "Borrador"
       submitted:         "Enviada"
@@ -261,3 +263,12 @@ es:
     payment_failed:
       title: "Pago fallido en «%{subject}»"
       body:  "Stripe reporta que la intención de pago falló. Revisa y contacta al estudiante."
+    request_submitted:
+      title: "Nueva solicitud: «%{subject}»"
+      body:  "%{student} acaba de enviar su solicitud. Toca revisarla."
+    payment_received:
+      title: "Pago recibido en «%{subject}»"
+      body:  "%{student} acaba de pagar. La solicitud entró en el pipeline."
+    documents_added:
+      title: "Nuevos documentos en «%{subject}»"
+      body:  "%{student} subió %{count} archivo(s) en respuesta a tu petición."

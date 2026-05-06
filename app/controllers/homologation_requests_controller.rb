@@ -35,6 +35,7 @@ class HomologationRequestsController < ApplicationController
     @homologation_request = HomologationRequest.kept.includes(:conversation, :user).find(params[:id])
     authorize @homologation_request
     Conversation.create!(homologation_request: @homologation_request) unless @homologation_request.conversation
+    flash.now[:notice] = t("flash.payment_processing") if params[:payment] == "success"
   end
 
   def edit

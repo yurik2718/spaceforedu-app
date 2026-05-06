@@ -55,6 +55,22 @@ module Stripe
       assert_not_nil request.payment_confirmed_at
     end
 
+    test "payment_intent.succeeded notifies the super admin that the payment arrived" do
+      request = homologation_requests(:awaiting_payment)
+      admin   = users(:admin)
+      payload = {
+        id:   "evt_pi_succeeded_admin_notif",
+        type: "payment_intent.succeeded",
+        data: { object: { id: request.stripe_payment_intent_id } }
+      }.to_json
+
+      assert_difference -> {
+        admin.notifications.where(notifiable: request, title_key: "notifications.payment_received.title").count
+      }, 1 do
+        post_signed_event payload
+      end
+    end
+
     test "payment_intent.payment_failed notifies the super admin" do
       request = homologation_requests(:awaiting_payment)
       admin   = users(:admin)

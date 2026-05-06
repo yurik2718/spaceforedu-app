@@ -2,6 +2,8 @@
 
 <% hr = @homologation_request %>
 
+<%= turbo_stream_from hr %>
+
 <%= render "shared/page_header",
       title: hr.subject,
       actions: capture {
@@ -108,6 +110,13 @@
           <p class="text-2xl font-semibold mt-1"><%= number_to_currency hr.payment_amount %></p>
         <% else %>
           <p class="opacity-60"><%= t("requests.payment.not_set") %></p>
+        <% end %>
+
+        <% if policy(hr).checkout? %>
+          <%= button_to t("requests.payment.pay_now"),
+                homologation_request_checkout_path(hr),
+                method: :post,
+                class: "btn btn-primary mt-4 w-full" %>
         <% end %>
 
         <% if hr.payment_confirmed_at %>

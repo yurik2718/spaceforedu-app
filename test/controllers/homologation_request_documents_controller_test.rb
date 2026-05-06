@@ -60,6 +60,32 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     assert_match(/text-error/, response.body)
   end
 
+  test "uploading documents while awaiting_reply pings the super admin" do
+    awaiting_reply = @student.homologation_requests.create!(
+      subject: "Reply needed", service_type: "homologation",
+      status: "awaiting_reply", privacy_accepted: true
+    )
+    admin = users(:admin)
+    sign_in_as @student
+    pdf = Rack::Test::UploadedFile.new(StringIO.new("%PDF-1.4 fake"), "application/pdf", original_filename: "reply.pdf")
+
+    assert_difference -> {
+      admin.notifications.where(notifiable: awaiting_reply, title_key: "notifications.documents_added.title").count
+    }, 1 do
+      post homologation_request_documents_path(awaiting_reply), params: { files: [ pdf ] }
+    end
+  end
+
+  test "uploading documents while in draft does not ping the super admin" do
+    sign_in_as @student
+    admin = users(:admin)
+    pdf = Rack::Test::UploadedFile.new(StringIO.new("%PDF-1.4 fake"), "application/pdf", original_filename: "ok.pdf")
+
+    assert_no_difference -> { admin.notifications.where(notifiable: @draft).count } do
+      post homologation_request_documents_path(@draft), params: { files: [ pdf ] }
+    end
+  end
+
   test "a mixed-batch upload purges only the files attached in this request" do
     sign_in_as @student
     @draft.documents.attach(io: StringIO.new("%PDF pre-existing"), filename: "old.pdf", content_type: "application/pdf")

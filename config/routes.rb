@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   resources :homologation_requests, only: %i[index new create show edit update] do
     resource  :submission, only: :create, controller: "homologation_request_submissions"
+    resource  :checkout,   only: :create, controller: "homologation_request_checkouts"
     resources :documents,  only: %i[create destroy], controller: "homologation_request_documents"
   end
 

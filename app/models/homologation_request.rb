@@ -11,6 +11,8 @@ class HomologationRequest < ApplicationRecord
   has_many_attached :originals
   has_many_attached :documents
 
+  broadcasts_refreshes
+
   validates :application_file, :originals, :documents,
             content_type: %w[application/pdf image/jpeg image/png image/webp],
             size:         { less_than: 15.megabytes }

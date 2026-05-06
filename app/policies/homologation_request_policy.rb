@@ -3,6 +3,7 @@ class HomologationRequestPolicy < ApplicationPolicy
   def create?          = user.present?
   def update?          = record.user_id == user&.id
   def submit?          = record.user_id == user&.id
+  def checkout?        = record.user_id == user&.id && record.status == "awaiting_payment" && record.payment_amount.present?
   def manage_pipeline? = user&.super_admin?
 
   class Scope < ApplicationPolicy::Scope

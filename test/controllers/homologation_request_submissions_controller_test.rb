@@ -22,6 +22,18 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
     assert_equal @student.id,  fresh.status_changed_by
   end
 
+  test "POST create notifies the super admin about the new submission" do
+    sign_in_as @student
+    admin = users(:admin)
+
+    assert_difference -> { admin.notifications.where(notifiable: @draft).count }, 1 do
+      post homologation_request_submission_path(@draft)
+    end
+
+    notification = admin.notifications.where(notifiable: @draft).last
+    assert_equal "notifications.request_submitted.title", notification.title_key
+  end
+
   test "POST create on a non-draft status redirects with an alert" do
     sign_in_as @student
     submitted = @student.homologation_requests.create!(

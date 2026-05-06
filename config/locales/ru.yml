@@ -28,6 +28,7 @@ ru:
       other: "%{count} файлов загружены."
     document_removed:       "Файл удалён."
     no_files_selected:      "Файлы не выбраны."
+    payment_processing:     "Платёж получен. Скоро подтвердим."
 
   profile:
     edit_title: "Редактировать профиль"
@@ -173,6 +174,7 @@ ru:
       not_set:      "Сумма пока не задана."
       confirmed_at: "Подтверждено"
       confirmed_by: "Подтвердил"
+      pay_now:      "Оплатить"
     status:
       draft:             "Черновик"
       submitted:         "Отправлена"
@@ -263,3 +265,12 @@ ru:
     payment_failed:
       title: "Оплата по заявке «%{subject}» не прошла"
       body:  "Stripe сообщает, что платёж не прошёл. Свяжитесь со студентом."
+    request_submitted:
+      title: "Новая заявка: «%{subject}»"
+      body:  "%{student} только что отправил заявку. Пора смотреть."
+    payment_received:
+      title: "Оплата по заявке «%{subject}» получена"
+      body:  "%{student} только что оплатил. Заявка ушла в работу."
+    documents_added:
+      title: "Новые документы по заявке «%{subject}»"
+      body:  "%{student} загрузил %{count} файл(ов) в ответ на ваш запрос."

@@ -26,6 +26,7 @@ en:
       other: "%{count} files uploaded."
     document_removed:       "File removed."
     no_files_selected:      "No files selected."
+    payment_processing:     "Payment received. We'll confirm it shortly."
 
   profile:
     edit_title: "Edit profile"
@@ -171,6 +172,7 @@ en:
       not_set:      "No amount set yet."
       confirmed_at: "Confirmed at"
       confirmed_by: "Confirmed by"
+      pay_now:      "Pay now"
     status:
       draft:             "Draft"
       submitted:         "Submitted"
@@ -261,3 +263,12 @@ en:
     payment_failed:
       title: "Payment failed for \"%{subject}\""
       body:  "Stripe reports the payment intent failed. Investigate and contact the student."
+    request_submitted:
+      title: "New submission: \"%{subject}\""
+      body:  "%{student} just submitted their request. Time to review."
+    payment_received:
+      title: "Payment received for \"%{subject}\""
+      body:  "%{student} just paid. The request moved into the pipeline."
+    documents_added:
+      title: "New documents on \"%{subject}\""
+      body:  "%{student} uploaded %{count} file(s) in reply to your request."

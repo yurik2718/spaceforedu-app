@@ -16,6 +16,8 @@ class User < ApplicationRecord
 
   scope :kept, -> { where(discarded_at: nil) }
 
+  def self.super_admin = kept.where(role: "super_admin").order(:id).first
+
   def super_admin? = role == "super_admin"
   def student?     = role == "student"
   def has_passport? = passport.present?
