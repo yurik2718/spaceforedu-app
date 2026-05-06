@@ -45,6 +45,22 @@ module ApplicationHelper
     NATIVE_LOCALE_LABELS.fetch(locale.to_sym, locale.to_s.upcase)
   end
 
+  def support_email
+    ENV.fetch("SUPPORT_EMAIL", "support@example.com")
+  end
+
+  def support_whatsapp
+    ENV.fetch("SUPPORT_WHATSAPP", "+00 000 000 000")
+  end
+
+  def support_whatsapp_url
+    "https://wa.me/#{support_whatsapp.gsub(/\D/, '')}"
+  end
+
+  def brand_location
+    ENV.fetch("BRAND_LOCATION", "City, Country")
+  end
+
   def masked_phone(value)
     return "—" if value.blank?
     digits = value.to_s.gsub(/\D/, "")

@@ -1,31 +1,44 @@
 <% content_for :title, t("nav.sign_in") %>
 
-<%= render "shared/page_header", title: t("nav.sign_in") %>
+<h1 class="font-display font-bold text-4xl text-ink leading-[1.1] tracking-tight"><%= t("auth.welcome_back.title") %></h1>
 
-<%= form_with url: session_url, class: "card bg-white shadow max-w-md mx-auto" do |f| %>
-  <div class="card-body">
-    <fieldset class="fieldset">
-      <label class="label" for="<%= f.field_id(:email_address) %>"><%= t("profile.fields.email_address") %></label>
-      <%= f.email_field :email_address,
-            value: params[:email_address],
-            required: true,
-            autofocus: true,
-            autocomplete: "username",
-            class: "input input-bordered w-full" %>
-    </fieldset>
+<%= form_with url: session_url, class: "space-y-5" do |f| %>
+  <div>
+    <label class="label" for="<%= f.field_id(:email_address) %>"><%= t("profile.fields.email_address") %></label>
+    <%= f.email_field :email_address,
+          value: params[:email_address],
+          required: true,
+          autofocus: true,
+          autocomplete: "username",
+          placeholder: "you@example.com",
+          class: "input w-full" %>
+  </div>
 
-    <fieldset class="fieldset">
+  <div>
+    <div class="flex items-baseline justify-between">
       <label class="label" for="<%= f.field_id(:password) %>"><%= t("auth.password") %></label>
-      <%= f.password_field :password,
-            required: true,
-            autocomplete: "current-password",
-            maxlength: 72,
-            class: "input input-bordered w-full" %>
-    </fieldset>
-
-    <div class="card-actions justify-between items-center pt-2">
-      <%= link_to t("auth.forgot_password"), new_password_path, class: "link link-hover text-sm opacity-70" %>
-      <%= f.submit t("nav.sign_in"), class: "btn btn-primary" %>
+      <%= link_to t("auth.forgot_password"), new_password_path, class: "text-xs text-mute hover:text-ink no-underline" %>
     </div>
+    <%= f.password_field :password,
+          required: true,
+          autocomplete: "current-password",
+          maxlength: 72,
+          placeholder: "••••••••",
+          class: "input w-full" %>
+  </div>
+
+  <div class="space-y-2 pt-1">
+    <%= f.submit t("auth.welcome_back.submit"), class: "btn btn-primary w-full h-12 text-base" %>
+    <p class="flex items-center justify-center gap-1.5 text-xs text-ash">
+      <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v3H5a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1v-8a1 1 0 00-1-1h-1V6a4 4 0 00-4-4zm2 7V6a2 2 0 10-4 0v3h4z" clip-rule="evenodd"/>
+      </svg>
+      <%= t("auth.secure_login") %>
+    </p>
   </div>
 <% end %>
+
+<div class="divider"><%= t("auth.or") %></div>
+
+<%= link_to t("registrations.submit"), new_registration_path,
+      class: "btn w-full h-12 text-base border border-hairline text-ink hover:bg-surface-card no-underline flex items-center justify-center gap-2" %>

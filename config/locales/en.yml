@@ -84,6 +84,30 @@ en:
     password_reset_title:   "Reset password"
     password_reset_submit:  "Send reset instructions"
     password_update_title:  "Set a new password"
+    no_account:             "Don't have an account?"
+    secure_login:           "End-to-end encrypted sign-in"
+    welcome_back:
+      title:  "Welcome back"
+      submit: "Sign in to your dashboard"
+    or:       "or"
+    brand:
+      eyebrow:        "Diploma homologation in Spain"
+      tagline_line_1: "Your degree,"
+      tagline_line_2: "all the way to recognition."
+      lede:           "Filing with the Ministerio, RedSARA correspondence, cotejo to completion — in your language, every step of the way."
+      steps:
+        submit:
+          title: "We review before filing"
+          body:  "Which documents, which sworn translation (traducción jurada), where you need an apostille. We don't file with gaps — gaps cost months."
+        quote:
+          title: "Fixed price, before we start"
+          body:  "Our fee, tasas, translations — visible up front. No \"pay extra later\"."
+        track:
+          title: "All the way to cotejo"
+          body:  "RedSARA submission, Ministerio correspondence, replies to additional requests. Status visible in real time."
+      trust:
+        gdpr:           "GDPR · EU data"
+        no_hidden_fees: "No hidden fees"
 
   registrations:
     title:          "Create your account"

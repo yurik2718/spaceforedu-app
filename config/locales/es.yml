@@ -84,6 +84,30 @@ es:
     password_reset_title:   "Recuperar contraseña"
     password_reset_submit:  "Enviar instrucciones"
     password_update_title:  "Establecer nueva contraseña"
+    no_account:             "¿Aún no tienes cuenta?"
+    secure_login:           "Acceso cifrado de extremo a extremo"
+    welcome_back:
+      title:  "Bienvenido de vuelta"
+      submit: "Entrar a mi panel"
+    or:       "o"
+    brand:
+      eyebrow:        "Homologación de títulos en España"
+      tagline_line_1: "Llevamos tu título"
+      tagline_line_2: "hasta la homologación."
+      lede:           "Presentación en el Ministerio, gestión por RedSARA, cotejo hasta el final — en tu idioma, en cada paso."
+      steps:
+        submit:
+          title: "Revisamos antes de presentar"
+          body:  "Qué documentos, qué traducción jurada, dónde necesitas apostilla. No presentamos con vacíos — los vacíos cuestan meses."
+        quote:
+          title: "Precio fijo, antes de empezar"
+          body:  "Honorarios, tasas, traducciones — todo visible desde el inicio. Sin «paga más al final»."
+        track:
+          title: "Hasta el cotejo final"
+          body:  "Envío RedSARA, correspondencia con el Ministerio, respuestas a requerimientos. Estado en tiempo real."
+      trust:
+        gdpr:           "RGPD · datos en UE"
+        no_hidden_fees: "Sin tasas ocultas"
 
   registrations:
     title:          "Crea tu cuenta"

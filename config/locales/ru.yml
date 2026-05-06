@@ -86,6 +86,30 @@ ru:
     password_reset_title:   "Восстановление пароля"
     password_reset_submit:  "Отправить инструкции"
     password_update_title:  "Задайте новый пароль"
+    no_account:             "Ещё нет аккаунта?"
+    secure_login:           "Сквозное шифрование при входе"
+    welcome_back:
+      title:  "С возвращением"
+      submit: "Войти в кабинет"
+    or:       "или"
+    brand:
+      eyebrow:        "Омологация дипломов в Испании"
+      tagline_line_1: "Доводим диплом"
+      tagline_line_2: "до признания."
+      lede:           "Подача в Ministerio, переписка через RedSARA, cotejo до завершения — на вашем языке, на каждом этапе."
+      steps:
+        submit:
+          title: "Проверяем перед подачей"
+          body:  "Какие документы, какая traducción jurada, где нужен апостиль. Не подаём с пробелами — пробелы стоят месяцев."
+        quote:
+          title: "Фиксируем цену до старта"
+          body:  "Гонорар, tasas, переводы — всё видно до начала. Без «доплатите по факту»."
+        track:
+          title: "Доводим до cotejo"
+          body:  "Подача в RedSARA, переписка с Ministerio, ответы на запросы. Статус виден в реальном времени."
+      trust:
+        gdpr:           "RGPD · данные в ЕС"
+        no_hidden_fees: "Без скрытых платежей"
 
   registrations:
     title:          "Создайте аккаунт"

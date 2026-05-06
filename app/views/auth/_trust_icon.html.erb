@@ -1,0 +1,11 @@
+<%# locals: (key:) — :location, :gdpr, :no_hidden_fees %>
+<svg class="w-3.5 h-3.5 text-primary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+  <% case key
+     when :location %>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2a6 6 0 00-6 6c0 4.5 6 10 6 10s6-5.5 6-10a6 6 0 00-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z"/>
+  <% when :gdpr %>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+  <% when :no_hidden_fees %>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 5a2 2 0 012-2h5.586a1 1 0 01.707.293l7 7a1 1 0 010 1.414l-5.586 5.586a1 1 0 01-1.414 0l-7-7A1 1 0 012 9.586V5zm5 1a1 1 0 100-2 1 1 0 000 2z"/>
+  <% end %>
+</svg>
