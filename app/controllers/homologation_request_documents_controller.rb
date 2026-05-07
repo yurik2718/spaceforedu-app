@@ -22,6 +22,7 @@ class HomologationRequestDocumentsController < ApplicationController
       new_blob_ids = new_blobs.map(&:id)
       @homologation_request.documents.attachments.select { |a| new_blob_ids.include?(a.blob_id) }.each(&:purge_later)
 
+      @checklist_keys = PipelineFlow.checklist_keys
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(

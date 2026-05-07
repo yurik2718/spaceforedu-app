@@ -31,8 +31,9 @@ module Stripe
       def confirm_payment(payment_intent_id)
         request = HomologationRequest.kept.includes(:user).find_by(stripe_payment_intent_id: payment_intent_id)
         return unless request
-
         admin = User.super_admin
+        return unless admin
+
         request.confirm_payment!(confirmed_by: admin)
         admin.notify(
           notifiable: request,
@@ -46,8 +47,10 @@ module Stripe
       def notify_payment_failed(payment_intent_id)
         request = HomologationRequest.kept.find_by(stripe_payment_intent_id: payment_intent_id)
         return unless request
+        admin = User.super_admin
+        return unless admin
 
-        User.super_admin.notify(
+        admin.notify(
           notifiable: request,
           title_key:  "notifications.payment_failed.title",
           body_key:   "notifications.payment_failed.body",

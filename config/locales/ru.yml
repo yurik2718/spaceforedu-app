@@ -2,8 +2,11 @@ ru:
   errors:
     not_authorized:        "У вас нет прав для выполнения этого действия."
     privacy_required:      "должна быть принята для регистрации"
-    rate_limited:          "Слишком много попыток. Попробуйте позже."
-    unknown_checklist_key: "Неизвестный ключ чеклиста."
+    rate_limited:                  "Слишком много попыток. Попробуйте позже."
+    unknown_checklist_key:         "Неизвестный ключ чеклиста."
+    invalid_credentials:           "Неверный email или пароль."
+    passwords_mismatch:            "Пароли не совпадают."
+    password_reset_token_invalid:  "Ссылка для сброса пароля недействительна или истекла."
 
   flash:
     request_created:        "Заявка создана."
@@ -29,6 +32,8 @@ ru:
     document_removed:       "Файл удалён."
     no_files_selected:      "Файлы не выбраны."
     payment_processing:     "Платёж получен. Скоро подтвердим."
+    password_reset_sent:    "Инструкции по сбросу пароля отправлены (если пользователь с таким email существует)."
+    password_reset_success: "Пароль успешно изменён."
 
   profile:
     edit_title: "Редактировать профиль"

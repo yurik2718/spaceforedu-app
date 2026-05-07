@@ -7,10 +7,6 @@ class HomologationRequestSubmissionsController < ApplicationController
       .find(params[:homologation_request_id])
     authorize homologation_request, :submit?
 
-    unless homologation_request.status == "draft"
-      redirect_to homologation_request, alert: t("flash.request_not_submittable") and return
-    end
-
     homologation_request.transition_to!("submitted", changed_by: Current.user)
     notify_admin_of_submission(homologation_request)
     redirect_to homologation_request, notice: t("flash.request_submitted")

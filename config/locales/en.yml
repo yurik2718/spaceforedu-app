@@ -2,8 +2,11 @@ en:
   errors:
     not_authorized:        "You are not authorized to perform this action."
     privacy_required:      "must be accepted to register"
-    rate_limited:          "Too many attempts. Try again later."
-    unknown_checklist_key: "Unknown checklist key."
+    rate_limited:                  "Too many attempts. Try again later."
+    unknown_checklist_key:         "Unknown checklist key."
+    invalid_credentials:           "Try another email address or password."
+    passwords_mismatch:            "Passwords did not match."
+    password_reset_token_invalid:  "Password reset link is invalid or has expired."
 
   flash:
     request_created:        "Request created."
@@ -27,6 +30,8 @@ en:
     document_removed:       "File removed."
     no_files_selected:      "No files selected."
     payment_processing:     "Payment received. We'll confirm it shortly."
+    password_reset_sent:    "Password reset instructions sent (if user with that email address exists)."
+    password_reset_success: "Password has been reset."
 
   profile:
     edit_title: "Edit profile"

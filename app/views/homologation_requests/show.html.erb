@@ -69,9 +69,8 @@
   </div>
 
   <%# CHECKLIST — read-only with progress %>
-  <% checklist_keys  = PipelineFlow.checklist_keys %>
-  <% checklist_done  = checklist_keys.count { |k| hr.checklist_done?(k) } %>
-  <% checklist_total = checklist_keys.size %>
+  <% checklist_done  = @checklist_keys.count { |k| hr.checklist_done?(k) } %>
+  <% checklist_total = @checklist_keys.size %>
   <div class="card bg-white shadow">
     <div class="card-body">
       <header class="flex items-center justify-between gap-2">
@@ -83,7 +82,7 @@
                 value="<%= checklist_done %>" max="<%= checklist_total %>"></progress>
 
       <ul class="mt-2 space-y-1">
-        <% checklist_keys.each do |key| %>
+        <% @checklist_keys.each do |key| %>
           <li class="flex items-center gap-2">
             <input type="checkbox" class="checkbox checkbox-sm" disabled
                    <%= "checked" if hr.checklist_done?(key) %>>

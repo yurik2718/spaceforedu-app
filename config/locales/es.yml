@@ -2,8 +2,11 @@ es:
   errors:
     not_authorized:        "No tienes permiso para realizar esta acción."
     privacy_required:      "debe ser aceptada para registrarse"
-    rate_limited:          "Demasiados intentos. Inténtalo más tarde."
-    unknown_checklist_key: "Clave de lista de documentos desconocida."
+    rate_limited:                  "Demasiados intentos. Inténtalo más tarde."
+    unknown_checklist_key:         "Clave de lista de documentos desconocida."
+    invalid_credentials:           "Correo o contraseña incorrectos."
+    passwords_mismatch:            "Las contraseñas no coinciden."
+    password_reset_token_invalid:  "El enlace de recuperación no es válido o ha expirado."
 
   flash:
     request_created:        "Solicitud creada."
@@ -27,6 +30,8 @@ es:
     document_removed:       "Archivo eliminado."
     no_files_selected:      "No has seleccionado ningún archivo."
     payment_processing:     "Pago recibido. Lo confirmaremos en breve."
+    password_reset_sent:    "Instrucciones de recuperación enviadas (si existe un usuario con ese correo)."
+    password_reset_success: "Contraseña actualizada."
 
   profile:
     edit_title: "Editar perfil"

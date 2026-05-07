@@ -9,8 +9,11 @@ class User < ApplicationRecord
 
   attribute :privacy_accepted, :boolean
 
-  validates :email_address, presence: true, uniqueness: true
-  validates :name,          presence: true
+  validates :email_address,   presence: true, uniqueness: true
+  validates :name,            presence: true
+  validates :privacy_accepted, acceptance: true, on: :create
+
+  before_create { self.privacy_accepted_at = Time.current if privacy_accepted? }
 
   encrypts :phone, :whatsapp, :guardian_phone, :guardian_whatsapp, :identity_card, :passport
 

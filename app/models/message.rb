@@ -5,10 +5,10 @@ class Message < ApplicationRecord
 
   validates :body, presence: true
 
-  after_create        :auto_advance_request_status
   after_create_commit -> { broadcast_append_to conversation }
   after_create_commit :touch_conversation
   after_create_commit :notify_counterpart
+  after_create_commit :auto_advance_request_status
 
   private
     def touch_conversation
@@ -20,6 +20,8 @@ class Message < ApplicationRecord
       return unless user_id == request.user_id && request.status == "awaiting_reply"
 
       request.transition_to!("in_review", changed_by: user)
+    rescue HomologationRequest::InvalidTransition
+      nil
     end
 
     def notify_counterpart
@@ -37,6 +39,6 @@ class Message < ApplicationRecord
 
     def counterpart
       owner = conversation.homologation_request.user
-      user == owner ? User.kept.where(role: "super_admin").order(:id).first : owner
+      user == owner ? User.super_admin : owner
     end
 end

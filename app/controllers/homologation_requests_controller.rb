@@ -13,13 +13,7 @@ class HomologationRequestsController < ApplicationController
     @homologation_request = Current.user.homologation_requests.new(request_params)
     authorize @homologation_request
 
-    unless privacy_accepted?
-      @homologation_request.errors.add(:privacy_accepted, :acceptance, message: t("errors.privacy_required"))
-      return render :new, status: :unprocessable_entity
-    end
-
-    @homologation_request.privacy_accepted = true
-    @homologation_request.status           = "draft"
+    @homologation_request.status = "draft"
 
     if @homologation_request.save
       redirect_to @homologation_request, notice: t("flash.request_created")
@@ -31,6 +25,7 @@ class HomologationRequestsController < ApplicationController
   def show
     @homologation_request = HomologationRequest.kept.includes(:conversation, :user).find(params[:id])
     authorize @homologation_request
+    @checklist_keys = PipelineFlow.checklist_keys
     flash.now[:notice] = t("flash.payment_processing") if params[:payment] == "success"
   end
 
@@ -62,11 +57,7 @@ class HomologationRequestsController < ApplicationController
     def request_params
       params.expect(homologation_request: %i[
         subject service_type description education_system university year
-        studies_finished language_knowledge language_certificate
+        studies_finished language_knowledge language_certificate privacy_accepted
       ])
-    end
-
-    def privacy_accepted?
-      params.dig(:homologation_request, :privacy_accepted) == "1"
     end
 end

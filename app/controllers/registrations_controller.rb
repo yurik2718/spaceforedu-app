@@ -11,13 +11,6 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    unless privacy_accepted?
-      @user.errors.add(:privacy_accepted, :acceptance, message: t("errors.privacy_required"))
-      return render :new, status: :unprocessable_entity
-    end
-
-    @user.privacy_accepted_at = Time.current
-
     if @user.save
       start_new_session_for @user
       redirect_to root_path, notice: t("flash.registered")
@@ -28,10 +21,6 @@ class RegistrationsController < ApplicationController
 
   private
     def user_params
-      params.expect(user: %i[email_address password password_confirmation name])
-    end
-
-    def privacy_accepted?
-      params.dig(:user, :privacy_accepted) == "1"
+      params.expect(user: %i[email_address password password_confirmation name privacy_accepted])
     end
 end

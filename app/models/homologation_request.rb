@@ -27,6 +27,8 @@ class HomologationRequest < ApplicationRecord
 
   EDITABLE_STATUSES = %w[draft awaiting_reply].freeze
 
+  validates :privacy_accepted, acceptance: true, on: :create
+
   after_create_commit :create_conversation
 
   def editable? = status.in?(EDITABLE_STATUSES)

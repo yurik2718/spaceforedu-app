@@ -33,8 +33,7 @@ module ApplicationHelper
     locale.to_s.upcase
   end
 
-  # Language name in its OWN language — UX convention for language switchers.
-  # Lets a user who doesn't know the current locale still find their language.
+  # Native labels let users find their language regardless of current locale.
   NATIVE_LOCALE_LABELS = {
     en: "English",
     es: "Español",
@@ -45,10 +44,7 @@ module ApplicationHelper
     NATIVE_LOCALE_LABELS.fetch(locale.to_sym, locale.to_s.upcase)
   end
 
-  # Brand contacts and identity. Stored in encrypted credentials
-  # (`bin/rails credentials:edit` → `brand:` section) so real values stay
-  # out of the public repo. Fallbacks are clearly-fake placeholders that
-  # keep pages rendering during local setup before master.key arrives.
+  # Fallbacks keep pages rendering locally before master.key arrives.
   def support_email
     Rails.application.credentials.dig(:brand, :support_email) || "support@example.com"
   end
