@@ -1,5 +1,3 @@
-require "zip"
-
 class HomologationRequest < ApplicationRecord
   belongs_to :user
   belongs_to :status_changer,    class_name: "User", optional: true, foreign_key: :status_changed_by
@@ -26,6 +24,12 @@ class HomologationRequest < ApplicationRecord
     awaiting_payment payment_confirmed in_progress
     resolved closed
   ].freeze
+
+  EDITABLE_STATUSES = %w[draft awaiting_reply].freeze
+
+  after_create_commit :create_conversation
+
+  def editable? = status.in?(EDITABLE_STATUSES)
 
   def transition_to!(new_status, changed_by:)
     unless STATUSES.include?(new_status.to_s)
@@ -111,8 +115,7 @@ class HomologationRequest < ApplicationRecord
   private
     def notify_owner_of_status_change
       return if status_changed_by == user_id
-      owner = User.find(user_id)
-      owner.notify(
+      user.notify(
         notifiable:  self,
         title_key:   "notifications.status_changed.title",
         body_key:    "notifications.status_changed.body",
@@ -122,13 +125,16 @@ class HomologationRequest < ApplicationRecord
     end
 
     def notify_owner_of_payment_confirmed
-      owner = User.find(user_id)
-      owner.notify(
+      user.notify(
         notifiable: self,
         title_key:  "notifications.payment_confirmed.title",
         body_key:   "notifications.payment_confirmed.body",
         subject:    subject
       )
+    end
+
+    def create_conversation
+      Conversation.create!(homologation_request: self)
     end
 
     def write_zip_entry(zip, namespace, attachment)

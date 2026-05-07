@@ -298,3 +298,7 @@ ru:
     documents_added:
       title: "Новые документы по заявке «%{subject}»"
       body:  "%{student} загрузил %{count} файл(ов) в ответ на ваш запрос."
+
+  passwords_mailer:
+    reset:
+      subject: "Сброс пароля Space for Edu"

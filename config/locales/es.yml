@@ -296,3 +296,7 @@ es:
     documents_added:
       title: "Nuevos documentos en «%{subject}»"
       body:  "%{student} subió %{count} archivo(s) en respuesta a tu petición."
+
+  passwords_mailer:
+    reset:
+      subject: "Recupera el acceso a Space for Edu"

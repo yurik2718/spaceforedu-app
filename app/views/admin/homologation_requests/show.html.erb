@@ -156,7 +156,7 @@
       <% end %>
 
       <% if hr.status == "awaiting_payment" %>
-        <%= form_with url: admin_homologation_request_payment_confirmations_path(hr),
+        <%= form_with url: admin_homologation_request_payment_confirmation_path(hr),
                       scope: :payment_confirmation,
                       class: "flex gap-2 mt-4" do |f| %>
           <% if hr.payment_amount.blank? %>

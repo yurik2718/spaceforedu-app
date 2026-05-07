@@ -8,7 +8,7 @@ class Admin::HomologationRequests::PaymentConfirmationsControllerTest < ActionDi
 
   test "super_admin confirms payment, transitioning status and seeding pipeline" do
     sign_in_as @admin
-    post admin_homologation_request_payment_confirmations_path(@homologation_request),
+    post admin_homologation_request_payment_confirmation_path(@homologation_request),
          params: { payment_confirmation: { payment_amount: "199.50" } }
 
     assert_redirected_to admin_homologation_request_path(@homologation_request)
@@ -23,7 +23,7 @@ class Admin::HomologationRequests::PaymentConfirmationsControllerTest < ActionDi
 
   test "students cannot confirm payment" do
     sign_in_as users(:student_es)
-    post admin_homologation_request_payment_confirmations_path(@homologation_request),
+    post admin_homologation_request_payment_confirmation_path(@homologation_request),
          params: { payment_confirmation: {} }
 
     assert_redirected_to root_path
@@ -31,7 +31,7 @@ class Admin::HomologationRequests::PaymentConfirmationsControllerTest < ActionDi
   end
 
   test "unauthenticated visitors are redirected to sign in" do
-    post admin_homologation_request_payment_confirmations_path(@homologation_request),
+    post admin_homologation_request_payment_confirmation_path(@homologation_request),
          params: { payment_confirmation: {} }
     assert_redirected_to new_session_path
   end

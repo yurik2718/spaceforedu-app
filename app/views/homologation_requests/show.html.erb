@@ -18,7 +18,7 @@
             chat_icon + label + badge
           end)
         end
-        if policy(hr).update? && HomologationRequestsController::EDITABLE_STATUSES.include?(hr.status)
+        if policy(hr).update? && hr.editable?
           concat link_to(t("actions.edit"), edit_homologation_request_path(hr), class: "btn btn-ghost btn-sm")
         end
         if policy(hr).submit? && hr.status == "draft"
@@ -97,7 +97,7 @@
   </div>
 
   <%# DOCUMENTS — student uploads %>
-  <% can_edit = policy(hr).update? && HomologationRequestsController::EDITABLE_STATUSES.include?(hr.status) %>
+  <% can_edit = policy(hr).update? && hr.editable? %>
   <%= render "homologation_requests/documents", hr: hr, can_edit: can_edit %>
 
   <%# PAYMENT — only when relevant %>

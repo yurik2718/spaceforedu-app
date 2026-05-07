@@ -45,12 +45,16 @@ module ApplicationHelper
     NATIVE_LOCALE_LABELS.fetch(locale.to_sym, locale.to_s.upcase)
   end
 
+  # Brand contacts and identity. Stored in encrypted credentials
+  # (`bin/rails credentials:edit` → `brand:` section) so real values stay
+  # out of the public repo. Fallbacks are clearly-fake placeholders that
+  # keep pages rendering during local setup before master.key arrives.
   def support_email
-    ENV.fetch("SUPPORT_EMAIL", "support@example.com")
+    Rails.application.credentials.dig(:brand, :support_email) || "support@example.com"
   end
 
   def support_whatsapp
-    ENV.fetch("SUPPORT_WHATSAPP", "+00 000 000 000")
+    Rails.application.credentials.dig(:brand, :support_whatsapp) || "+00 000 000 000"
   end
 
   def support_whatsapp_url
@@ -58,7 +62,7 @@ module ApplicationHelper
   end
 
   def brand_location
-    ENV.fetch("BRAND_LOCATION", "City, Country")
+    Rails.application.credentials.dig(:brand, :location) || "City, Country"
   end
 
   def masked_phone(value)

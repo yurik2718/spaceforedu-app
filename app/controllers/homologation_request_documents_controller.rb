@@ -52,7 +52,7 @@ class HomologationRequestDocumentsController < ApplicationController
     end
 
     def guard_editable!
-      return if HomologationRequestsController::EDITABLE_STATUSES.include?(@homologation_request.status)
+      return if @homologation_request.editable?
       redirect_to @homologation_request, alert: t("flash.request_not_editable") and return
     end
 

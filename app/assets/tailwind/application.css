@@ -176,6 +176,19 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+/* ==========================================================================
+   Component utility layer — Tailwind v4 @utility (NOT DaisyUI).
+
+   Class names mirror DaisyUI conventions (btn, input, alert, badge, …) so
+   markup reads familiarly, but every rule below is project-owned. There is
+   no DaisyUI plugin installed and no `@plugin "daisyui"` import.
+
+   Why a utility layer at all (vs raw Tailwind in views): these patterns are
+   reused across 25+ views. Inlining the implementation everywhere would
+   trade intent ("btn-primary") for verbosity (10+ utility classes). Tailwind
+   v4 ships @utility for exactly this case.
+   ========================================================================== */
+
 /* ── Buttons ──────────────────────────────────────── */
 @utility btn {
   display: inline-flex;

@@ -29,7 +29,7 @@ Rails.application.routes.draw do
         resource  :pipeline_advance,     only: :create
         resource  :pipeline_retreat,     only: :create
         resources :status_transitions,   only: :create
-        resources :payment_confirmations, only: :create
+        resource  :payment_confirmation,  only: :create
         resource  :document_checklist,   only: :update
         resource  :conversation,         only: :create
         resource  :archive,              only: :show

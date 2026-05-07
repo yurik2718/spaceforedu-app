@@ -1,6 +1,4 @@
 class HomologationRequestsController < ApplicationController
-  EDITABLE_STATUSES = %w[draft awaiting_reply].freeze
-
   def index
     scope = policy_scope(HomologationRequest).kept.order(updated_at: :desc)
     @pagy, @homologation_requests = pagy(scope)
@@ -24,7 +22,6 @@ class HomologationRequestsController < ApplicationController
     @homologation_request.status           = "draft"
 
     if @homologation_request.save
-      Conversation.create!(homologation_request: @homologation_request)
       redirect_to @homologation_request, notice: t("flash.request_created")
     else
       render :new, status: :unprocessable_entity
@@ -34,7 +31,6 @@ class HomologationRequestsController < ApplicationController
   def show
     @homologation_request = HomologationRequest.kept.includes(:conversation, :user).find(params[:id])
     authorize @homologation_request
-    Conversation.create!(homologation_request: @homologation_request) unless @homologation_request.conversation
     flash.now[:notice] = t("flash.payment_processing") if params[:payment] == "success"
   end
 
@@ -42,7 +38,7 @@ class HomologationRequestsController < ApplicationController
     @homologation_request = HomologationRequest.kept.find(params[:id])
     authorize @homologation_request, :update?
 
-    unless EDITABLE_STATUSES.include?(@homologation_request.status)
+    unless @homologation_request.editable?
       redirect_to @homologation_request, alert: t("flash.request_not_editable") and return
     end
   end
@@ -51,7 +47,7 @@ class HomologationRequestsController < ApplicationController
     @homologation_request = HomologationRequest.kept.find(params[:id])
     authorize @homologation_request
 
-    unless EDITABLE_STATUSES.include?(@homologation_request.status)
+    unless @homologation_request.editable?
       redirect_to @homologation_request, alert: t("flash.request_not_editable") and return
     end
 
