@@ -32,6 +32,9 @@ es:
     payment_processing:     "Pago recibido. Lo confirmaremos en breve."
     password_reset_sent:    "Instrucciones de recuperación enviadas (si existe un usuario con ese correo)."
     password_reset_success: "Contraseña actualizada."
+    data_exported:              "Tus datos han sido exportados."
+    deletion_requested:         "Solicitud de eliminación registrada. Procesaremos tu solicitud en un plazo máximo de 30 días."
+    deletion_already_requested: "Ya tienes una solicitud de eliminación pendiente."
 
   profile:
     edit_title: "Editar perfil"
@@ -115,10 +118,11 @@ es:
         no_hidden_fees: "Sin tasas ocultas"
 
   registrations:
-    title:          "Crea tu cuenta"
-    submit:         "Registrarse"
-    privacy_accept: "Acepto la política de privacidad."
-    have_account:   "¿Ya tienes una cuenta?"
+    title:                "Crea tu cuenta"
+    submit:               "Registrarse"
+    privacy_accept:       "Acepto la política de privacidad."
+    privacy_accept_html:  "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
+    have_account:         "¿Ya tienes una cuenta?"
 
   pipeline:
     active:  "Activas"
@@ -178,7 +182,8 @@ es:
       studies_finished:     "¿Estudios finalizados?"
       language_knowledge:   "Nivel de idioma"
       language_certificate: "Certificado de idioma"
-      privacy_accepted:     "Acepto la política de privacidad."
+      privacy_accepted:      "Acepto la política de privacidad."
+      privacy_accepted_html: "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
       payment_amount:       "Importe"
     studies_finished:
       yes_label: "Sí"
@@ -272,6 +277,7 @@ es:
     sign_out:      "Cerrar sesión"
     language:      "Idioma"
     menu:          "Menú"
+    privacy:       "Privacidad"
 
   notification_mailer:
     new_event:
@@ -305,3 +311,115 @@ es:
   passwords_mailer:
     reset:
       subject: "Recupera el acceso a Space for Edu"
+
+  profile:
+    gdpr:
+      title:                      "Mis datos (RGPD)"
+      export_button:              "Exportar mis datos"
+      export_hint:                "Descarga un archivo JSON con todos tus datos personales (art. 20 RGPD)."
+      deletion_button:            "Solicitar eliminación de cuenta"
+      deletion_hint:              "Tu cuenta y datos personales serán anonimizados en un plazo máximo de 30 días."
+      deletion_confirm:           "¿Confirmar solicitud de eliminación de tu cuenta? Esta acción no se puede deshacer."
+      deletion_requested_at:      "Eliminación solicitada el"
+      deletion_requested_notice:  "Solicitud de eliminación registrada el %{date}. Será procesada en un plazo de 30 días."
+
+  cookie_notice:
+    text:          "Este sitio utiliza únicamente una cookie de sesión, estrictamente necesaria para el funcionamiento del servicio."
+    privacy_link:  "Más información"
+    dismiss:       "Entendido"
+
+  privacy:
+    page_title:   "Política de Privacidad"
+    last_updated: "Última actualización: mayo de 2025"
+
+    controller:
+      title: "1. Responsable del tratamiento"
+      body_html: "%{company}, con domicilio en %{address} y CIF %{cif}, es el responsable del tratamiento de los datos personales recabados a través de esta plataforma. Contacto para cuestiones de protección de datos: <a href='mailto:%{email}' class='link'>%{email}</a>."
+
+    data_collected:
+      title:          "2. Datos que recopilamos y su finalidad"
+      items_label:    "Datos"
+      purpose_label:  "Finalidad"
+      basis_label:    "Base jurídica"
+      categories:
+        account:
+          title:    "Datos de cuenta"
+          items:    "Nombre, correo electrónico, país, idioma."
+          purpose:  "Creación de cuenta y prestación del servicio."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        contact:
+          title:    "Datos de contacto"
+          items:    "Teléfono, WhatsApp."
+          purpose:  "Coordinación operativa del expediente."
+          basis:    "Contrato / Consentimiento (art. 6.1.b y 6.1.a RGPD)"
+        identity:
+          title:    "Documentos de identidad"
+          items:    "Número de pasaporte o documento de identidad."
+          purpose:  "Verificación de identidad para la tramitación de la homologación."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        application:
+          title:    "Datos de la solicitud"
+          items:    "Universidad, año, asignatura, sistema educativo, documentos académicos adjuntos."
+          purpose:  "Tramitación del expediente de homologación."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        session:
+          title:    "Datos de acceso"
+          items:    "Dirección IP y agente de usuario del navegador."
+          purpose:  "Seguridad de la plataforma y prevención del fraude."
+          basis:    "Interés legítimo (art. 6.1.f RGPD)"
+        payment:
+          title:    "Datos de pago"
+          items:    "Space for Edu no almacena números de tarjeta. Los pagos son gestionados íntegramente por Stripe, Inc."
+          purpose:  "Procesamiento del pago del servicio."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        messages:
+          title:    "Comunicaciones"
+          items:    "Mensajes del chat interno entre estudiante y administrador."
+          purpose:  "Gestión del expediente y atención al usuario."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+
+    retention:
+      title: "3. Plazos de conservación"
+      intro: "Conservamos sus datos únicamente durante el tiempo necesario para cada finalidad:"
+      rows:
+        account:    "Datos de cuenta — mientras dure la relación contractual y, tras su finalización, 5 años (normativa fiscal española)."
+        identity:   "Documentos de identidad — vigencia del expediente y hasta su resolución definitiva."
+        session:    "Datos de sesión (IP, navegador) — 90 días."
+        requests:   "Expedientes y documentos adjuntos — 5 años tras el cierre."
+        payments:   "Eventos de pago — 13 meses."
+        messages:   "Mensajes de chat — vinculados a la vigencia del expediente."
+
+    recipients:
+      title: "4. Destinatarios y transferencias internacionales"
+      intro: "Sus datos podrán ser comunicados a los siguientes destinatarios:"
+      stripe:
+        name:     "Stripe, Inc."
+        role:     "Procesador de pagos. Stripe puede transferir datos fuera del Espacio Económico Europeo al amparo de las Cláusulas Contractuales Tipo de la Comisión Europea. Acuerdo de procesamiento de datos disponible en"
+        dpa_link: "stripe.com/es/legal/dpa"
+      hosting:
+        name: "Proveedor de alojamiento"
+        role: "Servidor que aloja la aplicación, ubicado en el Espacio Económico Europeo."
+
+    rights:
+      title: "5. Sus derechos"
+      intro: "En virtud del RGPD y la LOPD-GDD, tiene derecho a:"
+      items:
+        access:          "Acceso — conocer qué datos personales tratamos sobre usted."
+        rectification:   "Rectificación — corregir datos inexactos desde su perfil."
+        erasure:         "Supresión — solicitar la eliminación de sus datos."
+        restriction:     "Limitación del tratamiento."
+        portability:     "Portabilidad — recibir sus datos en formato JSON estructurado."
+        objection:       "Oposición — cuando el tratamiento se base en interés legítimo."
+        withdraw:        "Retirada del consentimiento — en cualquier momento, sin efectos retroactivos."
+
+    how_to_exercise:
+      title:     "6. Cómo ejercer sus derechos"
+      body_html: "Puede exportar sus datos o solicitar la eliminación de su cuenta directamente desde <a href='%{profile_url}' class='link'>su perfil</a>. Para el resto de derechos, envíe un correo a <a href='mailto:%{email}' class='link'>%{email}</a> indicando su nombre, correo registrado y el derecho que desea ejercer. Responderemos en un plazo máximo de un mes (art. 12 RGPD)."
+
+    cookies:
+      title: "7. Cookies"
+      body:  "Este sitio web utiliza exclusivamente una cookie de sesión estrictamente necesaria para gestionar su acceso autenticado. Esta cookie caduca a los 90 días o al cerrar sesión. No utilizamos cookies de seguimiento, publicidad ni analítica de terceros."
+
+    complaints:
+      title:     "8. Reclamaciones ante la AEPD"
+      body_html: "Si considera que el tratamiento de sus datos infringe la normativa, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD): <a href='https://www.aepd.es' target='_blank' rel='noopener' class='link'>www.aepd.es</a>."

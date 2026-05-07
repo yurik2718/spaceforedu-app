@@ -89,7 +89,7 @@
       <fieldset class="fieldset">
         <label class="label cursor-pointer justify-start gap-2">
           <%= check_box_tag "homologation_request[privacy_accepted]", "1", false, class: "checkbox" %>
-          <span><%= t("requests.fields.privacy_accepted") %></span>
+          <span><%= t("requests.fields.privacy_accepted_html", url: privacy_path) %></span>
         </label>
       </fieldset>
     <% end %>

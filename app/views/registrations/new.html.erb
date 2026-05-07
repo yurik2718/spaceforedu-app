@@ -37,7 +37,7 @@
     <fieldset class="fieldset">
       <label class="label cursor-pointer justify-start gap-2">
         <%= f.check_box :privacy_accepted, { class: "checkbox" }, "1", "0" %>
-        <span><%= t("registrations.privacy_accept") %></span>
+        <span><%= t("registrations.privacy_accept_html", url: privacy_path) %></span>
       </label>
     </fieldset>
 

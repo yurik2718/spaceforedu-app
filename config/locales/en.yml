@@ -31,7 +31,10 @@ en:
     no_files_selected:      "No files selected."
     payment_processing:     "Payment received. We'll confirm it shortly."
     password_reset_sent:    "Password reset instructions sent (if user with that email address exists)."
-    password_reset_success: "Password has been reset."
+    password_reset_success:     "Password has been reset."
+    data_exported:              "Your data has been exported."
+    deletion_requested:         "Deletion request received. We will process it within 30 days."
+    deletion_already_requested: "You already have a pending deletion request."
 
   profile:
     edit_title: "Edit profile"
@@ -115,10 +118,11 @@ en:
         no_hidden_fees: "No hidden fees"
 
   registrations:
-    title:          "Create your account"
-    submit:         "Sign up"
-    privacy_accept: "I accept the privacy policy."
-    have_account:   "Already have an account?"
+    title:                "Create your account"
+    submit:               "Sign up"
+    privacy_accept:       "I accept the privacy policy."
+    privacy_accept_html:  "I accept the <a href=\"%{url}\" target=\"_blank\" class=\"link\">privacy policy</a>."
+    have_account:         "Already have an account?"
 
   pipeline:
     active:  "Active"
@@ -178,7 +182,8 @@ en:
       studies_finished:     "Studies finished?"
       language_knowledge:   "Language knowledge"
       language_certificate: "Language certificate"
-      privacy_accepted:     "I accept the privacy policy."
+      privacy_accepted:      "I accept the privacy policy."
+      privacy_accepted_html: "I accept the <a href=\"%{url}\" target=\"_blank\" class=\"link\">privacy policy</a>."
       payment_amount:       "Amount"
     studies_finished:
       yes_label: "Yes"
@@ -272,6 +277,7 @@ en:
     sign_out:      "Sign out"
     language:      "Language"
     menu:          "Menu"
+    privacy:       "Privacy"
 
   notification_mailer:
     new_event:
@@ -305,3 +311,115 @@ en:
   passwords_mailer:
     reset:
       subject: "Reset your Space for Edu password"
+
+  profile:
+    gdpr:
+      title:                      "My Data (GDPR)"
+      export_button:              "Export my data"
+      export_hint:                "Download a JSON file with all your personal data (Art. 20 GDPR)."
+      deletion_button:            "Request account deletion"
+      deletion_hint:              "Your account and personal data will be anonymised within 30 days."
+      deletion_confirm:           "Are you sure you want to request deletion of your account? This cannot be undone."
+      deletion_requested_at:      "Deletion requested at"
+      deletion_requested_notice:  "Deletion request registered on %{date}. It will be processed within 30 days."
+
+  cookie_notice:
+    text:         "This website uses only one strictly necessary session cookie to manage your authenticated access."
+    privacy_link: "Learn more"
+    dismiss:      "Got it"
+
+  privacy:
+    page_title:   "Privacy Policy"
+    last_updated: "Last updated: May 2025"
+
+    controller:
+      title:     "1. Data Controller"
+      body_html: "%{company}, with registered address at %{address} and company number %{cif}, is the data controller responsible for processing your personal data on this platform. Data protection contact: <a href='mailto:%{email}' class='link'>%{email}</a>."
+
+    data_collected:
+      title:          "2. Data We Collect and Why"
+      items_label:    "Data"
+      purpose_label:  "Purpose"
+      basis_label:    "Legal basis"
+      categories:
+        account:
+          title:    "Account data"
+          items:    "Name, email address, country of residence, language."
+          purpose:  "Account creation and service delivery."
+          basis:    "Contract (Art. 6(1)(b) GDPR)"
+        contact:
+          title:    "Contact data"
+          items:    "Phone number, WhatsApp."
+          purpose:  "Operational coordination of your homologation application."
+          basis:    "Contract / Consent (Art. 6(1)(b) and (a) GDPR)"
+        identity:
+          title:    "Identity documents"
+          items:    "Passport number or national ID card number."
+          purpose:  "Identity verification for homologation processing."
+          basis:    "Contract (Art. 6(1)(b) GDPR)"
+        application:
+          title:    "Application data"
+          items:    "University, year, subject, education system, supporting academic documents."
+          purpose:  "Processing your homologation application."
+          basis:    "Contract (Art. 6(1)(b) GDPR)"
+        session:
+          title:    "Access data"
+          items:    "IP address, browser user-agent."
+          purpose:  "Platform security and fraud prevention."
+          basis:    "Legitimate interest (Art. 6(1)(f) GDPR)"
+        payment:
+          title:    "Payment data"
+          items:    "Space for Edu does not store card numbers. Payments are processed entirely by Stripe, Inc."
+          purpose:  "Processing payment for the service."
+          basis:    "Contract (Art. 6(1)(b) GDPR)"
+        messages:
+          title:    "Communications"
+          items:    "Internal chat messages between student and administrator."
+          purpose:  "Application management and customer support."
+          basis:    "Contract (Art. 6(1)(b) GDPR)"
+
+    retention:
+      title: "3. Retention Periods"
+      intro: "We retain your data only for as long as necessary for each purpose:"
+      rows:
+        account:    "Account data — for the duration of the service relationship and, after termination, 5 years (Spanish tax law)."
+        identity:   "Identity documents — for the duration of the application and until final resolution."
+        session:    "Session data (IP, browser) — 90 days."
+        requests:   "Applications and attached documents — 5 years after closure."
+        payments:   "Payment events — 13 months."
+        messages:   "Chat messages — for the duration of the application."
+
+    recipients:
+      title: "4. Recipients and International Transfers"
+      intro: "Your data may be shared with the following recipients:"
+      stripe:
+        name:     "Stripe, Inc."
+        role:     "Payment processor. Stripe may transfer data outside the European Economic Area under Standard Contractual Clauses approved by the European Commission. Data Processing Agreement available at"
+        dpa_link: "stripe.com/en/legal/dpa"
+      hosting:
+        name: "Hosting provider"
+        role: "The server hosting this application, located within the European Economic Area."
+
+    rights:
+      title: "5. Your Rights"
+      intro: "Under GDPR and LOPD-GDD, you have the right to:"
+      items:
+        access:        "Access — find out what personal data we hold about you."
+        rectification: "Rectification — correct inaccurate or incomplete data from your profile."
+        erasure:       "Erasure — request deletion of your data when no longer necessary."
+        restriction:   "Restriction of processing."
+        portability:   "Portability — receive your data in a structured, machine-readable format (JSON)."
+        objection:     "Objection — when processing is based on legitimate interest."
+        withdraw:      "Withdrawal of consent — at any time, with no retroactive effect."
+
+    how_to_exercise:
+      title:     "6. How to Exercise Your Rights"
+      body_html: "You can export your data and request account deletion directly from <a href='%{profile_url}' class='link'>your profile</a>. For other requests, email us at <a href='mailto:%{email}' class='link'>%{email}</a>, stating your name, registered email address, and the right you wish to exercise. We will respond within one month (Art. 12 GDPR)."
+
+    cookies:
+      title: "7. Cookies"
+      body:  "This website uses only one strictly necessary session cookie to manage your authenticated access. This cookie expires after 90 days or when you log out. We do not use tracking, advertising, or third-party analytics cookies."
+
+    complaints:
+      title:     "8. Complaints"
+      body_html: "If you believe your personal data is being processed in breach of applicable law, you have the right to lodge a complaint with the Spanish Data Protection Authority (AEPD): <a href='https://www.aepd.es' target='_blank' rel='noopener' class='link'>www.aepd.es</a>."

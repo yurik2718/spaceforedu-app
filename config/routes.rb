@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resource  :registration, only: %i[new create]
   resources :passwords, param: :token
 
+  get "privacy", to: "pages#privacy", as: :privacy
+
   namespace :stripe do
     resources :webhooks, only: :create
   end
@@ -17,7 +19,10 @@ Rails.application.routes.draw do
     resources :documents,  only: %i[create destroy], controller: "homologation_request_documents"
   end
 
-  resource  :profile, only: %i[show edit update]
+  resource :profile, only: %i[show edit update] do
+    get :export
+  end
+  resource :profile_deletion, only: :create, controller: "profile_deletions"
   resources :notifications, only: :index
   resource  :locale, only: :update
 

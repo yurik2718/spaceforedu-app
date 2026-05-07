@@ -17,3 +17,11 @@ production:
   purge_unattached_blobs:
     class: ActiveStorage::PurgeUnattachedJob
     schedule: every day at 3am UTC
+
+  cleanup_expired_sessions:
+    class: SessionCleanupJob
+    schedule: every day at 4am UTC
+
+  cleanup_old_stripe_events:
+    class: StripeEventCleanupJob
+    schedule: every month at 5am UTC on the 1st

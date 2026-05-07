@@ -65,6 +65,8 @@
             <span aria-hidden="true">·</span>
             <%= link_to "WhatsApp #{support_whatsapp}", support_whatsapp_url,
                   target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
+            <span aria-hidden="true">·</span>
+            <%= link_to t("nav.privacy"), privacy_path, class: "hover:text-ink no-underline" %>
           </p>
         </footer>
       </section>
@@ -74,5 +76,6 @@
         <%= render "auth/brand_panel" %>
       </aside>
     </main>
+    <%= render "shared/cookie_notice" %>
   </body>
 </html>

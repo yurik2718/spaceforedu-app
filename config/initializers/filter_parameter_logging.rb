@@ -7,5 +7,6 @@ Rails.application.config.filter_parameters += [
   :passw, :email, :secret, :token, :_key, :crypt, :salt, :certificate, :otp, :ssn, :cvv, :cvc,
   # PII fields — GDPR
   :phone, :whatsapp, :guardian_phone, :guardian_whatsapp, :guardian_email,
-  :telegram_chat_id, :guardian_name
+  :telegram_chat_id, :guardian_name,
+  :identity_card, :passport, :birthday, :name
 ]

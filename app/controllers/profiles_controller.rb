@@ -20,6 +20,16 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def export
+    @user = Current.user
+    authorize @user, policy_class: ProfilePolicy
+
+    send_data JSON.pretty_generate(@user.gdpr_export),
+              filename:    "space-for-edu-#{Date.current.iso8601}.json",
+              type:        "application/json",
+              disposition: "attachment"
+  end
+
   private
     def profile_params
       params.expect(user: %i[
@@ -28,4 +38,5 @@ class ProfilesController < ApplicationController
         guardian_name guardian_email guardian_phone
       ])
     end
+
 end

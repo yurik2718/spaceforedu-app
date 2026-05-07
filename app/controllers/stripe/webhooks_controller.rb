@@ -16,9 +16,19 @@ module Stripe
     private
       def record(event)
         StripeEvent.insert(
-          { id: event.id, type: event.type, payload: event.to_json, received_at: Time.current },
+          { id: event.id, type: event.type, payload: sanitize_payload(event), received_at: Time.current },
           unique_by: :id
         ).any?
+      end
+
+      def sanitize_payload(event)
+        data = JSON.parse(event.to_json)
+        if (obj = data.dig("data", "object"))
+          %w[billing_details shipping receipt_email customer_email].each { |k| obj.delete(k) }
+        end
+        data.to_json
+      rescue JSON::ParserError
+        event.to_json
       end
 
       def handle(event)

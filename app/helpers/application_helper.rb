@@ -61,6 +61,22 @@ module ApplicationHelper
     Rails.application.credentials.dig(:brand, :location) || "City, Country"
   end
 
+  def brand_name
+    Rails.application.credentials.dig(:brand, :name) || "Space for Edu"
+  end
+
+  def brand_cif
+    Rails.application.credentials.dig(:brand, :cif) || "[CIF pendiente]"
+  end
+
+  def brand_address
+    Rails.application.credentials.dig(:brand, :address) || brand_location
+  end
+
+  def privacy_contact_email
+    Rails.application.credentials.dig(:brand, :privacy_email) || support_email
+  end
+
   def masked_phone(value)
     return "—" if value.blank?
     digits = value.to_s.gsub(/\D/, "")
