@@ -30,8 +30,24 @@ class HomologationRequest < ApplicationRecord
   validates :privacy_accepted, acceptance: true, on: :create
 
   after_create_commit :create_conversation
+  after_commit :notify_admin_of_submission, on: :update, if: -> { saved_change_to_status?(to: "submitted") }
 
   def editable? = status.in?(EDITABLE_STATUSES)
+
+  def notify_admin_of_documents_reply!(count:)
+    return unless status == "awaiting_reply"
+    admin = User.super_admin
+    return unless admin
+
+    admin.notify(
+      notifiable: self,
+      title_key:  "notifications.documents_added.title",
+      body_key:   "notifications.documents_added.body",
+      subject:    subject,
+      student:    user.name,
+      count:      count
+    )
+  end
 
   def transition_to!(new_status, changed_by:)
     unless STATUSES.include?(new_status.to_s)
@@ -115,6 +131,19 @@ class HomologationRequest < ApplicationRecord
   class InvalidTransition < StandardError; end
 
   private
+    def notify_admin_of_submission
+      admin = User.super_admin
+      return unless admin
+
+      admin.notify(
+        notifiable: self,
+        title_key:  "notifications.request_submitted.title",
+        body_key:   "notifications.request_submitted.body",
+        subject:    subject,
+        student:    user.name
+      )
+    end
+
     def notify_owner_of_status_change
       return if status_changed_by == user_id
       user.notify(

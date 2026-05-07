@@ -15,7 +15,8 @@ class User < ApplicationRecord
 
   before_create { self.privacy_accepted_at = Time.current if privacy_accepted? }
 
-  encrypts :phone, :whatsapp, :guardian_phone, :guardian_whatsapp, :identity_card, :passport
+  encrypts :phone, :whatsapp, :guardian_phone, :guardian_whatsapp, :identity_card, :passport,
+           :telegram_chat_id, :telegram_link_token
 
   scope :kept, -> { where(discarded_at: nil) }
 

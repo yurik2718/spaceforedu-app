@@ -16,7 +16,7 @@ class HomologationRequestDocumentsController < ApplicationController
     new_blobs.each { |blob| @homologation_request.documents.attach(blob) }
 
     if @homologation_request.valid?
-      notify_admin_of_reply(files.size) if @homologation_request.status == "awaiting_reply"
+      @homologation_request.notify_admin_of_documents_reply!(count: files.size)
       redirect_to @homologation_request, notice: t("flash.documents_uploaded", count: files.size)
     else
       new_blob_ids = new_blobs.map(&:id)
@@ -57,17 +57,5 @@ class HomologationRequestDocumentsController < ApplicationController
       redirect_to @homologation_request, alert: t("flash.request_not_editable") and return
     end
 
-    def notify_admin_of_reply(file_count)
-      admin = User.super_admin
-      return unless admin
 
-      admin.notify(
-        notifiable: @homologation_request,
-        title_key:  "notifications.documents_added.title",
-        body_key:   "notifications.documents_added.body",
-        subject:    @homologation_request.subject,
-        student:    @homologation_request.user.name,
-        count:      file_count
-      )
-    end
 end

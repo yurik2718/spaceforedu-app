@@ -7,21 +7,21 @@ class Admin::PipelinesController < ApplicationController
 
     @kanban_stages     = PipelineFlow.kanban_stages
     @horizontal_stages = PipelineFlow.horizontal_stages
-    @grouped           = group_by_stage(scope)
-    @stats             = build_stats(scope)
+
+    records  = scope.includes(:user).order(updated_at: :desc).to_a
+    @grouped = group_by_stage(records)
+    @stats   = build_stats(records)
   end
 
   private
-    def group_by_stage(scope)
-      PipelineFlow.all_stages.index_with do |stage|
-        scope.where(pipeline_stage: stage).order(updated_at: :desc).includes(:user)
-      end
+    def group_by_stage(records)
+      PipelineFlow.all_stages.index_with { |stage| records.select { _1.pipeline_stage == stage } }
     end
 
-    def build_stats(scope)
+    def build_stats(records)
       {
-        active:  scope.where.not(pipeline_stage: PipelineFlow::TERMINAL_STAGE).count,
-        revenue: scope.sum(:payment_amount).to_f
+        active:  records.count { _1.pipeline_stage != PipelineFlow::TERMINAL_STAGE },
+        revenue: records.sum { _1.payment_amount.to_f }
       }
     end
 end

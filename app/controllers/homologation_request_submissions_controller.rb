@@ -8,23 +8,8 @@ class HomologationRequestSubmissionsController < ApplicationController
     authorize homologation_request, :submit?
 
     homologation_request.transition_to!("submitted", changed_by: Current.user)
-    notify_admin_of_submission(homologation_request)
     redirect_to homologation_request, notice: t("flash.request_submitted")
   rescue HomologationRequest::InvalidTransition
     redirect_to homologation_request, alert: t("flash.request_not_submittable")
   end
-
-  private
-    def notify_admin_of_submission(hr)
-      admin = User.super_admin
-      return unless admin
-
-      admin.notify(
-        notifiable: hr,
-        title_key:  "notifications.request_submitted.title",
-        body_key:   "notifications.request_submitted.body",
-        subject:    hr.subject,
-        student:    hr.user.name
-      )
-    end
 end
