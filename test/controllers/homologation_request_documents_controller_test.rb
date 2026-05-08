@@ -11,50 +11,45 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
 
   test "valid PDF attaches and redirects with a notice" do
     sign_in_as @student
-    pdf = Rack::Test::UploadedFile.new(StringIO.new("%PDF-1.4 fake"), "application/pdf", original_filename: "ok.pdf")
 
     assert_difference -> { @draft.documents.attachments.count }, 1 do
-      post homologation_request_documents_path(@draft), params: { files: [ pdf ] }
+      post homologation_request_documents_path(@draft),
+           params: { files: [ direct_upload_blob ] }
     end
 
     assert_redirected_to homologation_request_path(@draft)
   end
 
-  test "rejecting an unsupported content_type does not attach and surfaces errors on the request" do
+  test "rejecting an unsupported content_type does not keep the attachment" do
     sign_in_as @student
 
-    bad_file = Rack::Test::UploadedFile.new(StringIO.new("plain"), "text/plain", original_filename: "notes.txt")
-
-    assert_no_difference "ActiveStorage::Attachment.count" do
-      post homologation_request_documents_path(@draft), params: { files: [ bad_file ] }
-    end
+    post homologation_request_documents_path(@draft),
+         params: { files: [ direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain") ] }
 
     assert_response :unprocessable_entity
     assert_select ".text-error", text: /document/i
+    assert_equal 0, @draft.reload.documents.attachments.count
   end
 
   test "a single oversized file is rejected and not retained" do
     sign_in_as @student
-    huge = Rack::Test::UploadedFile.new(StringIO.new("x" * (16.megabytes)), "application/pdf", original_filename: "huge.pdf")
 
-    assert_no_difference -> { @draft.documents.attachments.where.not(id: nil).count } do
-      post homologation_request_documents_path(@draft), params: { files: [ huge ] }
-    end
+    post homologation_request_documents_path(@draft),
+         params: { files: [ direct_upload_blob(content: "x" * (16.megabytes), filename: "huge.pdf") ] }
 
     assert_response :unprocessable_entity
+    assert_equal 0, @draft.reload.documents.attachments.count
   end
 
   test "Turbo Stream response replaces the documents frame with the errors-bearing partial" do
     sign_in_as @student
-    bad_file = Rack::Test::UploadedFile.new(StringIO.new("plain"), "text/plain", original_filename: "notes.txt")
 
     post homologation_request_documents_path(@draft),
-         params:  { files: [ bad_file ] },
+         params:  { files: [ direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain") ] },
          headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
     assert_response :unprocessable_entity
-    assert_equal "text/vnd.turbo-stream.html",
-                 response.media_type
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
     assert_match %r{<turbo-stream\s+action="replace"\s+target="#{ActionView::RecordIdentifier.dom_id(@draft, :documents)}"},
                  response.body
     assert_match(/text-error/, response.body)
@@ -67,22 +62,22 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     )
     admin = users(:admin)
     sign_in_as @student
-    pdf = Rack::Test::UploadedFile.new(StringIO.new("%PDF-1.4 fake"), "application/pdf", original_filename: "reply.pdf")
 
     assert_difference -> {
       admin.notifications.where(notifiable: awaiting_reply, title_key: "notifications.documents_added.title").count
     }, 1 do
-      post homologation_request_documents_path(awaiting_reply), params: { files: [ pdf ] }
+      post homologation_request_documents_path(awaiting_reply),
+           params: { files: [ direct_upload_blob(filename: "reply.pdf") ] }
     end
   end
 
   test "uploading documents while in draft does not ping the super admin" do
     sign_in_as @student
     admin = users(:admin)
-    pdf = Rack::Test::UploadedFile.new(StringIO.new("%PDF-1.4 fake"), "application/pdf", original_filename: "ok.pdf")
 
     assert_no_difference -> { admin.notifications.where(notifiable: @draft).count } do
-      post homologation_request_documents_path(@draft), params: { files: [ pdf ] }
+      post homologation_request_documents_path(@draft),
+           params: { files: [ direct_upload_blob ] }
     end
   end
 
@@ -91,10 +86,12 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     @draft.documents.attach(io: StringIO.new("%PDF pre-existing"), filename: "old.pdf", content_type: "application/pdf")
     pre_existing_id = @draft.documents.attachments.last.id
 
-    good = Rack::Test::UploadedFile.new(StringIO.new("%PDF good"), "application/pdf", original_filename: "good.pdf")
-    bad  = Rack::Test::UploadedFile.new(StringIO.new("plain"),     "text/plain",      original_filename: "notes.txt")
-
-    post homologation_request_documents_path(@draft), params: { files: [ good, bad ] }
+    post homologation_request_documents_path(@draft), params: {
+      files: [
+        direct_upload_blob(filename: "good.pdf"),
+        direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain")
+      ]
+    }
 
     assert_response :unprocessable_entity
     assert_equal [ pre_existing_id ], @draft.reload.documents.attachments.pluck(:id)

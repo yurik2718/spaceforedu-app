@@ -10,9 +10,7 @@ class HomologationRequestDocumentsController < ApplicationController
       redirect_to @homologation_request, alert: t("flash.no_files_selected") and return
     end
 
-    new_blobs = files.map do |f|
-      ActiveStorage::Blob.create_and_upload!(io: f, filename: f.original_filename, content_type: f.content_type)
-    end
+    new_blobs = files.map { |signed_id| ActiveStorage::Blob.find_signed!(signed_id) }
     new_blobs.each { |blob| @homologation_request.documents.attach(blob) }
 
     if @homologation_request.valid?

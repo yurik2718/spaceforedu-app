@@ -542,6 +542,8 @@ end
 
 The TDD discipline is defined at the top of this document under **TDD — IRON RULE**. That section is the contract; what follows here is the toolchain.
 
+Concrete patterns, conventions, and common pitfalls are documented in **[`doc/testing.md`](doc/testing.md)**. Read it before writing any test involving file uploads, ActiveStorage, or Turbo Stream responses.
+
 - Minitest for unit, controller, integration, and mailer tests
 - Capybara + Selenium for system tests covering the 5 MVP flow steps
 - Rails fixtures (YAML) — no FactoryBot, no Faker
