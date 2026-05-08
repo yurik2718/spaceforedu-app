@@ -52,6 +52,8 @@ en:
       locale:                "Language"
       notification_email:    "Email notifications"
       notification_telegram: "Telegram notifications"
+      notification_push:     "Push notifications on this device"
+      notification_push_hint: "You'll receive browser alerts even when the tab is closed."
       privacy_accepted_at:   "Privacy accepted at"
       guardian_name:         "Guardian name"
       guardian_email:        "Guardian email"

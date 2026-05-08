@@ -45,6 +45,9 @@ gem "rubyzip", "~> 3.0", require: "zip"
 # Payments — Stripe API client (signed webhooks, payment intents)
 gem "stripe", "~> 15.0"
 
+# Web Push notifications (VAPID)
+gem "web-push", "~> 3.0"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

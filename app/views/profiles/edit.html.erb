@@ -63,6 +63,16 @@
         <%= f.check_box :notification_telegram, class: "checkbox" %>
         <span><%= t("profile.fields.notification_telegram") %></span>
       </label>
+
+      <div data-controller="push-notifications">
+        <label class="label cursor-pointer justify-start gap-2">
+          <input type="checkbox" class="checkbox"
+                 data-push-notifications-target="checkbox"
+                 data-action="change->push-notifications#toggle">
+          <span><%= t("profile.fields.notification_push") %></span>
+        </label>
+        <p class="text-xs text-gray-400 mt-1"><%= t("profile.fields.notification_push_hint") %></p>
+      </div>
     </fieldset>
 
     <% if @user.is_minor %>

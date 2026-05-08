@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resource :profile_deletion, only: :create, controller: "profile_deletions"
   resources :notifications, only: :index
   resource  :locale, only: :update
+  resource  :push_subscription, only: %i[create destroy]
 
   namespace :admin do
     resource :pipeline, only: :show
@@ -48,9 +49,7 @@ Rails.application.routes.draw do
   get "up/db"    => "health_checks#db",       as: :db_health_check
   get "up/queue" => "health_checks#queue",    as: :queue_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   root to: "pages#home"
 end

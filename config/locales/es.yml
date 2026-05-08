@@ -52,6 +52,8 @@ es:
       locale:                "Idioma"
       notification_email:    "Notificaciones por email"
       notification_telegram: "Notificaciones por Telegram"
+      notification_push:     "Notificaciones push en este dispositivo"
+      notification_push_hint: "Recibirás alertas del navegador aunque la pestaña esté cerrada."
       privacy_accepted_at:   "Privacidad aceptada el"
       guardian_name:         "Nombre del tutor"
       guardian_email:        "Email del tutor"

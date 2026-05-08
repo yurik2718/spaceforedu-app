@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :homologation_requests,  dependent: :destroy
   has_many :messages,               dependent: :destroy
   has_many :notifications,          dependent: :destroy
+  has_many :push_subscriptions,     dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 

@@ -54,6 +54,8 @@ ru:
       locale:                "Язык"
       notification_email:    "Уведомления по email"
       notification_telegram: "Уведомления в Telegram"
+      notification_push:     "Push-уведомления на этом устройстве"
+      notification_push_hint: "Вы будете получать уведомления браузера, даже когда вкладка закрыта."
       privacy_accepted_at:   "Политика принята"
       guardian_name:         "Имя опекуна"
       guardian_email:        "Email опекуна"

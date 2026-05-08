@@ -5,7 +5,8 @@
       "Bash(bin/rails runner *)",
       "Bash(bin/rails db:migrate)",
       "Bash(bin/rails test *)",
-      "Bash(bin/rails routes *)"
+      "Bash(bin/rails routes *)",
+      "Bash(bin/rails generate *)"
     ]
   }
 }
