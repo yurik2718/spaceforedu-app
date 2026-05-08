@@ -1,4 +1,4 @@
-<div id="message_form" class="border-t border-gray-200 p-3 flex-shrink-0 bg-white">
+<div id="message_form" class="border-t border-hairline-soft p-3 flex-shrink-0 bg-canvas">
   <%= form_with model: [ conversation, message ],
                 data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
     <div class="flex gap-2 items-end">
@@ -7,9 +7,11 @@
             placeholder: t("messages.placeholder"),
             rows: 2,
             required: true,
-            autofocus: true %>
+            autofocus: true,
+            data: { action: "keydown->message-form#submitOnEnter" } %>
       <%= f.submit t("actions.send"), class: "btn btn-primary" %>
     </div>
+    <p class="text-xs text-ash mt-1.5 text-right"><%= t("messages.enter_hint") %></p>
     <% if message.errors.any? %>
       <p class="text-error text-sm mt-1"><%= message.errors.full_messages.to_sentence %></p>
     <% end %>

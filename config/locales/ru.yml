@@ -310,6 +310,8 @@ ru:
 
   messages:
     placeholder: "Введите сообщение..."
+    empty: "Сообщений пока нет."
+    enter_hint: "Enter — отправить · Shift+Enter — новая строка"
 
   admin:
     requests:

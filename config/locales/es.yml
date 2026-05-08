@@ -308,6 +308,8 @@ es:
 
   messages:
     placeholder: "Escribe un mensaje..."
+    empty: "Aún no hay mensajes."
+    enter_hint: "Enter — enviar · Shift+Enter — nueva línea"
 
   admin:
     requests:

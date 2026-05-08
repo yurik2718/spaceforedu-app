@@ -1,6 +1,7 @@
 class ConversationsController < ApplicationController
   def show
-    @conversation = Conversation.includes(homologation_request: :user).find(params[:id])
+    hr_includes = Current.user.super_admin? ? { homologation_request: :user } : :homologation_request
+    @conversation = Conversation.includes(hr_includes).find(params[:id])
     authorize @conversation
 
     @conversation.mark_read_for!(Current.user)
