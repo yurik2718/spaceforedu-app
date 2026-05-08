@@ -20,10 +20,7 @@
         <% attachments.each do |attachment| %>
           <li class="flex items-center gap-3 px-4 py-3 bg-canvas hover:bg-surface-soft transition-colors">
             <span class="w-9 h-9 rounded-xl bg-surface-card inline-flex items-center justify-center shrink-0 text-mute" aria-hidden="true">
-              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M8 3h7l5 5v13H4V3h4z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 13h8M8 17h6"/>
-              </svg>
+              <%= heroicon "document-text", options: { class: "w-5 h-5" } %>
             </span>
             <div class="min-w-0 flex-1">
               <p class="text-sm font-semibold text-ink truncate"><%= attachment.filename.to_s %></p>
@@ -36,9 +33,7 @@
             <%= link_to rails_blob_path(attachment, disposition: "attachment"),
                   class: "btn btn-ghost btn-sm gap-1.5 shrink-0",
                   data:  { turbo_frame: "_top" } do %>
-              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/>
-              </svg>
+              <%= heroicon "arrow-down-tray", options: { class: "w-4 h-4", "aria-hidden": true } %>
               <span class="hidden sm:inline"><%= t("requests.attachments.download") %></span>
             <% end %>
             <% if can_edit %>
@@ -47,9 +42,7 @@
                     form: { data: { turbo_confirm: t("requests.attachments.confirm_remove"), turbo_frame: "_top" } },
                     class: "btn btn-ghost btn-sm shrink-0",
                     aria: { label: t("requests.attachments.remove") } do %>
-                <svg viewBox="0 0 24 24" class="w-4 h-4 text-mute" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 7h12M9 7V4h6v3m-7 0v13a1 1 0 001 1h6a1 1 0 001-1V7"/>
-                </svg>
+                <%= heroicon "trash", options: { class: "w-4 h-4 text-mute", "aria-hidden": true } %>
               <% end %>
             <% end %>
           </li>
@@ -81,9 +74,7 @@
               data: { dropzone_target: "form" },
               class: "p-6 flex flex-col items-center justify-center gap-2 text-center" do |f| %>
           <span class="w-10 h-10 rounded-full bg-surface-card text-ink inline-flex items-center justify-center" aria-hidden="true">
-            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16"/>
-            </svg>
+            <%= heroicon "arrow-up-tray", variant: :solid, options: { class: "w-5 h-5" } %>
           </span>
           <p class="text-sm font-semibold text-ink" data-dropzone-target="label">
             <%= t("requests.attachments.drop_here") %>

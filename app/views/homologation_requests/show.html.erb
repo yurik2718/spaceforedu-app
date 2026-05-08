@@ -1,114 +1,184 @@
 <% content_for :title, @homologation_request.subject %>
 
 <% hr = @homologation_request %>
+<% can_edit = policy(hr).update? && hr.editable? %>
 
 <%= turbo_stream_from hr %>
 
-<%= render "shared/page_header",
-      title: hr.subject,
-      actions: capture {
-        concat content_tag(:span, t("requests.status.#{hr.status}"), class: "badge badge-lg #{status_badge_class(hr.status)}")
-        if hr.conversation
-          unread_count = hr.conversation.unread_for?(Current.user) ? 1 : 0
-          concat(link_to(conversation_path(hr.conversation), class: "btn btn-secondary btn-sm gap-1.5") do
-            chat_icon = content_tag(:svg, '<path stroke-linecap="round" stroke-linejoin="round" d="M21 12a8 8 0 01-11.5 7.2L4 21l1.8-5.5A8 8 0 1121 12z"/>'.html_safe,
-              viewBox: "0 0 24 24", class: "w-4 h-4", fill: "none", stroke: "currentColor", "stroke-width": 2, "aria-hidden": true)
-            label = content_tag(:span, t("requests.actions.open_chat"))
-            badge = unread_count.positive? ? content_tag(:span, "•", class: "text-primary text-base leading-none ml-1") : "".html_safe
-            chat_icon + label + badge
-          end)
-        end
-        if policy(hr).update? && hr.editable?
-          concat link_to(t("actions.edit"), edit_homologation_request_path(hr), class: "btn btn-ghost btn-sm")
-        end
-        if policy(hr).submit? && hr.status == "draft"
-          concat button_to(t("requests.actions.submit"), homologation_request_submission_path(hr), method: :post, class: "btn btn-primary btn-sm")
-        end
-      } %>
-
-<div class="grid gap-6 md:grid-cols-2">
-
-  <%# REQUEST INFO %>
-  <div class="card bg-white shadow">
-    <div class="card-body">
-      <h3 class="card-title text-base"><%= t("requests.sections.info") %></h3>
-
-      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm mt-2">
-        <dt class="opacity-60"><%= t("requests.fields.university") %></dt>
-        <dd><%= hr.university.presence || "—" %></dd>
-
-        <dt class="opacity-60"><%= t("requests.fields.education_system") %></dt>
-        <dd><%= hr.education_system.presence || "—" %></dd>
-
-        <dt class="opacity-60"><%= t("requests.fields.year") %></dt>
-        <dd><%= hr.year || "—" %></dd>
-
-        <dt class="opacity-60"><%= t("requests.fields.studies_finished") %></dt>
-        <dd>
-          <% if hr.studies_finished.present? %>
-            <%= t("requests.studies_finished.#{hr.studies_finished}_label", default: hr.studies_finished) %>
-          <% else %>—<% end %>
-        </dd>
-
-        <dt class="opacity-60"><%= t("requests.fields.language_knowledge") %></dt>
-        <dd>
-          <% if hr.language_knowledge.present? %>
-            <%= t("requests.language_knowledge.#{hr.language_knowledge}", default: hr.language_knowledge) %>
-          <% else %>—<% end %>
-        </dd>
-
-        <dt class="opacity-60"><%= t("requests.fields.language_certificate") %></dt>
-        <dd><%= hr.language_certificate.presence || "—" %></dd>
-      </dl>
-
-      <% if hr.description.present? %>
-        <div class="divider my-2"></div>
-        <p class="text-sm whitespace-pre-line leading-relaxed opacity-80"><%= hr.description %></p>
+<%# ── Header ────────────────────────────────────────── %>
+<header class="mb-6 flex items-start justify-between gap-4 flex-wrap">
+  <div class="min-w-0 flex-1">
+    <h1 class="t-heading-xl break-words"><%= hr.subject %></h1>
+    <div class="flex items-center gap-2 mt-2 text-sm text-mute flex-wrap">
+      <time datetime="<%= hr.created_at.iso8601 %>">
+        <%= t("requests.timeline.created_at") %> <%= l(hr.created_at, format: :long) %>
+      </time>
+      <% if hr.updated_at > hr.created_at + 1.minute %>
+        <span aria-hidden="true">·</span>
+        <time datetime="<%= hr.updated_at.iso8601 %>">
+          <%= t("requests.timeline.updated_at") %> <%= l(hr.updated_at, format: :short) %>
+        </time>
       <% end %>
     </div>
   </div>
 
-  <%# CHECKLIST — read-only with progress %>
-  <% checklist_done  = @checklist_keys.count { |k| hr.checklist_done?(k) } %>
-  <% checklist_total = @checklist_keys.size %>
-  <div class="card bg-white shadow">
-    <div class="card-body">
+  <div class="flex items-center gap-2 shrink-0">
+    <% if hr.conversation %>
+      <% unread = hr.conversation.unread_for?(Current.user) %>
+      <%= link_to conversation_path(hr.conversation), class: "btn btn-secondary btn-sm gap-1.5" do %>
+        <%= heroicon "chat-bubble-left-right", options: { class: "w-4 h-4", "aria-hidden": true } %>
+        <span><%= t("requests.actions.open_chat") %></span>
+        <% if unread %>
+          <span class="text-primary text-base leading-none ml-1" aria-label="unread">•</span>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if can_edit %>
+      <%= link_to t("actions.edit"), edit_homologation_request_path(hr), class: "btn btn-ghost btn-sm" %>
+    <% end %>
+
+    <% if policy(hr).submit? && hr.status == "draft" %>
+      <% if hr.documents.attached? %>
+        <%= button_to t("requests.actions.submit"),
+              homologation_request_submission_path(hr),
+              method: :post,
+              class: "btn btn-primary btn-sm" %>
+      <% else %>
+        <span class="btn btn-disabled btn-sm" title="<%= t("requests.actions.submit_disabled_hint") %>">
+          <%= t("requests.actions.submit") %>
+        </span>
+      <% end %>
+    <% end %>
+  </div>
+</header>
+
+<%# ── Status stepper ─────────────────────────────────── %>
+<div class="card bg-canvas border border-hairline-soft mb-5">
+  <div class="card-body" style="--card-body-pad: 1.5rem">
+    <%= render "shared/status_stepper", status: hr.status %>
+  </div>
+</div>
+
+<%# ── What's next ────────────────────────────────────── %>
+<%
+  next_step_key =
+    case hr.status
+    when "draft"
+      hr.documents.attached? ? :ready : :missing_app
+    when "submitted"                              then :submitted
+    when "in_review"                              then :in_review
+    when "awaiting_reply"                         then :awaiting_reply
+    when "awaiting_payment"                       then :awaiting_payment
+    when "payment_confirmed", "in_progress"       then :in_progress
+    when "resolved"                               then :resolved
+    when "closed"                                 then :closed
+    end
+%>
+
+<div class="card bg-surface-card mb-6 p-5 flex items-start gap-4">
+  <span class="shrink-0 w-9 h-9 rounded-full bg-primary text-on-primary inline-flex items-center justify-center" aria-hidden="true">
+    <%= heroicon "arrow-right", variant: :solid, options: { class: "w-5 h-5" } %>
+  </span>
+  <div class="min-w-0">
+    <h2 class="text-base font-semibold text-ink"><%= t("requests.next_step.heading") %></h2>
+    <p class="text-sm text-body mt-1 leading-relaxed"><%= t("requests.next_step.#{next_step_key}") %></p>
+  </div>
+</div>
+
+<%# ── Documents (the main work) ──────────────────────── %>
+<%= render "homologation_requests/documents", hr: hr, can_edit: can_edit %>
+
+<%# ── Info + checklist ───────────────────────────────── %>
+<div class="grid gap-6 md:grid-cols-2 mt-6">
+
+  <%# REQUEST INFO %>
+  <%
+    info_pairs = [
+      [t("requests.fields.university"),       hr.university.presence],
+      [t("requests.fields.education_system"), hr.education_system.presence],
+      [t("requests.fields.year"),             hr.year],
+      [t("requests.fields.studies_finished"), hr.studies_finished.present? ? t("requests.studies_finished.#{hr.studies_finished}_label", default: nil) : nil],
+      [t("requests.fields.language_knowledge"), hr.language_knowledge.present? ? t("requests.language_knowledge.#{hr.language_knowledge}", default: nil) : nil],
+      [t("requests.fields.language_certificate"), hr.language_certificate.presence]
+    ].reject { |_, v| v.blank? }
+  %>
+  <div class="card bg-canvas border border-hairline-soft">
+    <div class="card-body" style="--card-body-pad: 1.5rem">
       <header class="flex items-center justify-between gap-2">
-        <h3 class="card-title text-base"><%= t("requests.sections.documents") %></h3>
-        <span class="text-sm font-mono opacity-70"><%= checklist_done %>/<%= checklist_total %></span>
+        <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.info") %></h3>
+        <% if can_edit %>
+          <%= link_to t("actions.edit"),
+                edit_homologation_request_path(hr),
+                class: "text-sm font-medium text-mute hover:text-ink underline-offset-2 hover:underline" %>
+        <% end %>
       </header>
 
-      <progress class="progress <%= checklist_done == checklist_total ? 'progress-success' : 'progress-primary' %> w-full"
+      <% if info_pairs.any? %>
+        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2.5 text-sm mt-4">
+          <% info_pairs.each do |label, value| %>
+            <dt class="text-mute"><%= label %></dt>
+            <dd class="text-ink"><%= value %></dd>
+          <% end %>
+        </dl>
+      <% else %>
+        <p class="text-sm text-mute mt-4">—</p>
+      <% end %>
+
+      <% if hr.description.present? %>
+        <hr class="border-hairline-soft my-4">
+        <p class="text-sm whitespace-pre-line leading-relaxed text-body"><%= hr.description %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <%# CHECKLIST %>
+  <%
+    checklist_done  = @checklist_keys.count { |k| hr.checklist_done?(k) }
+    checklist_total = @checklist_keys.size
+  %>
+  <div class="card bg-canvas border border-hairline-soft">
+    <div class="card-body" style="--card-body-pad: 1.5rem">
+      <header class="flex items-center justify-between gap-2">
+        <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.documents") %></h3>
+        <span class="text-sm font-mono text-mute tabular-nums"><%= checklist_done %>/<%= checklist_total %></span>
+      </header>
+
+      <progress class="progress <%= checklist_done == checklist_total ? 'progress-success' : 'progress-primary' %> w-full mt-3"
                 value="<%= checklist_done %>" max="<%= checklist_total %>"></progress>
 
-      <ul class="mt-2 space-y-1">
+      <ul class="mt-4 -mx-2">
         <% @checklist_keys.each do |key| %>
-          <li class="flex items-center gap-2">
-            <input type="checkbox" class="checkbox checkbox-sm" disabled
-                   <%= "checked" if hr.checklist_done?(key) %>>
-            <span class="text-sm <%= 'line-through opacity-50' if hr.checklist_done?(key) %>">
-              <%= t("requests.checklist.#{key}") %>
-            </span>
+          <% done = hr.checklist_done?(key) %>
+          <li>
+            <details class="group rounded-md hover:bg-surface-soft">
+              <summary class="flex items-center gap-2 px-2 py-1.5 cursor-pointer list-none text-sm">
+                <input type="checkbox" class="checkbox checkbox-sm shrink-0" disabled <%= "checked" if done %>>
+                <span class="flex-1 <%= 'line-through text-ash' if done %><%= ' text-ink' unless done %>">
+                  <%= t("requests.checklist.#{key}") %>
+                </span>
+                <%= heroicon "chevron-down", options: { class: "w-4 h-4 text-ash transition-transform group-open:rotate-180", "aria-hidden": true } %>
+              </summary>
+              <p class="px-8 pb-2 pt-0.5 text-xs text-mute leading-relaxed">
+                <%= t("requests.checklist_descriptions.#{key}", default: "") %>
+              </p>
+            </details>
           </li>
         <% end %>
       </ul>
     </div>
   </div>
 
-  <%# DOCUMENTS — student uploads %>
-  <% can_edit = policy(hr).update? && hr.editable? %>
-  <%= render "homologation_requests/documents", hr: hr, can_edit: can_edit %>
-
   <%# PAYMENT — only when relevant %>
   <% if hr.payment_amount.present? || hr.status == "awaiting_payment" %>
-    <div class="card bg-white shadow md:col-span-2">
-      <div class="card-body">
-        <h3 class="card-title text-base"><%= t("requests.sections.payment") %></h3>
+    <div class="card bg-canvas border border-hairline-soft md:col-span-2">
+      <div class="card-body" style="--card-body-pad: 1.5rem">
+        <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.payment") %></h3>
 
         <% if hr.payment_amount.present? %>
-          <p class="text-2xl font-semibold mt-1"><%= number_to_currency hr.payment_amount %></p>
+          <p class="text-2xl font-semibold mt-1 text-ink"><%= number_to_currency hr.payment_amount %></p>
         <% else %>
-          <p class="opacity-60"><%= t("requests.payment.not_set") %></p>
+          <p class="text-mute mt-1"><%= t("requests.payment.not_set") %></p>
         <% end %>
 
         <% if policy(hr).checkout? %>
@@ -119,7 +189,7 @@
         <% end %>
 
         <% if hr.payment_confirmed_at %>
-          <p class="text-xs opacity-60 mt-1">
+          <p class="text-xs text-mute mt-2">
             <%= t("requests.payment.confirmed_at") %>:
             <%= l hr.payment_confirmed_at, format: :long %>
           </p>
@@ -127,5 +197,4 @@
       </div>
     </div>
   <% end %>
-
 </div>

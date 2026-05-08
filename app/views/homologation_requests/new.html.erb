@@ -1,5 +1,28 @@
 <% content_for :title, t("requests.new_title") %>
 
-<%= render "shared/page_header", title: t("requests.new_title") %>
+<header class="mb-8">
+  <h1 class="t-heading-xl"><%= t("requests.new_title") %></h1>
+  <p class="text-mute mt-2 max-w-2xl"><%= t("requests.new_lede") %></p>
+</header>
 
-<%= render "form", homologation_request: @homologation_request %>
+<div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
+  <%= render "form", homologation_request: @homologation_request %>
+
+  <aside class="card bg-surface-card lg:sticky lg:top-6">
+    <div class="card-body !p-6">
+      <h2 class="text-base font-semibold text-ink"><%= t("requests.next_step_title") %></h2>
+      <p class="text-sm text-mute mt-1"><%= t("requests.next_step_intro") %></p>
+
+      <ul class="mt-4 space-y-2">
+        <% PipelineFlow.checklist_keys.each do |key| %>
+          <li class="flex items-start gap-2 text-sm text-body">
+            <%= heroicon "check-circle", options: { class: "w-4 h-4 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+            <span><%= t("requests.checklist.#{key}") %></span>
+          </li>
+        <% end %>
+      </ul>
+
+      <p class="text-xs text-ash mt-4 leading-relaxed"><%= t("requests.attachments.formats_hint") %></p>
+    </div>
+  </aside>
+</div>

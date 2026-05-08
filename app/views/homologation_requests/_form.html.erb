@@ -1,102 +1,105 @@
-<%= form_with model: homologation_request, class: "card bg-white shadow" do |f| %>
-  <div class="card-body space-y-6">
+<%= form_with model: homologation_request, class: "card bg-canvas border border-hairline-soft" do |f| %>
+  <div class="flex flex-col gap-8 p-6 sm:p-8">
     <%= f.hidden_field :service_type, value: homologation_request.service_type.presence || "homologation" %>
 
-    <%# DIPLOMA %>
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend"><%= t("requests.sections.diploma") %></legend>
+    <%# 1 — DIPLOMA %>
+    <section class="space-y-5">
+      <%= render "shared/section_heading",
+            step: 1,
+            title: t("requests.sections.diploma"),
+            description: t("requests.sections.diploma_description") %>
 
-      <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="label" for="<%= f.field_id(:university) %>"><%= t("requests.fields.university") %></label>
-          <%= f.text_field :university,
-                class: "input input-bordered w-full #{'input-error' if homologation_request.errors[:university].any?}" %>
-          <% if homologation_request.errors[:university].any? %>
-            <p class="label-text-alt text-error mt-1"><%= homologation_request.errors[:university].to_sentence %></p>
-          <% end %>
-        </div>
+      <div class="grid md:grid-cols-2 gap-x-5 gap-y-4">
+        <%= render "shared/field",
+              form: f, name: :university,
+              required: true,
+              placeholder: t("requests.placeholders.university"),
+              hint: t("requests.hints.university") %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:education_system) %>"><%= t("requests.fields.education_system") %></label>
-          <%= f.text_field :education_system,
-                class: "input input-bordered w-full #{'input-error' if homologation_request.errors[:education_system].any?}" %>
-          <% if homologation_request.errors[:education_system].any? %>
-            <p class="label-text-alt text-error mt-1"><%= homologation_request.errors[:education_system].to_sentence %></p>
-          <% end %>
-        </div>
+        <%= render "shared/field",
+              form: f, name: :education_system,
+              placeholder: t("requests.placeholders.education_system"),
+              hint: t("requests.hints.education_system") %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:year) %>"><%= t("requests.fields.year") %></label>
-          <%= f.select :year,
-                (1980..Date.today.year).to_a.reverse,
-                { include_blank: true },
-                class: "select select-bordered w-full" %>
-        </div>
+        <%= render "shared/field",
+              form: f, name: :year,
+              type: :select,
+              choices: (1980..Date.today.year).to_a.reverse,
+              hint: t("requests.hints.year") %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:studies_finished) %>"><%= t("requests.fields.studies_finished") %></label>
-          <%= f.select :studies_finished,
-                [[t("requests.studies_finished.yes_label"), "yes"], [t("requests.studies_finished.no_label"), "no"]],
-                { include_blank: true },
-                class: "select select-bordered w-full" %>
-        </div>
+        <%= render "shared/field",
+              form: f, name: :studies_finished,
+              type: :select,
+              choices: [[t("requests.studies_finished.yes_label"), "yes"],
+                        [t("requests.studies_finished.no_label"),  "no"]],
+              hint: t("requests.hints.studies_finished") %>
       </div>
-    </fieldset>
+    </section>
 
-    <div class="divider"></div>
+    <hr class="border-hairline-soft">
 
-    <%# LANGUAGE %>
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend"><%= t("requests.sections.language") %></legend>
+    <%# 2 — LANGUAGE %>
+    <section class="space-y-5">
+      <%= render "shared/section_heading",
+            step: 2,
+            title: t("requests.sections.language"),
+            description: t("requests.sections.language_description") %>
 
-      <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="label" for="<%= f.field_id(:language_knowledge) %>"><%= t("requests.fields.language_knowledge") %></label>
-          <%= f.select :language_knowledge,
-                %w[A1 A2 B1 B2 C1 C2 native].map { |level| [t("requests.language_knowledge.#{level}"), level] },
-                { include_blank: true },
-                class: "select select-bordered w-full" %>
-        </div>
+      <div class="grid md:grid-cols-2 gap-x-5 gap-y-4">
+        <%= render "shared/field",
+              form: f, name: :language_knowledge,
+              type: :select,
+              choices: %w[A1 A2 B1 B2 C1 C2 native].map { |level| [t("requests.language_knowledge.#{level}"), level] },
+              hint: t("requests.hints.language_knowledge") %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:language_certificate) %>"><%= t("requests.fields.language_certificate") %></label>
-          <%= f.text_field :language_certificate, class: "input input-bordered w-full" %>
-        </div>
+        <%= render "shared/field",
+              form: f, name: :language_certificate,
+              placeholder: t("requests.placeholders.language_certificate"),
+              hint: t("requests.hints.language_certificate") %>
       </div>
-    </fieldset>
+    </section>
 
-    <div class="divider"></div>
+    <hr class="border-hairline-soft">
 
-    <%# REQUEST %>
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend"><%= t("requests.sections.request") %></legend>
+    <%# 3 — REQUEST %>
+    <section class="space-y-5">
+      <%= render "shared/section_heading",
+            step: 3,
+            title: t("requests.sections.request"),
+            description: t("requests.sections.request_description") %>
 
-      <label class="label" for="<%= f.field_id(:subject) %>"><%= t("requests.fields.subject") %></label>
-      <%= f.text_field :subject,
-            class: "input input-bordered w-full #{'input-error' if homologation_request.errors[:subject].any?}",
-            required: true %>
-      <% if homologation_request.errors[:subject].any? %>
-        <p class="label-text-alt text-error mt-1"><%= homologation_request.errors[:subject].to_sentence %></p>
-      <% end %>
+      <div class="space-y-4">
+        <%= render "shared/field",
+              form: f, name: :subject,
+              required: true,
+              placeholder: t("requests.placeholders.subject"),
+              hint: t("requests.hints.subject") %>
 
-      <label class="label mt-3" for="<%= f.field_id(:description) %>"><%= t("requests.fields.description") %></label>
-      <%= f.text_area :description, class: "textarea textarea-bordered w-full", rows: 4 %>
-    </fieldset>
+        <%= render "shared/field",
+              form: f, name: :description,
+              type: :textarea, rows: 5,
+              placeholder: t("requests.placeholders.description"),
+              hint: t("requests.hints.description") %>
+      </div>
+    </section>
 
     <% if homologation_request.new_record? %>
-      <div class="divider"></div>
+      <hr class="border-hairline-soft">
 
-      <fieldset class="fieldset">
-        <label class="label cursor-pointer justify-start gap-2">
-          <%= check_box_tag "homologation_request[privacy_accepted]", "1", false, class: "checkbox" %>
-          <span><%= t("requests.fields.privacy_accepted_html", url: privacy_path) %></span>
-        </label>
-      </fieldset>
+      <label class="flex items-start gap-3 cursor-pointer">
+        <%= check_box_tag "homologation_request[privacy_accepted]", "1", false,
+              class: "checkbox mt-0.5 shrink-0", required: true %>
+        <span class="text-sm text-body leading-relaxed">
+          <%= t("requests.fields.privacy_accepted_html", url: privacy_path).html_safe %>
+        </span>
+      </label>
     <% end %>
 
-    <div class="card-actions justify-end pt-2">
-      <%= link_to t("actions.cancel"), root_path, class: "btn btn-ghost" %>
-      <%= f.submit t("actions.save"), class: "btn btn-primary" %>
+    <div class="flex items-center justify-end gap-3 pt-2">
+      <%= link_to t("actions.cancel"), root_path,
+            class: "text-sm font-medium text-mute hover:text-ink transition-colors" %>
+      <%= f.submit (homologation_request.new_record? ? t("requests.save_draft") : t("actions.save")),
+            class: "btn btn-primary" %>
     </div>
   </div>
 <% end %>
