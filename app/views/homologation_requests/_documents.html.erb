@@ -91,6 +91,14 @@
                   data: { dropzone_target: "input", action: "change->dropzone#selected" } %>
           </label>
           <p class="text-xs text-ash mt-1"><%= t("requests.attachments.formats_hint") %></p>
+          <p class="text-xs text-ash mt-2 flex items-center gap-1 justify-center">
+            <%= t("requests.attachments.security_hint_before") %>
+            <span class="inline-flex items-center gap-1 mx-0.5">
+              <%= heroicon "lock-closed", variant: :micro, options: { class: "w-3 h-3", "aria-hidden": true } %>
+              <%= t("requests.attachments.security_hint_encrypted") %>
+            </span>
+            <%= t("requests.attachments.security_hint_after") %>
+          </p>
         <% end %>
         <ul class="px-6 pb-6 space-y-1.5 empty:hidden" data-dropzone-target="progress"></ul>
       </div>
