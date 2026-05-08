@@ -193,7 +193,8 @@ es:
       error_prefix:    "Documento:"
     sections:
       info:        "Información de la solicitud"
-      documents:   "Lista de verificación"
+      documents:         "Lista de verificación"
+      documents_subtitle: "Nuestro equipo marca los puntos a medida que se revisa la solicitud."
       attachments: "Documentos"
       payment:     "Pago"
       student:   "Estudiante"

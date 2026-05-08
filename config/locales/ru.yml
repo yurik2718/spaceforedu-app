@@ -195,7 +195,8 @@ ru:
       error_prefix:    "Документ:"
     sections:
       info:        "Информация о заявке"
-      documents:   "Контрольный список"
+      documents:         "Контрольный список"
+      documents_subtitle: "Наша команда отмечает пункты по мере рассмотрения заявки."
       attachments: "Документы"
       payment:     "Оплата"
       student:   "Студент"

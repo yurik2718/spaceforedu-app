@@ -139,9 +139,12 @@
   %>
   <div class="card bg-canvas border border-hairline-soft">
     <div class="card-body" style="--card-body-pad: 1.5rem">
-      <header class="flex items-center justify-between gap-2">
-        <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.documents") %></h3>
-        <span class="text-sm font-mono text-mute tabular-nums"><%= checklist_done %>/<%= checklist_total %></span>
+      <header class="flex items-start justify-between gap-2">
+        <div>
+          <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.documents") %></h3>
+          <p class="text-sm text-mute mt-0.5"><%= t("requests.sections.documents_subtitle") %></p>
+        </div>
+        <span class="text-sm font-mono text-mute tabular-nums shrink-0 mt-0.5"><%= checklist_done %>/<%= checklist_total %></span>
       </header>
 
       <progress class="progress <%= checklist_done == checklist_total ? 'progress-success' : 'progress-primary' %> w-full mt-3"
@@ -153,13 +156,17 @@
           <li>
             <details class="group rounded-md hover:bg-surface-soft">
               <summary class="flex items-center gap-2 px-2 py-1.5 cursor-pointer list-none text-sm">
-                <input type="checkbox" class="checkbox checkbox-sm shrink-0" disabled <%= "checked" if done %>>
-                <span class="flex-1 <%= 'line-through text-ash' if done %><%= ' text-ink' unless done %>">
+                <% if done %>
+                  <%= heroicon "check-circle", variant: :solid, options: { class: "w-5 h-5 text-success shrink-0", "aria-hidden": true } %>
+                <% else %>
+                  <%= heroicon "clock", variant: :solid, options: { class: "w-5 h-5 text-ash shrink-0", "aria-hidden": true } %>
+                <% end %>
+                <span class="flex-1 <%= done ? 'text-ash' : 'text-ink' %>">
                   <%= t("requests.checklist.#{key}") %>
                 </span>
                 <%= heroicon "chevron-down", options: { class: "w-4 h-4 text-ash transition-transform group-open:rotate-180", "aria-hidden": true } %>
               </summary>
-              <p class="px-8 pb-2 pt-0.5 text-xs text-mute leading-relaxed">
+              <p class="px-9 pb-2 pt-0.5 text-xs text-mute leading-relaxed">
                 <%= t("requests.checklist_descriptions.#{key}", default: "") %>
               </p>
             </details>

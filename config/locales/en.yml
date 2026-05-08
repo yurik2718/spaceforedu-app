@@ -193,7 +193,8 @@ en:
       error_prefix:    "Document:"
     sections:
       info:        "Request information"
-      documents:   "Verification checklist"
+      documents:         "Verification checklist"
+      documents_subtitle: "Our team marks these off as your application is reviewed."
       attachments: "Documents"
       payment:     "Payment"
       student:   "Student"
