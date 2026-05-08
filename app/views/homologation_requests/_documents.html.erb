@@ -2,7 +2,7 @@
       hr      — HomologationRequest
       can_edit — boolean (uploader + delete buttons visible only when true) %>
 <%
-  attachments = hr.documents.attachments.includes(:blob).order(created_at: :desc)
+  attachments = hr.documents.attachments.order(created_at: :desc)
 %>
 <%= turbo_frame_tag dom_id(hr, :documents) do %>
 <div class="card bg-canvas border border-hairline-soft md:col-span-2">

@@ -38,17 +38,25 @@ en:
 
   profile:
     edit_title: "Edit profile"
+    show:
+      conditions: "Privacy"
+      conditions_accepted: "Accepted"
     sections:
       account:        "Account"
       notifications:  "Notifications"
       guardian:       "Guardian"
+      personal_info:  "Personal information"
+      contacts:       "Contacts"
+      guardian_description: "Required for minor students — needed for identity verification."
     fields:
       name:                  "Name"
       email_address:         "Email"
       country:               "Country"
       birthday:              "Date of birth"
       phone:                 "Phone"
+      phone_hint:            "+X XXX XXX XX XX"
       whatsapp:              "WhatsApp"
+      whatsapp_hint:         "+X XXX XXX XX XX"
       locale:                "Language"
       notification_email:    "Email notifications"
       notification_telegram: "Telegram notifications"
@@ -61,6 +69,10 @@ en:
     toggle:
       on:  "On"
       off: "Off"
+    notifications:
+      email_description:    "Request updates and messages."
+      telegram_description: "Notifications via Telegram."
+      push_description:     "Browser alerts, even when the tab is closed."
     locales:
       es: "Spanish"
       en: "English"
@@ -80,6 +92,15 @@ en:
       EC: "Ecuador"
       US: "United States"
       OTHER: "Other"
+    gdpr:
+      title:                      "My Data (GDPR)"
+      export_button:              "Export my data"
+      export_hint:                "Download a JSON file with all your personal data (Art. 20 GDPR)."
+      deletion_button:            "Request account deletion"
+      deletion_hint:              "Your account and personal data will be anonymised within 30 days."
+      deletion_confirm:           "Are you sure you want to request deletion of your account? This cannot be undone."
+      deletion_requested_at:      "Deletion requested at"
+      deletion_requested_notice:  "Deletion request registered on %{date}. It will be processed within 30 days."
 
   home:
     hero:
@@ -288,9 +309,6 @@ en:
   messages:
     placeholder: "Type a message..."
 
-  notifications:
-    empty: "You have no notifications yet."
-
   admin:
     requests:
       sections:
@@ -339,6 +357,7 @@ en:
       footer:   "You're receiving this email because email notifications are on for your Space for Edu account."
 
   notifications:
+    empty: "You have no notifications yet."
     status_changed:
       title: "Your request \"%{subject}\" changed status"
       body:  "Current status: %{status}."
@@ -364,17 +383,6 @@ en:
   passwords_mailer:
     reset:
       subject: "Reset your Space for Edu password"
-
-  profile:
-    gdpr:
-      title:                      "My Data (GDPR)"
-      export_button:              "Export my data"
-      export_hint:                "Download a JSON file with all your personal data (Art. 20 GDPR)."
-      deletion_button:            "Request account deletion"
-      deletion_hint:              "Your account and personal data will be anonymised within 30 days."
-      deletion_confirm:           "Are you sure you want to request deletion of your account? This cannot be undone."
-      deletion_requested_at:      "Deletion requested at"
-      deletion_requested_notice:  "Deletion request registered on %{date}. It will be processed within 30 days."
 
   cookie_notice:
     text:         "This website uses only one strictly necessary session cookie to manage your authenticated access."

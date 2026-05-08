@@ -38,17 +38,25 @@ es:
 
   profile:
     edit_title: "Editar perfil"
+    show:
+      conditions: "Privacidad"
+      conditions_accepted: "Aceptada"
     sections:
       account:        "Cuenta"
       notifications:  "Notificaciones"
       guardian:       "Tutor"
+      personal_info:  "Datos personales"
+      contacts:       "Contactos"
+      guardian_description: "Obligatorio para menores — necesario para la verificación de identidad."
     fields:
       name:                  "Nombre"
       email_address:         "Email"
       country:               "País"
       birthday:              "Fecha de nacimiento"
       phone:                 "Teléfono"
+      phone_hint:            "+XX XXX XXX XXXX"
       whatsapp:              "WhatsApp"
+      whatsapp_hint:         "+XX XXX XXX XXXX"
       locale:                "Idioma"
       notification_email:    "Notificaciones por email"
       notification_telegram: "Notificaciones por Telegram"
@@ -61,6 +69,10 @@ es:
     toggle:
       on:  "Activado"
       off: "Desactivado"
+    notifications:
+      email_description:    "Actualizaciones de tu solicitud y mensajes."
+      telegram_description: "Notificaciones por Telegram."
+      push_description:     "Alertas del navegador, aunque la pestaña esté cerrada."
     locales:
       es: "Español"
       en: "Inglés"
@@ -80,6 +92,15 @@ es:
       EC: "Ecuador"
       US: "Estados Unidos"
       OTHER: "Otro"
+    gdpr:
+      title:                      "Mis datos (RGPD)"
+      export_button:              "Exportar mis datos"
+      export_hint:                "Descarga un archivo JSON con todos tus datos personales (art. 20 RGPD)."
+      deletion_button:            "Solicitar eliminación de cuenta"
+      deletion_hint:              "Tu cuenta y datos personales serán anonimizados en un plazo máximo de 30 días."
+      deletion_confirm:           "¿Confirmar solicitud de eliminación de tu cuenta? Esta acción no se puede deshacer."
+      deletion_requested_at:      "Eliminación solicitada el"
+      deletion_requested_notice:  "Solicitud de eliminación registrada el %{date}. Será procesada en un plazo de 30 días."
 
   home:
     hero:
@@ -288,9 +309,6 @@ es:
   messages:
     placeholder: "Escribe un mensaje..."
 
-  notifications:
-    empty: "Aún no tienes notificaciones."
-
   admin:
     requests:
       sections:
@@ -339,6 +357,7 @@ es:
       footer:   "Recibes este correo porque tienes notificaciones activas en Space for Edu."
 
   notifications:
+    empty: "Aún no tienes notificaciones."
     status_changed:
       title: "Tu solicitud «%{subject}» cambió de estado"
       body:  "Estado actual: %{status}."
@@ -364,17 +383,6 @@ es:
   passwords_mailer:
     reset:
       subject: "Recupera el acceso a Space for Edu"
-
-  profile:
-    gdpr:
-      title:                      "Mis datos (RGPD)"
-      export_button:              "Exportar mis datos"
-      export_hint:                "Descarga un archivo JSON con todos tus datos personales (art. 20 RGPD)."
-      deletion_button:            "Solicitar eliminación de cuenta"
-      deletion_hint:              "Tu cuenta y datos personales serán anonimizados en un plazo máximo de 30 días."
-      deletion_confirm:           "¿Confirmar solicitud de eliminación de tu cuenta? Esta acción no se puede deshacer."
-      deletion_requested_at:      "Eliminación solicitada el"
-      deletion_requested_notice:  "Solicitud de eliminación registrada el %{date}. Será procesada en un plazo de 30 días."
 
   cookie_notice:
     text:          "Este sitio utiliza únicamente una cookie de sesión, estrictamente necesaria para el funcionamiento del servicio."

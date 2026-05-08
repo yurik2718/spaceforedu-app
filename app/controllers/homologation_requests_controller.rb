@@ -23,7 +23,7 @@ class HomologationRequestsController < ApplicationController
   end
 
   def show
-    @homologation_request = HomologationRequest.kept.includes(:conversation, :user).find(params[:id])
+    @homologation_request = HomologationRequest.kept.includes(:conversation).find(params[:id])
     authorize @homologation_request
     @checklist_keys = PipelineFlow.checklist_keys
     flash.now[:notice] = t("flash.payment_processing") if params[:payment] == "success"

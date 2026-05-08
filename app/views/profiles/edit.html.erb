@@ -1,9 +1,22 @@
 <% content_for :title, t("profile.edit_title") %>
 
-<%= render "shared/page_header", title: t("profile.edit_title") %>
+<header class="mb-8">
+  <h1 class="t-heading-xl"><%= t("profile.edit_title") %></h1>
+</header>
 
-<%= form_with model: @user, url: profile_path, class: "card bg-white shadow" do |f| %>
-  <div class="card-body space-y-6">
+<%= form_with model: @user, url: profile_path, class: "card bg-canvas border border-hairline-soft" do |f| %>
+
+  <%# Identity header — who is being edited %>
+  <div class="flex items-center gap-3 px-6 py-4 border-b border-hairline-soft">
+    <%= render "shared/avatar", user: @user, size: :sm %>
+    <div class="min-w-0">
+      <p class="font-semibold text-sm text-ink truncate"><%= @user.name %></p>
+      <p class="text-xs text-mute truncate"><%= @user.email_address %></p>
+    </div>
+  </div>
+
+  <div class="card-body space-y-6" style="--card-body-pad: 1.5rem">
+
     <% if @user.errors.any? %>
       <div class="alert alert-error">
         <ul>
@@ -14,93 +27,127 @@
       </div>
     <% end %>
 
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend"><%= t("profile.sections.account") %></legend>
+    <%# SECTION 1 — Personal info %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 1,
+            title: t("profile.sections.personal_info") %>
 
-      <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="label" for="<%= f.field_id(:name) %>"><%= t("profile.fields.name") %></label>
-          <%= f.text_field :name, class: "input input-bordered w-full", required: true %>
-        </div>
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <%= render "shared/field", form: f, name: :name,
+              label: t("profile.fields.name"),
+              required: true %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:country) %>"><%= t("profile.fields.country") %></label>
-          <%= f.select :country,
-                %w[ES AR MX CO RU UA BY KZ PE CL VE EC US OTHER].map { |code| [t("profile.countries.#{code}", default: code), code] },
-                { include_blank: true },
-                class: "select select-bordered w-full" %>
-        </div>
+        <%= render "shared/field", form: f, name: :country,
+              type: :select,
+              label: t("profile.fields.country"),
+              choices: %w[ES AR MX CO RU UA BY KZ PE CL VE EC US OTHER].map { |c| [t("profile.countries.#{c}", default: c), c] },
+              include_blank: true %>
 
-        <div>
-          <label class="label" for="<%= f.field_id(:locale) %>"><%= t("profile.fields.locale") %></label>
-          <%= f.select :locale,
-                %w[es en ru].map { |loc| [t("profile.locales.#{loc}"), loc] },
-                {}, class: "select select-bordered w-full" %>
-        </div>
+        <%= render "shared/field", form: f, name: :locale,
+              type: :select,
+              label: t("profile.fields.locale"),
+              choices: %w[es en ru].map { |loc| [t("profile.locales.#{loc}"), loc] },
+              include_blank: false %>
+      </div>
+    </section>
 
+    <div class="divider"></div>
+
+    <%# SECTION 2 — Contacts %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 2,
+            title: t("profile.sections.contacts") %>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
         <div>
           <label class="label" for="<%= f.field_id(:phone) %>"><%= t("profile.fields.phone") %></label>
           <%= f.telephone_field :phone, class: "input input-bordered w-full" %>
+          <p class="label-text-alt mt-1"><%= t("profile.fields.phone_hint") %></p>
         </div>
 
         <div>
           <label class="label" for="<%= f.field_id(:whatsapp) %>"><%= t("profile.fields.whatsapp") %></label>
           <%= f.telephone_field :whatsapp, class: "input input-bordered w-full" %>
+          <p class="label-text-alt mt-1"><%= t("profile.fields.whatsapp_hint") %></p>
         </div>
       </div>
-    </fieldset>
+    </section>
 
     <div class="divider"></div>
 
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend"><%= t("profile.sections.notifications") %></legend>
+    <%# SECTION 3 — Notifications %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 3,
+            title: t("profile.sections.notifications") %>
 
-      <label class="label cursor-pointer justify-start gap-2">
-        <%= f.check_box :notification_email, class: "checkbox" %>
-        <span><%= t("profile.fields.notification_email") %></span>
-      </label>
-      <label class="label cursor-pointer justify-start gap-2">
-        <%= f.check_box :notification_telegram, class: "checkbox" %>
-        <span><%= t("profile.fields.notification_telegram") %></span>
-      </label>
+      <div class="mt-4 space-y-1">
+        <label class="flex items-start gap-3 cursor-pointer py-2.5 px-1 rounded-lg hover:bg-surface-soft">
+          <%= heroicon "envelope", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_email") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.email_description") %></span>
+          </div>
+          <%= f.check_box :notification_email, class: "checkbox mt-0.5 shrink-0" %>
+        </label>
 
-      <div data-controller="push-notifications">
-        <label class="label cursor-pointer justify-start gap-2">
-          <input type="checkbox" class="checkbox"
+        <label class="flex items-start gap-3 cursor-pointer py-2.5 px-1 rounded-lg hover:bg-surface-soft">
+          <%= heroicon "paper-airplane", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_telegram") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.telegram_description") %></span>
+          </div>
+          <%= f.check_box :notification_telegram, class: "checkbox mt-0.5 shrink-0" %>
+        </label>
+
+        <div data-controller="push-notifications" class="flex items-start gap-3 py-2.5 px-1 rounded-lg">
+          <%= heroicon "bell", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_push") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.push_description") %></span>
+          </div>
+          <input type="checkbox" class="checkbox mt-0.5 shrink-0"
                  data-push-notifications-target="checkbox"
                  data-action="change->push-notifications#toggle">
-          <span><%= t("profile.fields.notification_push") %></span>
-        </label>
-        <p class="text-xs text-gray-400 mt-1"><%= t("profile.fields.notification_push_hint") %></p>
+        </div>
       </div>
-    </fieldset>
+    </section>
 
     <% if @user.is_minor %>
       <div class="divider"></div>
 
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend"><%= t("profile.sections.guardian") %></legend>
+      <%# SECTION 4 — Guardian %>
+      <section class="space-y-4">
+        <%= render "shared/section_heading",
+              step: 4,
+              title: t("profile.sections.guardian"),
+              description: t("profile.sections.guardian_description") %>
 
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label class="label" for="<%= f.field_id(:guardian_name) %>"><%= t("profile.fields.guardian_name") %></label>
-            <%= f.text_field :guardian_name, class: "input input-bordered w-full" %>
-          </div>
+        <div class="grid md:grid-cols-2 gap-4 mt-4">
+          <%= render "shared/field", form: f, name: :guardian_name,
+                label: t("profile.fields.guardian_name") %>
+
           <div>
             <label class="label" for="<%= f.field_id(:guardian_email) %>"><%= t("profile.fields.guardian_email") %></label>
             <%= f.email_field :guardian_email, class: "input input-bordered w-full" %>
           </div>
+
           <div>
             <label class="label" for="<%= f.field_id(:guardian_phone) %>"><%= t("profile.fields.guardian_phone") %></label>
             <%= f.telephone_field :guardian_phone, class: "input input-bordered w-full" %>
           </div>
         </div>
-      </fieldset>
+      </section>
     <% end %>
 
-    <div class="card-actions justify-end">
-      <%= link_to t("actions.cancel"), profile_path, class: "btn btn-ghost" %>
-      <%= f.submit t("actions.save"), class: "btn btn-primary" %>
-    </div>
   </div>
+
+  <%# Action strip %>
+  <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-hairline-soft">
+    <%= link_to t("actions.cancel"), profile_path, class: "btn btn-ghost" %>
+    <%= f.submit t("actions.save"), class: "btn btn-primary" %>
+  </div>
+
 <% end %>

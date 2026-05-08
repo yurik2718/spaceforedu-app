@@ -40,17 +40,25 @@ ru:
 
   profile:
     edit_title: "Редактировать профиль"
+    show:
+      conditions: "Условия"
+      conditions_accepted: "Приняты"
     sections:
       account:        "Аккаунт"
       notifications:  "Уведомления"
       guardian:       "Опекун"
+      personal_info:  "Личные данные"
+      contacts:       "Контакты"
+      guardian_description: "Обязательно для несовершеннолетних — для верификации личности."
     fields:
       name:                  "Имя"
       email_address:         "Email"
       country:               "Страна"
       birthday:              "Дата рождения"
       phone:                 "Телефон"
+      phone_hint:            "+7 XXX XXX XX XX"
       whatsapp:              "WhatsApp"
+      whatsapp_hint:         "+7 XXX XXX XX XX"
       locale:                "Язык"
       notification_email:    "Уведомления по email"
       notification_telegram: "Уведомления в Telegram"
@@ -63,6 +71,10 @@ ru:
     toggle:
       on:  "Вкл"
       off: "Выкл"
+    notifications:
+      email_description:    "Обновления по заявке и сообщения."
+      telegram_description: "Уведомления через Telegram."
+      push_description:     "Уведомления браузера, даже когда вкладка закрыта."
     locales:
       es: "Испанский"
       en: "Английский"
@@ -82,6 +94,15 @@ ru:
       EC: "Эквадор"
       US: "США"
       OTHER: "Другая"
+    gdpr:
+      title:                      "Мои данные (GDPR)"
+      export_button:              "Экспортировать данные"
+      export_hint:                "Скачать JSON-файл со всеми вашими персональными данными (ст. 20 GDPR)."
+      deletion_button:            "Запросить удаление аккаунта"
+      deletion_hint:              "Аккаунт и персональные данные будут анонимизированы в течение 30 дней."
+      deletion_confirm:           "Подтвердить запрос на удаление аккаунта? Это действие нельзя отменить."
+      deletion_requested_at:      "Удаление запрошено"
+      deletion_requested_notice:  "Запрос на удаление зарегистрирован %{date}. Будет обработан в течение 30 дней."
 
   home:
     hero:
@@ -290,9 +311,6 @@ ru:
   messages:
     placeholder: "Введите сообщение..."
 
-  notifications:
-    empty: "У вас пока нет уведомлений."
-
   admin:
     requests:
       sections:
@@ -341,6 +359,7 @@ ru:
       footer:   "Вы получили это письмо, потому что у вас включены email-уведомления в Space for Edu."
 
   notifications:
+    empty: "У вас пока нет уведомлений."
     status_changed:
       title: "Заявка «%{subject}» сменила статус"
       body:  "Текущий статус: %{status}."
@@ -366,17 +385,6 @@ ru:
   passwords_mailer:
     reset:
       subject: "Сброс пароля Space for Edu"
-
-  profile:
-    gdpr:
-      title:                      "Мои данные (GDPR)"
-      export_button:              "Экспортировать данные"
-      export_hint:                "Скачать JSON-файл со всеми вашими персональными данными (ст. 20 GDPR)."
-      deletion_button:            "Запросить удаление аккаунта"
-      deletion_hint:              "Аккаунт и персональные данные будут анонимизированы в течение 30 дней."
-      deletion_confirm:           "Подтвердить запрос на удаление аккаунта? Это действие нельзя отменить."
-      deletion_requested_at:      "Удаление запрошено"
-      deletion_requested_notice:  "Запрос на удаление зарегистрирован %{date}. Будет обработан в течение 30 дней."
 
   cookie_notice:
     text:         "Этот сайт использует только одну сессионную cookie — строго необходимую для работы сервиса."

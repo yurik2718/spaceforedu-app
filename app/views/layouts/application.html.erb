@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>" class="h-full">
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || "Homologation" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -17,10 +17,10 @@
     <%= javascript_importmap_tags %>
     <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
   </head>
-  <body class="h-full flex flex-col bg-surface-soft text-body antialiased font-sans">
+  <body class="min-h-screen flex flex-col bg-surface-soft text-body antialiased font-sans">
     <%= render "layouts/navbar" %>
     <%= render "shared/flash" %>
-    <main class="container mx-auto px-4 py-6 flex-1 min-h-0">
+    <main class="container mx-auto px-4 py-6 flex-1">
       <%= yield %>
     </main>
     <%= render "layouts/footer" %>
