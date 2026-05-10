@@ -6,7 +6,7 @@ unread_status_change:
 
 already_read_message:
   user: student_es
-  notifiable: in_pipeline_es (HomologationRequest)
+  notifiable: at_redsara_es (HomologationRequest)
   title: "New message"
   body: "Admin replied"
   read_at: <%= 1.hour.ago %>

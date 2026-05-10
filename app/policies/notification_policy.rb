@@ -1,5 +1,6 @@
 class NotificationPolicy < ApplicationPolicy
-  def show? = user.present? && record.user_id == user.id
+  def show?     = user.present? && record.user_id == user.id
+  def read_all? = user.present?
 
   class Scope < ApplicationPolicy::Scope
     def resolve

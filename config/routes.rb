@@ -23,7 +23,9 @@ Rails.application.routes.draw do
     get :export
   end
   resource :profile_deletion, only: :create, controller: "profile_deletions"
-  resources :notifications, only: :index
+  resources :notifications, only: %i[index show] do
+    post :read_all, on: :collection
+  end
   resource  :locale, only: :update
   resource  :push_subscription, only: %i[create destroy]
 

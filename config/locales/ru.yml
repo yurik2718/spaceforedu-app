@@ -383,6 +383,11 @@ ru:
       latest_message:
         title: "Последнее сообщение"
         empty: "В этом деле ещё нет сообщений."
+      verdict:
+        heading: "Это дело ждёт твоего вердикта"
+        intro:   "Просмотри документы и переписку, затем одобри или откажи."
+      checklist:
+        final_state: "Итоговое состояние"
     pipeline:
       inbox:
         title:     "Inbox"
@@ -390,13 +395,20 @@ ru:
         empty:     "Inbox пуст. Ничего не ждёт твоего действия."
       unread:      "Непрочитанные"
       stale_hint:  "Без движения более 7 дней."
+    quick_replies:
+      label: "Готовые ответы"
 
   countries:
     AR: "Аргентина"
+    BR: "Бразилия"
     CO: "Колумбия"
+    DE: "Германия"
     ES: "Испания"
+    JP: "Япония"
     MX: "Мексика"
+    PE: "Перу"
     RU: "Россия"
+    TR: "Турция"
 
   footer:
     about:    "О нас"
@@ -427,7 +439,14 @@ ru:
       footer:   "Вы получили это письмо, потому что у вас включены email-уведомления в Space for Edu."
 
   notifications:
-    empty: "У вас пока нет уведомлений."
+    empty:         "У вас пока нет уведомлений."
+    empty_heading: "Всё прочитано"
+    mark_all_read: "Отметить все как прочитанные"
+    group_count:
+      one:   "×%{count}"
+      few:   "×%{count}"
+      many:  "×%{count}"
+      other: "×%{count}"
     status_changed:
       title: "Заявка «%{subject}» сменила статус"
       body:  "Текущий статус: %{status}."

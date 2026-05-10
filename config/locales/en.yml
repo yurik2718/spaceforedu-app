@@ -381,6 +381,11 @@ en:
       latest_message:
         title: "Latest message"
         empty: "No messages on this case yet."
+      verdict:
+        heading: "This case needs your verdict"
+        intro:   "Review the documents and the conversation, then approve or decline."
+      checklist:
+        final_state: "Final state"
     pipeline:
       inbox:
         title:     "Inbox"
@@ -388,13 +393,20 @@ en:
         empty:     "Inbox clear. Nothing is waiting on you."
       unread:      "Unread"
       stale_hint:  "No movement for over 7 days."
+    quick_replies:
+      label: "Quick replies"
 
   countries:
     AR: "Argentina"
+    BR: "Brazil"
     CO: "Colombia"
+    DE: "Germany"
     ES: "Spain"
+    JP: "Japan"
     MX: "Mexico"
+    PE: "Peru"
     RU: "Russia"
+    TR: "Türkiye"
 
   footer:
     about:    "About"
@@ -425,7 +437,12 @@ en:
       footer:   "You're receiving this email because email notifications are on for your Space for Edu account."
 
   notifications:
-    empty: "You have no notifications yet."
+    empty:         "You have no notifications yet."
+    empty_heading: "All caught up"
+    mark_all_read: "Mark all read"
+    group_count:
+      one:   "×%{count}"
+      other: "×%{count}"
     status_changed:
       title: "Your request \"%{subject}\" changed status"
       body:  "Current status: %{status}."

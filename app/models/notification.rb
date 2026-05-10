@@ -22,6 +22,10 @@ class Notification < ApplicationRecord
     update!(read_at: Time.current)
   end
 
+  def group_key
+    [notifiable_type, notifiable_id, title_key]
+  end
+
   private
     def render_vars
       vars = (i18n_vars || {}).symbolize_keys

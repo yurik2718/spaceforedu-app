@@ -29,4 +29,18 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     get conversation_url(@conversation)
     assert_redirected_to new_session_url
   end
+
+  test "super_admin sees quick reply pills above the message form" do
+    sign_in_as @admin
+    get conversation_url(@conversation)
+
+    assert_select "button[data-action='quick-replies#insert']"
+  end
+
+  test "students do not see quick reply pills" do
+    sign_in_as @student
+    get conversation_url(@conversation)
+
+    assert_select "button[data-action='quick-replies#insert']", count: 0
+  end
 end

@@ -61,4 +61,13 @@ class NotificationTest < ActiveSupport::TestCase
       @student.notifications.create!(notifiable: @request, title: "Hi")
     end
   end
+
+  test "group_key is identical for same notifiable + title_key and differs otherwise" do
+    a = @student.notifications.create!(notifiable: @request, title_key: "notifications.new_message.title")
+    b = @student.notifications.create!(notifiable: @request, title_key: "notifications.new_message.title")
+    c = @student.notifications.create!(notifiable: @request, title_key: "notifications.status_changed.title")
+
+    assert_equal     a.group_key, b.group_key
+    assert_not_equal a.group_key, c.group_key
+  end
 end

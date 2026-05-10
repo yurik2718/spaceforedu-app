@@ -1,9 +1,27 @@
 class NotificationsController < ApplicationController
-  def index
-    scope = policy_scope(Notification).order(Arel.sql("read_at IS NULL DESC, created_at DESC"))
-    @pagy, @notifications = pagy(scope, limit: 25)
+  before_action :set_notification, only: :show
 
-    unread_ids = @notifications.filter_map { |n| n.id if n.read_at.nil? }
-    Notification.where(id: unread_ids).update_all(read_at: Time.current) if unread_ids.any?
+  def index
+    scope = policy_scope(Notification).includes(:user).order(Arel.sql("read_at IS NULL DESC, created_at DESC"))
+    @pagy, notifications = pagy(scope, limit: 25)
+    @groups = notifications.chunk_while { |a, b| a.group_key == b.group_key }.to_a
+    @unread_count = policy_scope(Notification).unread.count
   end
+
+  def show
+    @notification.mark_read!
+    redirect_to polymorphic_path(@notification.notifiable)
+  end
+
+  def read_all
+    authorize Notification
+    policy_scope(Notification).unread.update_all(read_at: Time.current)
+    redirect_to notifications_path
+  end
+
+  private
+    def set_notification
+      @notification = policy_scope(Notification).includes(:notifiable).find(params[:id])
+      authorize @notification
+    end
 end

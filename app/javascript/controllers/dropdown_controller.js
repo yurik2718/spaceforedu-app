@@ -1,11 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Click-toggle dropdown. Closes on outside click, Escape, or after activating
-// any link/button inside the menu (so navigation/forms work as expected).
+// Click-toggle dropdown. Closes on outside click or Escape.
 export default class extends Controller {
-  static targets = ["menu"]
-  static classes = ["open"]
-
   connect() {
     this.boundOutsideClick = this.outsideClick.bind(this)
     this.boundKeydown      = this.keydown.bind(this)

@@ -1,0 +1,149 @@
+# Canned responses for super_admin in chat. Variables: {student}, {subject}, {plan}, {amount}.
+# Per-locale. Edit and deploy — no admin UI.
+
+es:
+  - label: "Bienvenida"
+    items:
+      - id: welcome_received
+        label: "Recibida"
+        body: |
+          Hola {student}, hemos recibido tu solicitud para «{subject}». La revisaremos en 1–3 días y te avisamos por aquí.
+      - id: welcome_starting_review
+        label: "Empezando a revisar"
+        body: |
+          Hola {student}, ya estoy revisando tu expediente. Si necesito algo te lo pido por aquí.
+
+  - label: "Documentos"
+    items:
+      - id: docs_apostille_missing
+        label: "Falta apostilla"
+        body: |
+          {student}, el certificado de notas que has enviado no está apostillado. Sin la apostilla no podemos continuar. Por favor, gestiónalo y reenvíalo cuando lo tengas.
+      - id: docs_quality
+        label: "Escaneo ilegible"
+        body: |
+          {student}, el escaneo no se lee con claridad. ¿Puedes volver a subir el documento con mejor resolución? Mejor escáner que foto si es posible.
+      - id: docs_translation_needed
+        label: "Falta traducción jurada"
+        body: |
+          {student}, este documento necesita traducción jurada al castellano. Si no la tienes, puedo recomendarte traductores homologados.
+
+  - label: "Pago"
+    items:
+      - id: payment_approved
+        label: "Aprobado — listo para pagar"
+        body: |
+          Buenas noticias, {student}: hemos revisado tu caso y podemos llevarlo con el plan {plan} ({amount}). Pulsa «Pagar» en tu panel cuando estés listo y arrancamos.
+      - id: payment_confirmed
+        label: "Pago recibido"
+        body: |
+          {student}, hemos confirmado tu pago. Arrancamos con la tramitación. Te iremos informando de cada avance por aquí.
+
+  - label: "Tramitación"
+    items:
+      - id: process_redsara_submitted
+        label: "Presentado en RedSARA"
+        body: |
+          Tu solicitud ya ha sido presentada en RedSARA, {student}. El plazo ministerial es de 4 a 8 meses; te aviso en cuanto haya resolución.
+      - id: process_resolved_positive
+        label: "Resolución favorable"
+        body: |
+          Buenas noticias, {student}: el Ministerio ha resuelto favorablemente tu solicitud para {subject}. Recibirás la resolución oficial en los próximos días.
+
+en:
+  - label: "Welcome"
+    items:
+      - id: welcome_received
+        label: "Received"
+        body: |
+          Hi {student}, we've received your request for «{subject}». We'll review it in 1–3 days and update you here.
+      - id: welcome_starting_review
+        label: "Starting review"
+        body: |
+          Hi {student}, I've started reviewing your case. If I need anything I'll ask here.
+
+  - label: "Documents"
+    items:
+      - id: docs_apostille_missing
+        label: "Apostille missing"
+        body: |
+          {student}, the academic transcript you uploaded is not apostilled. We can't continue without the apostille. Please get it done and re-upload here.
+      - id: docs_quality
+        label: "Scan unreadable"
+        body: |
+          {student}, the scan isn't clear enough. Could you re-upload at higher resolution? A scanner gives better results than a phone photo.
+      - id: docs_translation_needed
+        label: "Sworn translation needed"
+        body: |
+          {student}, this document needs a sworn translation into Spanish. If you don't have one, I can recommend certified translators.
+
+  - label: "Payment"
+    items:
+      - id: payment_approved
+        label: "Approved — ready to pay"
+        body: |
+          Good news, {student}: we've reviewed your case and can handle it under the {plan} plan ({amount}). Click "Pay" on your dashboard whenever you're ready and we get going.
+      - id: payment_confirmed
+        label: "Payment received"
+        body: |
+          {student}, your payment is confirmed. We're starting the process. I'll keep you posted on each step here.
+
+  - label: "Processing"
+    items:
+      - id: process_redsara_submitted
+        label: "Filed in RedSARA"
+        body: |
+          Your request has been filed in RedSARA, {student}. The Ministry timeline is 4–8 months; I'll let you know as soon as there's a resolution.
+      - id: process_resolved_positive
+        label: "Favourable resolution"
+        body: |
+          Great news, {student}: the Ministry has resolved your request for {subject} favourably. You'll receive the official resolution in the coming days.
+
+ru:
+  - label: "Приветствие"
+    items:
+      - id: welcome_received
+        label: "Заявка получена"
+        body: |
+          Здравствуйте, {student}. Мы получили вашу заявку «{subject}». Рассмотрим в течение 1–3 дней и сообщим здесь.
+      - id: welcome_starting_review
+        label: "Начал проверку"
+        body: |
+          {student}, я уже смотрю ваше дело. Если что-то понадобится — напишу здесь.
+
+  - label: "Документы"
+    items:
+      - id: docs_apostille_missing
+        label: "Нужен апостиль"
+        body: |
+          {student}, на справке об оценках нет апостиля. Без него мы не можем двигаться дальше. Пожалуйста, оформите апостиль и пришлите файл сюда.
+      - id: docs_quality
+        label: "Скан нечитаем"
+        body: |
+          {student}, скан плохо читается. Можете загрузить повторно в лучшем качестве? Сканер лучше, чем фото с телефона.
+      - id: docs_translation_needed
+        label: "Нужен присяжный перевод"
+        body: |
+          {student}, этот документ требует присяжного перевода на испанский. Если перевода нет — могу порекомендовать сертифицированных переводчиков.
+
+  - label: "Оплата"
+    items:
+      - id: payment_approved
+        label: "Одобрено — можно оплатить"
+        body: |
+          Хорошие новости, {student}: мы рассмотрели ваше дело и берём его на тариф {plan} ({amount}). Нажмите «Оплатить» в личном кабинете, когда будете готовы — и мы стартуем.
+      - id: payment_confirmed
+        label: "Оплата получена"
+        body: |
+          {student}, оплата подтверждена. Запускаем оформление. Буду держать вас в курсе каждого шага здесь.
+
+  - label: "Делопроизводство"
+    items:
+      - id: process_redsara_submitted
+        label: "Подано в RedSARA"
+        body: |
+          {student}, ваше дело подано в RedSARA. Срок Министерства — от 4 до 8 месяцев. Я сообщу, как только будет решение.
+      - id: process_resolved_positive
+        label: "Положительное решение"
+        body: |
+          Отличные новости, {student}: Министерство приняло положительное решение по «{subject}». Официальное постановление придёт в ближайшие дни.

@@ -1,5 +1,11 @@
-<div id="message_form" class="border-t border-hairline-soft p-3 flex-shrink-0 bg-canvas">
+<div id="message_form" class="border-t border-hairline-soft flex-shrink-0 bg-canvas"
+     data-controller="quick-replies">
+  <% if Current.user.super_admin? %>
+    <%= render "messages/quick_replies", conversation: conversation, hr: conversation.homologation_request %>
+  <% end %>
+
   <%= form_with model: [ conversation, message ],
+                class: "p-3",
                 data: { controller: "message-form", action: "turbo:submit-end->message-form#reset" } do |f| %>
     <div class="flex gap-2 items-end">
       <%= f.text_area :body,
@@ -8,7 +14,7 @@
             rows: 2,
             required: true,
             autofocus: true,
-            data: { action: "keydown->message-form#submitOnEnter" } %>
+            data: { action: "keydown->message-form#submitOnEnter", quick_replies_target: "textarea" } %>
       <%= f.submit t("actions.send"), class: "btn btn-primary" %>
     </div>
     <p class="text-xs text-ash mt-1.5 text-right"><%= t("messages.enter_hint") %></p>

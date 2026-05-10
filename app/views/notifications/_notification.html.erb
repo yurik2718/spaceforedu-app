@@ -1,16 +1,26 @@
-<div id="<%= dom_id(notification) %>"
-     class="card card-compact bg-white shadow-sm border-l-4 <%= notification.read_at? ? 'border-gray-200 opacity-70' : 'border-primary' %>">
+<% count = local_assigns.fetch(:count, 1) %>
+<%= link_to notification_path(notification),
+      id: dom_id(notification),
+      class: "block card bg-canvas border border-hairline-soft hover:bg-surface-soft transition no-underline" do %>
   <div class="card-body">
     <header class="flex items-start justify-between gap-3">
-      <h4 class="font-semibold text-sm"><%= notification.title %></h4>
-      <time class="text-xs opacity-60 shrink-0">
-        <% if notification.created_at.today? %>
-          <%= time_ago_in_words(notification.created_at) %>
-        <% else %>
-          <%= l notification.created_at, format: :short %>
+      <h4 class="font-semibold text-sm <%= 'text-mute' if notification.read_at? %>"><%= notification.title %></h4>
+      <div class="flex items-center gap-2 shrink-0">
+        <% if count > 1 %>
+          <span class="badge badge-neutral badge-sm"><%= t("notifications.group_count", count: count) %></span>
         <% end %>
-      </time>
+        <time class="text-xs text-mute">
+          <% if notification.created_at > 24.hours.ago %>
+            <%= time_ago_in_words(notification.created_at) %>
+          <% else %>
+            <%= l notification.created_at, format: :short %>
+          <% end %>
+        </time>
+        <% unless notification.read_at? %>
+          <span class="text-primary text-base leading-none" aria-label="unread">•</span>
+        <% end %>
+      </div>
     </header>
-    <p class="text-sm opacity-80"><%= notification.body %></p>
+    <p class="text-sm <%= notification.read_at? ? 'text-mute' : 'text-body' %>"><%= notification.body %></p>
   </div>
-</div>
+<% end %>

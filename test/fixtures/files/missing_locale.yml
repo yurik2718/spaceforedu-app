@@ -1,0 +1,6 @@
+de:
+  - label: "Nur Deutsch"
+    items:
+      - id: only_de
+        label: "Nur"
+        body: "Nur."

@@ -34,4 +34,13 @@ class Admin::PipelinesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "section[data-stage=documentos] ##{ActionView::RecordIdentifier.dom_id(request_record)}"
   end
+
+  test "revenue stat is always rendered in euros, never dollars" do
+    sign_in_as users(:admin)
+
+    get admin_pipeline_path
+
+    assert_match(/\d[\d.,\s]*\s*€/, response.body, "revenue must be formatted with the € symbol")
+    assert_no_match(/\$\d/, response.body, "revenue must never use the $ symbol")
+  end
 end

@@ -1,4 +1,4 @@
-<div class="dropdown dropdown-end relative" data-controller="dropdown">
+<div class="dropdown dropdown-end" data-controller="dropdown">
   <button type="button"
           data-action="click->dropdown#toggle"
           class="inline-flex items-center gap-1.5 h-9 px-3 rounded-full bg-surface-card text-ink hover:bg-secondary-bg text-[13px] font-semibold cursor-pointer transition-colors"
@@ -10,8 +10,7 @@
     </svg>
     <span><%= native_locale_label(I18n.locale) %></span>
   </button>
-  <ul role="menu"
-      class="dropdown-content absolute right-0 mt-2 w-56 p-2 bg-canvas rounded-2xl shadow-[0_16px_32px_rgba(0,0,0,0.18),0_2px_6px_rgba(0,0,0,0.10)] border border-hairline-soft z-30">
+  <ul role="menu" class="dropdown-content w-56">
     <% available_locales.each do |loc| %>
       <% is_current = (I18n.locale == loc) %>
       <li role="none">

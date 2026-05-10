@@ -1,51 +1,37 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Self-hosted variable fonts — no third-party calls, no privacy leaks.
+   Self-hosted variable font — no third-party calls, no privacy leaks.
    Files live in app/assets/fonts/ and are fingerprinted by Propshaft.
-   Inter (SIL OFL 1.1) — github.com/rsms/inter
-   Inter Tight (SIL OFL 1.1) — github.com/itfoundry/inter-tight
+   Onest (SIL OFL 1.1) — github.com/onesthq/onest-font
+   Designed with first-class Cyrillic support; one family for body + display.
    ========================================================================== */
 @font-face {
-  font-family: "Inter";
+  font-family: "Onest";
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("Inter-Variable.woff2") format("woff2-variations");
-}
-@font-face {
-  font-family: "Inter";
-  font-style: italic;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("Inter-Variable-Italic.woff2") format("woff2-variations");
-}
-@font-face {
-  font-family: "Inter Tight";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("InterTight-Variable.woff2") format("woff2-variations");
+  src: url("Onest-Latin.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-                 U+2212, U+2215, U+FEFF, U+FFFD;
+                 U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+                 U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
-  font-family: "Inter Tight";
-  font-style: italic;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("InterTight-Variable-Italic.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-                 U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
-                 U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Inter Tight";
+  font-family: "Onest";
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("InterTight-Cyrillic.woff2") format("woff2-variations");
+  src: url("Onest-Latin-Ext.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+                 U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+                 U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("Onest-Cyrillic.woff2") format("woff2-variations");
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
@@ -54,8 +40,8 @@
    Warm-cream/coral system (Pinterest-inspired) tuned to SFE coral #E8453C.
    ========================================================================== */
 @theme {
-  --font-sans: "Inter", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Inter Tight", "Inter", -apple-system, system-ui, sans-serif;
+  --font-sans: "Onest", -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Onest", -apple-system, system-ui, sans-serif;
 
   /* Brand & accent */
   --color-primary:          #E8453C;
@@ -559,13 +545,19 @@ html {
   z-index: 1;
 }
 
-/* ── Modal (used on native <dialog> with .showModal()) ─ */
+/* ── Modal (used on native <dialog> with .showModal()) ─
+   Browsers center modal-mode <dialog> via `margin: auto; inset: 0` in their UA
+   stylesheet. Tailwind preflight zeros every margin, which kills the centering —
+   we restore both explicitly. */
 @utility modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
   padding: 0;
   background: transparent;
   border: 0;
-  max-width: 100vw;
-  max-height: 100vh;
+  max-width: min(32rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
 }
 dialog.modal::backdrop {
   background: rgba(15, 12, 10, 0.55);
