@@ -9,7 +9,10 @@
       "Bash(bin/rails generate *)",
       "Bash(ruby -c app/helpers/application_helper.rb)",
       "Bash(ruby -ryaml -e 'YAML.load_file\\(\"config/locales/en.yml\"\\); YAML.load_file\\(\"config/locales/es.yml\"\\); YAML.load_file\\(\"config/locales/ru.yml\"\\); puts \"yaml ok\"')",
-      "Bash(bin/rails db:reset)"
+      "Bash(bin/rails db:reset)",
+      "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/homologation_requests/4 -o /tmp/admin4.html)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/pipeline -o /tmp/pipeline.html)"
     ]
   }
 }

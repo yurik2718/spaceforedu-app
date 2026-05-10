@@ -374,6 +374,29 @@ ru:
         decline_reason: "Причина — студент увидит её в чате"
       errors:
         decline_reason_required: "Укажите причину отказа — студент увидит её в чате."
+      navigation:
+        previous:    "Предыдущая"
+        next:        "Следующая"
+        position:    "%{position} из %{total}"
+      documents:
+        admin_intro: "Документы, загруженные студентом."
+      latest_message:
+        title: "Последнее сообщение"
+        empty: "В этом деле ещё нет сообщений."
+    pipeline:
+      inbox:
+        title:     "Inbox"
+        subtitle:  "Ждёт твоего вердикта или ответа"
+        empty:     "Inbox пуст. Ничего не ждёт твоего действия."
+      unread:      "Непрочитанные"
+      stale_hint:  "Без движения более 7 дней."
+
+  countries:
+    AR: "Аргентина"
+    CO: "Колумбия"
+    ES: "Испания"
+    MX: "Мексика"
+    RU: "Россия"
 
   footer:
     about:    "О нас"

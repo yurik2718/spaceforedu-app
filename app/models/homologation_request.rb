@@ -1,8 +1,9 @@
 class HomologationRequest < ApplicationRecord
   belongs_to :user
-  belongs_to :status_changer,    class_name: "User", optional: true, foreign_key: :status_changed_by
-  belongs_to :payment_confirmer, class_name: "User", optional: true, foreign_key: :payment_confirmed_by
-  belongs_to :pipeline_changer,  class_name: "User", optional: true, foreign_key: :pipeline_changed_by
+  # Audit-trail accessors — accessed at most once per page and often nil; let them lazy-load.
+  belongs_to :status_changer,    class_name: "User", optional: true, foreign_key: :status_changed_by,    strict_loading: false
+  belongs_to :payment_confirmer, class_name: "User", optional: true, foreign_key: :payment_confirmed_by, strict_loading: false
+  belongs_to :pipeline_changer,  class_name: "User", optional: true, foreign_key: :pipeline_changed_by,  strict_loading: false
   has_one    :conversation, dependent: :destroy
 
   has_many_attached :documents

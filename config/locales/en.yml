@@ -372,6 +372,29 @@ en:
         decline_reason: "Reason — the student will see this in chat"
       errors:
         decline_reason_required: "Add a reason for the decline — the student will see it in chat."
+      navigation:
+        previous:    "Previous"
+        next:        "Next"
+        position:    "%{position} of %{total}"
+      documents:
+        admin_intro: "Documents uploaded by the student."
+      latest_message:
+        title: "Latest message"
+        empty: "No messages on this case yet."
+    pipeline:
+      inbox:
+        title:     "Inbox"
+        subtitle:  "Needs your verdict or reply"
+        empty:     "Inbox clear. Nothing is waiting on you."
+      unread:      "Unread"
+      stale_hint:  "No movement for over 7 days."
+
+  countries:
+    AR: "Argentina"
+    CO: "Colombia"
+    ES: "Spain"
+    MX: "Mexico"
+    RU: "Russia"
 
   footer:
     about:    "About"

@@ -372,6 +372,29 @@ es:
         decline_reason: "Motivo — el estudiante lo verá en el chat"
       errors:
         decline_reason_required: "Indica un motivo para el rechazo — el estudiante lo verá en el chat."
+      navigation:
+        previous:    "Anterior"
+        next:        "Siguiente"
+        position:    "%{position} de %{total}"
+      documents:
+        admin_intro: "Documentos subidos por el estudiante."
+      latest_message:
+        title: "Último mensaje"
+        empty: "Aún no hay mensajes en este expediente."
+    pipeline:
+      inbox:
+        title:     "Inbox"
+        subtitle:  "Necesita tu veredicto o respuesta"
+        empty:     "Inbox limpio. Nada espera tu acción."
+      unread:      "Sin leer"
+      stale_hint:  "Sin movimiento desde hace más de 7 días."
+
+  countries:
+    AR: "Argentina"
+    CO: "Colombia"
+    ES: "España"
+    MX: "México"
+    RU: "Rusia"
 
   footer:
     about:    "Sobre nosotros"

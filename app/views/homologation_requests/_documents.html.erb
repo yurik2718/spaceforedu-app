@@ -1,8 +1,10 @@
 <%# Locals:
-      hr      — HomologationRequest
-      can_edit — boolean (uploader + delete buttons visible only when true) %>
+      hr       — HomologationRequest
+      can_edit — boolean (uploader + delete buttons visible only when true)
+      intro    — optional String, copy under the section title; omit to use the student-facing default %>
 <%
-  attachments = hr.documents.attachments.order(created_at: :desc)
+  attachments  = hr.documents.attachments.order(created_at: :desc)
+  intro_text   = local_assigns.fetch(:intro, t("requests.attachments.intro"))
 %>
 <%= turbo_frame_tag dom_id(hr, :documents) do %>
 <div class="card bg-canvas border border-hairline-soft md:col-span-2">
@@ -10,7 +12,9 @@
     <header class="flex items-center justify-between gap-3">
       <div>
         <h3 class="card-title text-base"><%= t("requests.sections.attachments") %></h3>
-        <p class="text-sm text-mute mt-1"><%= t("requests.attachments.intro") %></p>
+        <% if intro_text.present? %>
+          <p class="text-sm text-mute mt-1"><%= intro_text %></p>
+        <% end %>
       </div>
       <span class="text-sm font-mono text-mute tabular-nums"><%= attachments.size %></span>
     </header>
