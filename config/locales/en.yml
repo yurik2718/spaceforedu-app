@@ -7,6 +7,8 @@ en:
     invalid_credentials:           "Try another email address or password."
     passwords_mismatch:            "Passwords did not match."
     password_reset_token_invalid:  "Password reset link is invalid or has expired."
+    avatar_invalid_type:           "must be a JPEG, PNG, WebP or GIF image"
+    avatar_too_large:              "must be %{max} MB or smaller"
 
   flash:
     request_created:        "Request created."
@@ -51,6 +53,10 @@ en:
     fields:
       name:                  "Name"
       email_address:         "Email"
+      avatar:                "Profile picture"
+      avatar_hint:           "JPEG, PNG, WebP or GIF, up to 5 MB."
+      avatar_choose:         "Choose a picture…"
+      avatar_remove:         "Remove current picture"
       country:               "Country"
       birthday:              "Date of birth"
       phone:                 "Phone"
@@ -337,6 +343,13 @@ en:
         confirmed_at:  "Confirmed at"
         confirmed_by:  "Confirmed by"
         retreat_reason: "Reason"
+
+  footer:
+    about:    "About"
+    pricing:  "Pricing"
+    legal:    "Legal notice"
+    cookies:  "Cookies"
+    contact:  "Contact"
 
   nav:
     dashboard:     "Dashboard"

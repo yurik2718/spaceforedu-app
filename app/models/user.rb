@@ -6,6 +6,16 @@ class User < ApplicationRecord
   has_many :notifications,          dependent: :destroy
   has_many :push_subscriptions,     dependent: :destroy
 
+  has_one_attached :avatar
+
+  AVATAR_CONTENT_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
+  AVATAR_MAX_BYTES     = 5.megabytes
+
+  validate :acceptable_avatar
+
+  attr_accessor :remove_avatar
+  before_save { avatar.purge if remove_avatar == "1" }
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   attribute :privacy_accepted, :boolean
@@ -44,6 +54,7 @@ class User < ApplicationRecord
       request.application_file.purge_later
     end
 
+    avatar.purge_later
     sessions.destroy_all
     notifications.destroy_all
 
@@ -102,4 +113,18 @@ class User < ApplicationRecord
       i18n_vars:  vars
     )
   end
+
+  private
+    def acceptable_avatar
+      return unless avatar.attached?
+
+      unless AVATAR_CONTENT_TYPES.include?(avatar.content_type)
+        errors.add(:avatar, I18n.t("errors.avatar_invalid_type"))
+      end
+
+      if avatar.byte_size > AVATAR_MAX_BYTES
+        errors.add(:avatar, I18n.t("errors.avatar_too_large",
+                                   max: AVATAR_MAX_BYTES / 1.megabyte))
+      end
+    end
 end

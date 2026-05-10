@@ -6,12 +6,24 @@
 
 <%= form_with model: @user, url: profile_path, class: "card bg-canvas border border-hairline-soft" do |f| %>
 
-  <%# Identity header — who is being edited %>
-  <div class="flex items-center gap-3 px-6 py-4 border-b border-hairline-soft">
-    <%= render "shared/avatar", user: @user, size: :sm %>
-    <div class="min-w-0">
+  <%# Identity header — avatar upload + who is being edited %>
+  <div class="flex items-center gap-4 px-6 py-4 border-b border-hairline-soft">
+    <%= render "shared/avatar", user: @user, size: :lg %>
+    <div class="min-w-0 flex-1">
       <p class="font-semibold text-sm text-ink truncate"><%= @user.name %></p>
-      <p class="text-xs text-mute truncate"><%= @user.email_address %></p>
+      <p class="text-xs text-mute truncate mb-2"><%= @user.email_address %></p>
+      <%= f.label :avatar, t("profile.fields.avatar_choose"),
+            class: "btn btn-secondary btn-sm cursor-pointer" %>
+      <%= f.file_field :avatar, accept: User::AVATAR_CONTENT_TYPES.join(","), class: "sr-only" %>
+      <% if @user.avatar.attached? %>
+        <label class="text-xs text-mute ml-2 cursor-pointer hover:text-ink">
+          <%= f.check_box :remove_avatar, class: "sr-only peer" %>
+          <span class="peer-checked:line-through peer-checked:text-error">
+            <%= t("profile.fields.avatar_remove") %>
+          </span>
+        </label>
+      <% end %>
+      <p class="text-xs text-mute mt-1.5"><%= t("profile.fields.avatar_hint") %></p>
     </div>
   </div>
 

@@ -6,7 +6,9 @@
       "Bash(bin/rails db:migrate)",
       "Bash(bin/rails test *)",
       "Bash(bin/rails routes *)",
-      "Bash(bin/rails generate *)"
+      "Bash(bin/rails generate *)",
+      "Bash(ruby -c app/helpers/application_helper.rb)",
+      "Bash(ruby -ryaml -e 'YAML.load_file\\(\"config/locales/en.yml\"\\); YAML.load_file\\(\"config/locales/es.yml\"\\); YAML.load_file\\(\"config/locales/ru.yml\"\\); puts \"yaml ok\"')"
     ]
   }
 }

@@ -7,6 +7,8 @@ es:
     invalid_credentials:           "Correo o contraseña incorrectos."
     passwords_mismatch:            "Las contraseñas no coinciden."
     password_reset_token_invalid:  "El enlace de recuperación no es válido o ha expirado."
+    avatar_invalid_type:           "debe ser una imagen JPEG, PNG, WebP o GIF"
+    avatar_too_large:              "no puede superar %{max} MB"
 
   flash:
     request_created:        "Solicitud creada."
@@ -51,6 +53,10 @@ es:
     fields:
       name:                  "Nombre"
       email_address:         "Email"
+      avatar:                "Foto de perfil"
+      avatar_hint:           "JPEG, PNG, WebP o GIF, hasta 5 MB."
+      avatar_choose:         "Elige una imagen…"
+      avatar_remove:         "Quitar imagen actual"
       country:               "País"
       birthday:              "Fecha de nacimiento"
       phone:                 "Teléfono"
@@ -337,6 +343,13 @@ es:
         confirmed_at:  "Confirmado el"
         confirmed_by:  "Confirmado por"
         retreat_reason: "Motivo"
+
+  footer:
+    about:    "Sobre nosotros"
+    pricing:  "Precios"
+    legal:    "Aviso legal"
+    cookies:  "Cookies"
+    contact:  "Contacto"
 
   nav:
     dashboard:     "Panel"

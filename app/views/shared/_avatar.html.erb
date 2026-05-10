@@ -1,8 +1,16 @@
-<%# Renders the user's avatar.
+<%# Renders the user's avatar — uploaded image if attached, generated SVG otherwise.
     Locals:
       user        — required, responds to #initials and #name
       size        — :xs | :sm | :md (default) | :lg | :xl
-      extra_class — extra Tailwind classes to merge onto the <svg> %>
-<%= avatar_svg(user,
-      size: local_assigns[:size] || :md,
-      extra_class: local_assigns[:extra_class]) %>
+      extra_class — extra Tailwind classes to merge onto the element %>
+<%
+  size_key = (local_assigns[:size] || :md).to_sym
+  px       = AvatarHelper::AVATAR_SIZES.fetch(size_key, AvatarHelper::AVATAR_SIZES[:md])[:px]
+  classes  = "rounded-full shrink-0 select-none block #{local_assigns[:extra_class]}".strip
+%>
+<% if user&.avatar&.attached? %>
+  <%= image_tag user.avatar.variant(resize_to_fill: [ px * 2, px * 2 ]),
+        width: px, height: px, alt: user.name.to_s, class: "#{classes} object-cover" %>
+<% else %>
+  <%= avatar_svg(user, size: size_key, extra_class: local_assigns[:extra_class]) %>
+<% end %>

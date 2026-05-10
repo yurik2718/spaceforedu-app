@@ -7,6 +7,8 @@ ru:
     invalid_credentials:           "Неверный email или пароль."
     passwords_mismatch:            "Пароли не совпадают."
     password_reset_token_invalid:  "Ссылка для сброса пароля недействительна или истекла."
+    avatar_invalid_type:           "должно быть изображение JPEG, PNG, WebP или GIF"
+    avatar_too_large:              "не должно превышать %{max} МБ"
 
   flash:
     request_created:        "Заявка создана."
@@ -53,6 +55,10 @@ ru:
     fields:
       name:                  "Имя"
       email_address:         "Email"
+      avatar:                "Фото профиля"
+      avatar_hint:           "JPEG, PNG, WebP или GIF, до 5 МБ."
+      avatar_choose:         "Выберите изображение…"
+      avatar_remove:         "Удалить текущее"
       country:               "Страна"
       birthday:              "Дата рождения"
       phone:                 "Телефон"
@@ -339,6 +345,13 @@ ru:
         confirmed_at:  "Подтверждено"
         confirmed_by:  "Подтвердил"
         retreat_reason: "Причина"
+
+  footer:
+    about:    "О нас"
+    pricing:  "Цены"
+    legal:    "Правовая информация"
+    cookies:  "Cookies"
+    contact:  "Контакты"
 
   nav:
     dashboard:     "Панель"

@@ -62,6 +62,12 @@ module ApplicationHelper
     Rails.application.credentials.dig(:brand, :location) || "City, Country"
   end
 
+  def marketing_url(path = nil)
+    base = Rails.application.credentials.dig(:brand, :marketing_url) || "https://spaceforedu.com"
+    suffix = path.present? ? "#{path}/" : ""
+    "#{base}/#{I18n.locale}/#{suffix}"
+  end
+
   def brand_name
     Rails.application.credentials.dig(:brand, :name) || "Space for Edu"
   end

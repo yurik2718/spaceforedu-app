@@ -32,10 +32,11 @@ class ProfilesController < ApplicationController
 
   private
     def profile_params
-      params.expect(user: %i[
-        name country locale phone whatsapp
-        notification_email notification_telegram
-        guardian_name guardian_email guardian_phone
+      params.expect(user: [
+        :name, :country, :locale, :phone, :whatsapp,
+        :notification_email, :notification_telegram,
+        :guardian_name, :guardian_email, :guardian_phone,
+        :avatar, :remove_avatar
       ])
     end
 
