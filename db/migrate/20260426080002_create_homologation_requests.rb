@@ -4,10 +4,10 @@ class CreateHomologationRequests < ActiveRecord::Migration[8.1]
       t.references :user, null: false, foreign_key: true
 
       # Core
-      t.string  :subject,      null: false
+      t.string  :subject,  null: false
       t.text    :description
-      t.string  :service_type, null: false
-      t.string  :status,       null: false, default: "draft"
+      t.string  :plan_key, null: false
+      t.string  :status,   null: false, default: "draft"
       t.boolean :privacy_accepted, null: false, default: false
 
       # Education details
@@ -27,11 +27,11 @@ class CreateHomologationRequests < ActiveRecord::Migration[8.1]
       t.string  :pipeline_stage
       t.text    :pipeline_notes
 
-      # Payment
-      t.decimal  :payment_amount, precision: 10, scale: 2
+      # Payment — amount is derived from plan_key (see Plan model). Don't store it.
+      # Stripe linkage flows through PaymentIntent.metadata.homologation_request_id;
+      # no column needed.
       t.datetime :payment_confirmed_at
       t.integer  :payment_confirmed_by
-      t.string   :stripe_payment_intent_id
 
       # Status tracking
       t.datetime :status_changed_at
@@ -53,7 +53,11 @@ class CreateHomologationRequests < ActiveRecord::Migration[8.1]
     add_foreign_key :homologation_requests, :users, column: :status_changed_by
 
     add_check_constraint :homologation_requests,
-      "status IN ('draft','submitted','in_review','awaiting_reply','awaiting_payment','payment_confirmed','in_progress','resolved','closed')",
+      "status IN ('draft','submitted','in_review','awaiting_reply','awaiting_payment','payment_confirmed','in_progress','resolved','closed','declined')",
       name: "valid_status"
+
+    add_check_constraint :homologation_requests,
+      "plan_key IN ('basico','completo','premium')",
+      name: "valid_plan_key"
   end
 end

@@ -4,7 +4,7 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
   setup do
     @student = users(:student_es)
     @draft   = @student.homologation_requests.create!(
-      subject: "Draft for upload", service_type: "homologation",
+      subject: "Draft for upload", plan_key: "basico",
       status: "draft", privacy_accepted: true
     )
   end
@@ -57,7 +57,7 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
 
   test "uploading documents while awaiting_reply pings the super admin" do
     awaiting_reply = @student.homologation_requests.create!(
-      subject: "Reply needed", service_type: "homologation",
+      subject: "Reply needed", plan_key: "basico",
       status: "awaiting_reply", privacy_accepted: true
     )
     admin = users(:admin)

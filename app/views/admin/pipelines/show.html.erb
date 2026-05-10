@@ -38,6 +38,11 @@
                     class: "block rounded-xl border border-hairline-soft bg-canvas px-3 py-2 hover:border-ink hover:bg-surface-soft transition no-underline" do %>
                 <p class="font-medium text-sm text-ink truncate"><%= request_record.user.name %></p>
                 <p class="text-xs text-mute truncate mt-0.5"><%= request_record.subject %></p>
+                <p class="text-[11px] text-ash truncate mt-1.5 font-mono tabular-nums">
+                  <%= request_record.plan.title %>
+                  <span aria-hidden="true">·</span>
+                  <%= t("requests.timeline.updated_at") %> <%= time_ago_in_words(request_record.updated_at) %>
+                </p>
               <% end %>
             <% end %>
           </div>

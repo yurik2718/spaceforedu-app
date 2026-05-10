@@ -15,6 +15,14 @@ module Stripe
            }
     end
 
+    def event_payload(id:, type:, request_id: nil, intent_id: "pi_test_1")
+      {
+        id:   id,
+        type: type,
+        data: { object: { id: intent_id, metadata: { homologation_request_id: request_id } } }
+      }.to_json
+    end
+
     test "POST without a Stripe-Signature header returns 400" do
       post "/stripe/webhooks",
            params: '{"id":"evt_test","type":"payment_intent.succeeded"}',
@@ -42,13 +50,7 @@ module Stripe
 
     test "payment_intent.succeeded confirms payment on the matching request" do
       request = homologation_requests(:awaiting_payment)
-      payload = {
-        id:   "evt_pi_succeeded_1",
-        type: "payment_intent.succeeded",
-        data: { object: { id: request.stripe_payment_intent_id } }
-      }.to_json
-
-      post_signed_event payload
+      post_signed_event event_payload(id: "evt_pi_succeeded_1", type: "payment_intent.succeeded", request_id: request.id)
 
       assert_response :ok
       assert_equal "payment_confirmed", request.reload.status
@@ -58,41 +60,37 @@ module Stripe
     test "payment_intent.succeeded notifies the super admin that the payment arrived" do
       request = homologation_requests(:awaiting_payment)
       admin   = users(:admin)
-      payload = {
-        id:   "evt_pi_succeeded_admin_notif",
-        type: "payment_intent.succeeded",
-        data: { object: { id: request.stripe_payment_intent_id } }
-      }.to_json
 
       assert_difference -> {
         admin.notifications.where(notifiable: request, title_key: "notifications.payment_received.title").count
       }, 1 do
-        post_signed_event payload
+        post_signed_event event_payload(id: "evt_pi_succeeded_admin_notif", type: "payment_intent.succeeded", request_id: request.id)
       end
     end
 
     test "payment_intent.payment_failed notifies the super admin" do
       request = homologation_requests(:awaiting_payment)
       admin   = users(:admin)
-      payload = {
-        id:   "evt_pi_failed_1",
-        type: "payment_intent.payment_failed",
-        data: { object: { id: request.stripe_payment_intent_id } }
-      }.to_json
 
       assert_difference -> { admin.notifications.where(notifiable: request).count }, 1 do
-        post_signed_event payload
+        post_signed_event event_payload(id: "evt_pi_failed_1", type: "payment_intent.payment_failed", request_id: request.id)
       end
 
       assert_response :ok
       assert_equal "awaiting_payment", request.reload.status
     end
 
-    test "payment_intent.succeeded for an unknown intent id returns 200 without crashing" do
+    test "payment_intent.succeeded for an unknown request id returns 200 without crashing" do
+      post_signed_event event_payload(id: "evt_pi_unknown", type: "payment_intent.succeeded", request_id: 999_999)
+
+      assert_response :ok
+    end
+
+    test "payment_intent.succeeded with no metadata returns 200 without crashing" do
       payload = {
-        id:   "evt_pi_unknown",
+        id:   "evt_pi_no_metadata",
         type: "payment_intent.succeeded",
-        data: { object: { id: "pi_does_not_exist_anywhere" } }
+        data: { object: { id: "pi_no_meta" } }
       }.to_json
 
       post_signed_event payload
@@ -102,11 +100,7 @@ module Stripe
 
     test "redelivered event with the same id is a no-op" do
       request = homologation_requests(:awaiting_payment)
-      payload = {
-        id:   "evt_pi_succeeded_dup",
-        type: "payment_intent.succeeded",
-        data: { object: { id: request.stripe_payment_intent_id } }
-      }.to_json
+      payload = event_payload(id: "evt_pi_succeeded_dup", type: "payment_intent.succeeded", request_id: request.id)
 
       post_signed_event payload
       assert_response :ok
@@ -119,6 +113,20 @@ module Stripe
       assert_response :ok
       assert_equal first_confirmed_at, request.reload.payment_confirmed_at,
                    "duplicate event must not overwrite payment_confirmed_at"
+    end
+
+    test "delayed succeeded webhook is idempotent and does not reset pipeline_stage" do
+      request = homologation_requests(:awaiting_payment)
+      admin   = users(:admin)
+      request.confirm_payment!(confirmed_by: admin)
+      request.advance_pipeline!(changed_by: admin)
+      stage_before = request.reload.pipeline_stage
+      assert_not_equal PipelineFlow::STARTING_STAGE, stage_before
+
+      post_signed_event event_payload(id: "evt_pi_succeeded_late", type: "payment_intent.succeeded", request_id: request.id)
+
+      assert_response :ok
+      assert_equal stage_before, request.reload.pipeline_stage
     end
   end
 end

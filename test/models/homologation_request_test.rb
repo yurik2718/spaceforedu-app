@@ -222,11 +222,11 @@ class HomologationRequestTest < ActiveSupport::TestCase
     assert @request.errors[:documents].any?
   end
 
-  test "transition_to!(submitted) rejects a draft with no application_file or documents" do
+  test "transition_to!(submitted) rejects a draft with no documents" do
      draft = HomologationRequest.create!(
       user:             users(:student_es),
       subject:          "Empty draft",
-      service_type:     "homologation",
+      plan_key: "basico",
       privacy_accepted: true
     )
 
@@ -236,16 +236,29 @@ class HomologationRequestTest < ActiveSupport::TestCase
     assert_equal "draft", draft.reload.status
   end
 
-  test "originals and application_file enforce the same content_type rule as documents" do
-    @request.originals.attach(
-      io: StringIO.new("plain"), filename: "x.txt", content_type: "text/plain"
-    )
-    @request.application_file.attach(
-      io: StringIO.new("plain"), filename: "y.txt", content_type: "text/plain"
-    )
+  test "transition_to! refuses to leave a terminal status" do
+    request = homologation_requests(:at_completado)
+    assert request.terminal?
 
-    refute @request.valid?
-    assert @request.errors[:originals].any?
-    assert @request.errors[:application_file].any?
+    assert_raises(HomologationRequest::InvalidTransition) do
+      request.transition_to!("in_progress", changed_by: @admin)
+    end
+    assert_equal "resolved", request.reload.status
+  end
+
+  test "confirm_payment! is a no-op when payment_confirmed_at is already set" do
+    request = homologation_requests(:awaiting_payment)
+    request.confirm_payment!(confirmed_by: @admin)
+    request.advance_pipeline!(changed_by: @admin)
+    stage_after_advance      = request.reload.pipeline_stage
+    confirmed_at_after_first = request.payment_confirmed_at
+
+    travel 1.hour do
+      request.confirm_payment!(confirmed_by: @admin)
+    end
+
+    request.reload
+    assert_equal stage_after_advance,      request.pipeline_stage
+    assert_equal confirmed_at_after_first, request.payment_confirmed_at
   end
 end

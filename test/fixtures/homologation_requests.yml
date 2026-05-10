@@ -1,10 +1,9 @@
 in_pipeline_es:
   user: student_es
   subject: Bachelor diploma
-  service_type: homologation
+  plan_key: basico
   status: payment_confirmed
   pipeline_stage: documentos
-  payment_amount: 350.00
   payment_confirmed_at: <%= 1.day.ago %>
   privacy_accepted: true
   document_checklist: '{"sol":true,"vol":false}'
@@ -12,56 +11,50 @@ in_pipeline_es:
 at_redsara_es:
   user: student_es
   subject: Master diploma
-  service_type: homologation
+  plan_key: completo
   status: payment_confirmed
   pipeline_stage: redsara
-  payment_amount: 500.00
   payment_confirmed_at: <%= 2.days.ago %>
   privacy_accepted: true
 
 at_redsara_other:
   user: student_other
   subject: Bachelor diploma
-  service_type: homologation
+  plan_key: basico
   status: payment_confirmed
   pipeline_stage: redsara
-  payment_amount: 400.00
   payment_confirmed_at: <%= 2.days.ago %>
   privacy_accepted: true
 
 at_completado:
   user: student_es
   subject: Old request
-  service_type: homologation
+  plan_key: basico
   status: resolved
   pipeline_stage: completado
-  payment_amount: 300.00
   payment_confirmed_at: <%= 30.days.ago %>
   privacy_accepted: true
 
 at_pago_recibido:
   user: student_es
   subject: Diploma at pipeline start
-  service_type: homologation
+  plan_key: basico
   status: payment_confirmed
   pipeline_stage: pago_recibido
-  payment_amount: 250.00
   payment_confirmed_at: <%= 1.hour.ago %>
   privacy_accepted: true
 
 awaiting_payment:
   user: student_es
   subject: Diploma awaiting payment
-  service_type: homologation
+  plan_key: completo
   status: awaiting_payment
-  payment_amount: 200.00
-  stripe_payment_intent_id: pi_test_awaiting_payment
   privacy_accepted: true
 
 discarded:
   user: student_es
   subject: Discarded request
-  service_type: homologation
+  plan_key: basico
   status: closed
   privacy_accepted: true
   discarded_at: <%= 1.day.ago %>

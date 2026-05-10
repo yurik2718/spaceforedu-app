@@ -1,6 +1,6 @@
 class Message < ApplicationRecord
-  belongs_to :conversation
-  belongs_to :user
+  belongs_to :conversation, strict_loading: false
+  belongs_to :user,         strict_loading: false
   has_many_attached :attachments
 
   validates :body, presence: true
@@ -8,20 +8,10 @@ class Message < ApplicationRecord
   after_create_commit -> { broadcast_append_to conversation }
   after_create_commit :touch_conversation
   after_create_commit :notify_counterpart
-  after_create_commit :auto_advance_request_status
 
   private
     def touch_conversation
       conversation.update!(last_message_at: created_at)
-    end
-
-    def auto_advance_request_status
-      request = conversation.homologation_request
-      return unless user_id == request.user_id && request.status == "awaiting_reply"
-
-      request.transition_to!("in_review", changed_by: user)
-    rescue HomologationRequest::InvalidTransition
-      nil
     end
 
     def notify_counterpart

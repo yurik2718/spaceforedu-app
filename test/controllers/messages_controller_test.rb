@@ -53,4 +53,40 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
          params: { message: { body: "Hello" } }
     assert_redirected_to new_session_url
   end
+
+  test "student reply on awaiting_reply request flips status to in_review" do
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+
+    sign_in_as @student
+    post conversation_messages_url(@conversation),
+         params: { message: { body: "here you go" } },
+         as: :turbo_stream
+
+    assert_equal "in_review", request.reload.status
+  end
+
+  test "admin reply on awaiting_reply request leaves status unchanged" do
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+
+    sign_in_as @admin
+    post conversation_messages_url(@conversation),
+         params: { message: { body: "still waiting" } },
+         as: :turbo_stream
+
+    assert_equal "awaiting_reply", request.reload.status
+  end
+
+  test "auto-advance from a student message does not self-notify the student" do
+    request = @conversation.homologation_request
+    request.update_columns(status: "awaiting_reply", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+
+    sign_in_as @student
+    assert_no_difference -> { @student.notifications.count } do
+      post conversation_messages_url(@conversation),
+           params: { message: { body: "here you go" } },
+           as: :turbo_stream
+    end
+  end
 end

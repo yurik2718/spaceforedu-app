@@ -18,6 +18,8 @@ es:
     request_not_editable:   "Esta solicitud ya no se puede editar."
     request_not_submittable: "Esta solicitud no se puede enviar."
     payment_confirmed:      "Pago confirmado. Tu solicitud está en proceso."
+    request_declined:       "Solicitud marcada como rechazada. El estudiante recibirá un mensaje en el chat."
+    request_approved_for_payment: "Aprobada. El estudiante ya puede pagar."
     user_updated:           "Perfil actualizado."
     message_sent:           "Mensaje enviado."
     pipeline_advanced:      "Avanzada a la siguiente etapa."
@@ -150,6 +152,18 @@ es:
     privacy_accept_html:  "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
     have_account:         "¿Ya tienes una cuenta?"
 
+  plans:
+    compare_link: "Comparar planes en la web"
+    compare_url:  "https://spaceforedu.com/es/pricing/#plans"
+    basico:
+      title:      "Homologación"
+      short_desc: "Homologación de título con soporte experto completo."
+    completo:
+      title:      "Integral"
+      short_desc: "Homologación + admisión universitaria — el camino completo."
+    premium:
+      title:      "VIP — Máxima Garantía"
+
   pipeline:
     active:  "Activas"
     revenue: "Ingresos"
@@ -178,7 +192,7 @@ es:
       submit:    "Enviar solicitud"
       new:       "Nueva solicitud"
       open_chat: "Abrir chat"
-      submit_disabled_hint: "Sube primero todos los documentos de la lista."
+      submit_disabled_hint: "Sube primero al menos un documento."
     attachments:
       intro:           "Sube escaneos de tu título, pasaporte y otros documentos."
       empty:           "Aún no hay documentos adjuntos."
@@ -205,6 +219,8 @@ es:
       chat:      "Chat"
       status:    "Estado"
       pipeline_notes: "Notas del pipeline"
+      plan:      "Elige tu plan"
+      plan_description: "Puedes cambiarlo mientras la solicitud sea un borrador."
       diploma:   "Sobre tu título"
       diploma_description: "Dónde, cuándo y qué estudiaste."
       language:  "Nivel de español"
@@ -214,7 +230,7 @@ es:
     fields:
       subject:              "Asunto"
       description:          "Descripción"
-      service_type:         "Tipo de servicio"
+      plan_key:             "Plan"
       education_system:     "Sistema educativo"
       university:           "Universidad"
       year:                 "Año"
@@ -223,7 +239,6 @@ es:
       language_certificate: "Certificado de idioma"
       privacy_accepted:      "Acepto la política de privacidad."
       privacy_accepted_html: "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
-      payment_amount:       "Importe"
     placeholders:
       subject:              "Por ejemplo: Homologación de licenciatura"
       university:           "Por ejemplo: Universidad de Buenos Aires"
@@ -268,26 +283,32 @@ es:
       in_review:    "En revisión"
       in_progress:  "En proceso"
       resolved:     "Lista"
+    declined_note: "Tu gestor no ha podido aceptar este caso. Lee la explicación en el chat."
+    declined_card:
+      heading:    "Mensaje del gestor"
+      empty:      "Tu gestor escribirá la explicación en el chat."
+      open_chat:  "Ver conversación completa"
     timeline:
       created_at: "Creada"
       updated_at: "Actualizada"
     next_step:
       heading: "¿Qué sigue?"
       ready:        "Lista para enviar. Pulsa «Enviar solicitud» para que tu gestor reciba el caso."
-      missing_docs: "Sube los documentos restantes de la lista de verificación."
       missing_app:  "Adjunta al menos un documento para poder enviar la solicitud."
       submitted:    "Solicitud enviada. Te escribiremos por chat en cuanto empecemos a revisarla."
       in_review:    "Tu gestor está revisando la solicitud. Suele llevar entre 1 y 3 días."
       awaiting_reply:  "Esperamos aclaraciones o documentos adicionales — revisa el chat."
-      awaiting_payment: "El importe está fijado. Páguelo para continuar el trámite."
+      awaiting_payment: "Tu gestor ha aprobado el caso. Paga para que empecemos a trabajar."
       in_progress:     "Tu gestor está trabajando en el caso. Sigue el progreso en el chat."
       resolved:        "Todo listo. Revisa los documentos finales."
       closed:          "Solicitud cerrada. El archivo es de solo lectura."
+      declined:        "No podemos aceptar este caso. Lee la nota de tu gestor en el chat."
     payment:
-      not_set:      "Importe aún no fijado."
+      your_plan:    "Tu plan"
       confirmed_at: "Confirmado el"
       confirmed_by: "Confirmado por"
-      pay_now:      "Pagar ahora"
+      pay_now:      "Pagar %{amount}"
+      pay_subtitle: "Pago seguro a través de Stripe. Volverás aquí cuando termine."
     status:
       draft:             "Borrador"
       submitted:         "Enviada"
@@ -298,6 +319,7 @@ es:
       in_progress:       "En proceso"
       resolved:          "Resuelta"
       closed:            "Cerrada"
+      declined:          "Rechazada"
 
   roles:
     super_admin: "Administrador"
@@ -329,20 +351,27 @@ es:
         chat:           "Chat"
         pipeline_notes: "Notas del pipeline"
       actions:
-        change_status:    "Cambiar estado"
-        confirm_payment:  "Confirmar pago"
-        advance:          "Avanzar"
-        retreat:          "Retroceder"
-        retreat_modal:    "Retroceder a la etapa anterior"
-        start_chat:       "Iniciar conversación"
-        open_chat:        "Abrir conversación"
-        download_archive: "Descargar archivo"
+        change_status:        "Cambiar estado"
+        confirm_payment:      "Marcar como pagada"
+        approve_for_payment:  "Aprobar — abrir pago"
+        decline:              "Rechazar (no podemos ayudar)"
+        decline_modal:        "Rechazar esta solicitud"
+        decline_submit:       "Enviar rechazo"
+        advance:              "Avanzar"
+        retreat:              "Retroceder"
+        retreat_modal:        "Retroceder a la etapa anterior"
+        start_chat:           "Iniciar conversación"
+        open_chat:            "Abrir conversación"
+        download_archive:     "Descargar archivo"
       labels:
-        changed_at:    "Cambiado el"
-        changed_by:    "Cambiado por"
-        confirmed_at:  "Confirmado el"
-        confirmed_by:  "Confirmado por"
+        changed_at:     "Cambiado el"
+        changed_by:     "Cambiado por"
+        confirmed_at:   "Confirmado el"
+        confirmed_by:   "Confirmado por"
         retreat_reason: "Motivo"
+        decline_reason: "Motivo — el estudiante lo verá en el chat"
+      errors:
+        decline_reason_required: "Indica un motivo para el rechazo — el estudiante lo verá en el chat."
 
   footer:
     about:    "Sobre nosotros"

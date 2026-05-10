@@ -1,5 +1,5 @@
 class Conversation < ApplicationRecord
-  belongs_to :homologation_request
+  belongs_to :homologation_request, strict_loading: false
   has_many   :messages, dependent: :destroy
 
   def student
@@ -7,9 +7,8 @@ class Conversation < ApplicationRecord
   end
 
   def unread_for?(user)
-    return false unless messages.exists?
     last_read = user.super_admin? ? admin_last_read_at : student_last_read_at
-    last_read.nil? || messages.where("created_at > ?", last_read).exists?
+    messages.where("created_at > ?", last_read || Time.at(0)).exists?
   end
 
   def mark_read_for!(user)

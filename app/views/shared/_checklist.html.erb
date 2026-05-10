@@ -1,0 +1,74 @@
+<%#
+  Locals:
+    hr       — HomologationRequest
+    editable — boolean. Admin = true (toggleable checkboxes); student = false (read-only with descriptions).
+%>
+<%
+  keys  = PipelineFlow.checklist_keys
+  done  = keys.count { |k| hr.checklist_done?(k) }
+  total = keys.size
+%>
+
+<div class="card bg-canvas border border-hairline-soft <%= 'md:col-span-2' if editable %>">
+  <div class="card-body" style="--card-body-pad: 1.5rem">
+    <header class="flex items-start justify-between gap-2">
+      <div>
+        <h3 class="text-base font-semibold text-ink"><%= t("requests.sections.documents") %></h3>
+        <% unless editable %>
+          <p class="text-sm text-mute mt-0.5"><%= t("requests.sections.documents_subtitle") %></p>
+        <% end %>
+      </div>
+      <span class="text-sm font-mono text-mute tabular-nums shrink-0 mt-0.5"><%= done %>/<%= total %></span>
+    </header>
+
+    <progress class="progress <%= done == total ? 'progress-success' : 'progress-primary' %> w-full mt-3"
+              value="<%= done %>" max="<%= total %>"></progress>
+
+    <% if editable %>
+      <ul class="mt-3 grid gap-1 sm:grid-cols-2">
+        <% keys.each do |key| %>
+          <li>
+            <%= form_with url: admin_homologation_request_document_checklist_path(hr),
+                          method: :patch,
+                          scope: :document_checklist,
+                          data: { controller: "auto-submit" },
+                          class: "flex items-center gap-2 py-1" do |f| %>
+              <%= f.hidden_field :key, value: key %>
+              <%= f.hidden_field :value, value: (hr.checklist_done?(key) ? "0" : "1") %>
+              <input type="checkbox" class="checkbox checkbox-sm"
+                     <%= "checked" if hr.checklist_done?(key) %>
+                     data-action="auto-submit#submit">
+              <span class="text-sm <%= 'line-through text-ash' if hr.checklist_done?(key) %>">
+                <%= t("requests.checklist.#{key}") %>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <ul class="mt-4 -mx-2">
+        <% keys.each do |key| %>
+          <% is_done = hr.checklist_done?(key) %>
+          <li>
+            <details class="group rounded-md hover:bg-surface-soft">
+              <summary class="flex items-center gap-2 px-2 py-1.5 cursor-pointer list-none text-sm">
+                <% if is_done %>
+                  <%= heroicon "check-circle", variant: :solid, options: { class: "w-5 h-5 text-success shrink-0", "aria-hidden": true } %>
+                <% else %>
+                  <%= heroicon "clock", variant: :solid, options: { class: "w-5 h-5 text-ash shrink-0", "aria-hidden": true } %>
+                <% end %>
+                <span class="flex-1 <%= is_done ? 'text-ash' : 'text-ink' %>">
+                  <%= t("requests.checklist.#{key}") %>
+                </span>
+                <%= heroicon "chevron-down", options: { class: "w-4 h-4 text-ash transition-transform group-open:rotate-180", "aria-hidden": true } %>
+              </summary>
+              <p class="px-9 pb-2 pt-0.5 text-xs text-mute leading-relaxed">
+                <%= t("requests.checklist_descriptions.#{key}", default: "") %>
+              </p>
+            </details>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>

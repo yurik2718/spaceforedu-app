@@ -50,8 +50,6 @@ class User < ApplicationRecord
   def anonymize!
     homologation_requests.each do |request|
       request.documents.purge_later
-      request.originals.purge_later
-      request.application_file.purge_later
     end
 
     avatar.purge_later

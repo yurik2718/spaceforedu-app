@@ -40,4 +40,27 @@ class Admin::HomologationRequests::StatusTransitionsControllerTest < ActionDispa
          params: { status_transition: { status: "in_review" } }
     assert_redirected_to new_session_path
   end
+
+  test "declined without a reason is rejected with an alert" do
+    sign_in_as @admin
+    post admin_homologation_request_status_transitions_path(@homologation_request),
+         params: { status_transition: { status: "declined", reason: "  " } }
+
+    assert_redirected_to admin_homologation_request_path(@homologation_request)
+    assert_equal I18n.t("admin.requests.errors.decline_reason_required"), flash[:alert]
+    assert_equal "awaiting_payment", @homologation_request.reload.status
+  end
+
+  test "declined with a reason posts the reason as a chat message and flips status" do
+    sign_in_as @admin
+    @homologation_request.update_columns(status: "in_review", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+
+    assert_difference -> { Message.count }, 1 do
+      post admin_homologation_request_status_transitions_path(@homologation_request),
+           params: { status_transition: { status: "declined", reason: "Documento no elegible." } }
+    end
+
+    assert_equal "declined", @homologation_request.reload.status
+    assert_equal "Documento no elegible.", @homologation_request.conversation.messages.last.body
+  end
 end

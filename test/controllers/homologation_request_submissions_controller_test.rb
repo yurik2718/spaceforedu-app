@@ -5,9 +5,8 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
     @student = users(:student_es)
     @other   = users(:student_other)
     @draft   = @student.homologation_requests.create!(
-      subject: "draft", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
-    @draft.application_file.attach(io: StringIO.new("pdf"), filename: "app.pdf", content_type: "application/pdf")
     @draft.documents.attach(io: StringIO.new("pdf"), filename: "doc.pdf", content_type: "application/pdf")
   end
 
@@ -37,7 +36,7 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
   test "POST create on a non-draft status redirects with an alert" do
     sign_in_as @student
     submitted = @student.homologation_requests.create!(
-      subject: "x", service_type: "homologation", status: "submitted", privacy_accepted: true
+      subject: "x", plan_key: "basico", status: "submitted", privacy_accepted: true
     )
 
     post homologation_request_submission_path(submitted)
@@ -62,7 +61,7 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
   test "POST create on a draft missing attachments shows the alert and stays in draft" do
     sign_in_as @student
     empty_draft = @student.homologation_requests.create!(
-      subject: "empty", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "empty", plan_key: "basico", status: "draft", privacy_accepted: true
     )
 
     post homologation_request_submission_path(empty_draft)

@@ -8,6 +8,10 @@ module ApplicationHelper
     end
   end
 
+  def format_eur(amount)
+    number_to_currency amount, unit: "€", format: "%n %u", precision: 0
+  end
+
   def status_badge_class(status)
     case status
     when "draft"                        then "badge-neutral"
@@ -16,6 +20,7 @@ module ApplicationHelper
          "awaiting_payment"             then "badge-warning"
     when "payment_confirmed", "resolved" then "badge-success"
     when "in_progress"                  then "badge-primary"
+    when "declined"                     then "badge-error"
     when "closed"                       then "badge-neutral"
     else                                     "badge-neutral"
     end

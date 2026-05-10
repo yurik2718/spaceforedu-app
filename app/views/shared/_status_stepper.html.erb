@@ -5,7 +5,8 @@
   Maps every backend status to one of 5 visual milestones:
     draft → submitted → in_review → in_progress → resolved
   awaiting_reply collapses to in_review; awaiting_payment / payment_confirmed
-  collapse to in_progress; closed renders as a dimmed terminal state.
+  collapse to in_progress; closed renders as a dimmed terminal state;
+  declined renders dimmed with a separate explanation underneath.
 %>
 <%
   steps = %w[draft submitted in_review in_progress resolved]
@@ -18,11 +19,14 @@
     "payment_confirmed" => "in_progress",
     "in_progress"       => "in_progress",
     "resolved"          => "resolved",
-    "closed"            => "resolved"
+    "closed"            => "resolved",
+    "declined"          => "in_review"
   }
   current     = collapse.fetch(status, "draft")
   current_idx = steps.index(current) || 0
   closed      = status == "closed"
+  declined    = status == "declined"
+  dimmed      = closed || declined
 %>
 
 <ol class="flex items-center gap-0 w-full">
@@ -35,18 +39,21 @@
     <li class="flex items-center <%= 'flex-1' unless i == steps.size - 1 %>">
       <div class="flex flex-col items-center gap-1.5 shrink-0">
         <span class="w-7 h-7 rounded-full inline-flex items-center justify-center text-xs font-semibold
-                     <%= 'bg-primary text-on-primary' if active %>
+                     <%= 'bg-error text-on-primary'   if active && declined %>
+                     <%= 'bg-primary text-on-primary' if active && !declined %>
                      <%= 'bg-ink text-on-dark'        if done %>
-                     <%= 'bg-surface-card text-ash'   if future || (closed && i >= current_idx) %>">
+                     <%= 'bg-surface-card text-ash'   if future || (dimmed && i >= current_idx) %>">
           <% if done %>
             <%= heroicon "check", options: { class: "w-4 h-4", "aria-hidden": true } %>
+          <% elsif active && declined %>
+            <%= heroicon "x-mark", options: { class: "w-4 h-4", "aria-hidden": true } %>
           <% else %>
             <%= i + 1 %>
           <% end %>
         </span>
         <span class="text-xs font-medium whitespace-nowrap
                      <%= 'text-ink'  if active || done %>
-                     <%= 'text-ash'  if future || (closed && i >= current_idx) %>">
+                     <%= 'text-ash'  if future || (dimmed && i >= current_idx) %>">
           <%= t("requests.stepper.#{step}") %>
         </span>
       </div>
@@ -64,5 +71,9 @@
 <% if closed %>
   <p class="text-xs text-mute mt-3 text-center">
     <%= t("requests.status.closed") %>
+  </p>
+<% elsif declined %>
+  <p class="text-xs text-error mt-3 text-center font-medium">
+    <%= t("requests.declined_note") %>
   </p>
 <% end %>

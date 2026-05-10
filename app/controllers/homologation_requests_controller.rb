@@ -5,7 +5,8 @@ class HomologationRequestsController < ApplicationController
   end
 
   def new
-    @homologation_request = Current.user.homologation_requests.new(service_type: "homologation")
+    plan_key = params[:plan].to_s.presence_in(Plan::KEYS) || "basico"
+    @homologation_request = Current.user.homologation_requests.new(plan_key: plan_key)
     authorize @homologation_request
   end
 
@@ -25,7 +26,6 @@ class HomologationRequestsController < ApplicationController
   def show
     @homologation_request = HomologationRequest.kept.includes(:conversation).find(params[:id])
     authorize @homologation_request
-    @checklist_keys = PipelineFlow.checklist_keys
     flash.now[:notice] = t("flash.payment_processing") if params[:payment] == "success"
   end
 
@@ -56,7 +56,7 @@ class HomologationRequestsController < ApplicationController
   private
     def request_params
       params.expect(homologation_request: %i[
-        subject service_type description education_system university year
+        subject plan_key description education_system university year
         studies_finished language_knowledge language_certificate privacy_accepted
       ])
     end

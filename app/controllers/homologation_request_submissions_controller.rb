@@ -2,7 +2,6 @@ class HomologationRequestSubmissionsController < ApplicationController
   def create
     homologation_request = HomologationRequest.kept
       .includes(:user)
-      .with_attached_application_file
       .with_attached_documents
       .find(params[:homologation_request_id])
     authorize homologation_request, :submit?

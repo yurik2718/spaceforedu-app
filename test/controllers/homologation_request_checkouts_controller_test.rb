@@ -4,12 +4,9 @@ class HomologationRequestCheckoutsControllerTest < ActionDispatch::IntegrationTe
   setup do
     @owner = users(:student_es)
     @other = users(:student_other)
-    @hr    = homologation_requests(:awaiting_payment) # owner: student_es, status: awaiting_payment, amount: 200.00
+    @hr    = homologation_requests(:awaiting_payment) # owner: student_es, status: awaiting_payment, plan: completo (1750 €)
 
-    @fake_session = Struct.new(:url, :payment_intent).new(
-      "https://checkout.stripe.com/c/pay/cs_test_123",
-      "pi_test_new_intent"
-    )
+    @fake_session = Struct.new(:url).new("https://checkout.stripe.com/c/pay/cs_test_123")
   end
 
   test "owner with awaiting_payment status is redirected to the Stripe Checkout URL" do
@@ -20,15 +17,12 @@ class HomologationRequestCheckoutsControllerTest < ActionDispatch::IntegrationTe
     end
 
     assert_redirected_to @fake_session.url
-    assert_equal @fake_session.payment_intent, @hr.reload.stripe_payment_intent_id
   end
 
   test "non-owner is rejected" do
     sign_in_as @other
 
-    assert_no_changes -> { @hr.reload.stripe_payment_intent_id } do
-      post homologation_request_checkout_path(@hr)
-    end
+    post homologation_request_checkout_path(@hr)
 
     assert_redirected_to root_path
   end
@@ -36,20 +30,10 @@ class HomologationRequestCheckoutsControllerTest < ActionDispatch::IntegrationTe
   test "owner whose request is not in awaiting_payment is rejected" do
     sign_in_as @owner
     draft = @owner.homologation_requests.create!(
-      subject: "draft", service_type: "homologation", status: "draft",
-      payment_amount: 100, privacy_accepted: true
+      subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
 
     post homologation_request_checkout_path(draft)
-
-    assert_redirected_to root_path
-  end
-
-  test "owner whose request has no payment_amount is rejected" do
-    sign_in_as @owner
-    @hr.update_column(:payment_amount, nil)
-
-    post homologation_request_checkout_path(@hr)
 
     assert_redirected_to root_path
   end

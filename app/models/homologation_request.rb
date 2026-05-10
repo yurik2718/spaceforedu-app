@@ -5,13 +5,11 @@ class HomologationRequest < ApplicationRecord
   belongs_to :pipeline_changer,  class_name: "User", optional: true, foreign_key: :pipeline_changed_by
   has_one    :conversation, dependent: :destroy
 
-  has_one_attached  :application_file
-  has_many_attached :originals
   has_many_attached :documents
 
   broadcasts_refreshes
 
-  validates :application_file, :originals, :documents,
+  validates :documents,
             content_type: %w[application/pdf image/jpeg image/png image/webp],
             size:         { less_than: 15.megabytes }
 
@@ -22,17 +20,22 @@ class HomologationRequest < ApplicationRecord
   STATUSES = %w[
     draft submitted in_review awaiting_reply
     awaiting_payment payment_confirmed in_progress
-    resolved closed
+    resolved closed declined
   ].freeze
 
   EDITABLE_STATUSES = %w[draft awaiting_reply].freeze
+  TERMINAL_STATUSES = %w[resolved closed declined].freeze
 
+  validates :plan_key, inclusion: { in: Plan::KEYS }
   validates :privacy_accepted, acceptance: true, on: :create
 
   after_create_commit :create_conversation
   after_commit :notify_admin_of_submission, on: :update, if: -> { saved_change_to_status?(to: "submitted") }
 
   def editable? = status.in?(EDITABLE_STATUSES)
+  def declined? = status == "declined"
+  def plan      = Plan.find(plan_key)
+  def amount    = plan.amount
 
   def notify_admin_of_documents_reply!(count:)
     return unless status == "awaiting_reply"
@@ -49,13 +52,19 @@ class HomologationRequest < ApplicationRecord
     )
   end
 
+  def terminal? = status.in?(TERMINAL_STATUSES)
+
   def transition_to!(new_status, changed_by:)
     unless STATUSES.include?(new_status.to_s)
       raise InvalidTransition, "Unknown status: #{new_status}"
     end
 
+    if terminal? && new_status.to_s != status
+      raise InvalidTransition, "cannot transition from terminal status #{status}"
+    end
+
     if new_status.to_s == "submitted" && !ready_to_submit?
-      raise InvalidTransition, "Request needs an application file and at least one supporting document"
+      raise InvalidTransition, "Request needs at least one document"
     end
 
     transaction do
@@ -69,6 +78,8 @@ class HomologationRequest < ApplicationRecord
   end
 
   def confirm_payment!(confirmed_by:)
+    return if payment_confirmed_at.present?
+
     transaction do
       update!(
         payment_confirmed_at: Time.current,
@@ -79,6 +90,35 @@ class HomologationRequest < ApplicationRecord
       )
       transition_to!("payment_confirmed", changed_by: confirmed_by)
       notify_owner_of_payment_confirmed
+    end
+  end
+
+  def start_checkout!(success_url:, cancel_url:)
+    Stripe::Checkout::Session.create(
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency:    "eur",
+          unit_amount: plan.amount * 100,
+          product_data: { name: "#{plan.title} — #{subject}" }
+        },
+        quantity: 1
+      }],
+      mode: "payment",
+      payment_intent_data: { metadata: { homologation_request_id: id } },
+      success_url:,
+      cancel_url:
+    )
+  end
+
+  def decline!(by:, reason:)
+    raise ArgumentError, "reason can't be blank" if reason.to_s.strip.empty?
+
+    transaction do
+      transition_to!("declined", changed_by: by)
+      conv = conversation || Conversation.create!(homologation_request: self)
+      conv.messages.create!(user: by, body: reason.strip)
+      conv.update!(last_message_at: Time.current)
     end
   end
 
@@ -110,7 +150,7 @@ class HomologationRequest < ApplicationRecord
   end
 
   def ready_to_submit?
-    application_file.attached? && documents.attached?
+    documents.attached?
   end
 
   def checklist_done?(key)
@@ -121,9 +161,10 @@ class HomologationRequest < ApplicationRecord
 
   def zip_archive
     buffer = Zip::OutputStream.write_buffer do |zip|
-      documents.attachments.each { |a| write_zip_entry(zip, "documents",   a) }
-      originals.attachments.each { |a| write_zip_entry(zip, "originals",   a) }
-      write_zip_entry(zip, "application", application_file.attachment) if application_file.attached?
+      documents.attachments.each do |attachment|
+        zip.put_next_entry(attachment.filename.to_s)
+        attachment.blob.download { |chunk| zip.write(chunk) }
+      end
     end
     buffer.string
   end
@@ -166,10 +207,5 @@ class HomologationRequest < ApplicationRecord
 
     def create_conversation
       Conversation.create!(homologation_request: self)
-    end
-
-    def write_zip_entry(zip, namespace, attachment)
-      zip.put_next_entry("#{namespace}/#{attachment.filename}")
-      attachment.blob.download { |chunk| zip.write(chunk) }
     end
 end

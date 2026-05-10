@@ -33,13 +33,13 @@ module Stripe
 
       def handle(event)
         case event.type
-        when "payment_intent.succeeded"      then confirm_payment(event.data.object.id)
-        when "payment_intent.payment_failed" then notify_payment_failed(event.data.object.id)
+        when "payment_intent.succeeded"      then confirm_payment(event.data.object)
+        when "payment_intent.payment_failed" then notify_payment_failed(event.data.object)
         end
       end
 
-      def confirm_payment(payment_intent_id)
-        request = HomologationRequest.kept.includes(:user).find_by(stripe_payment_intent_id: payment_intent_id)
+      def confirm_payment(intent)
+        request = find_request(intent)
         return unless request
         admin = User.super_admin
         return unless admin
@@ -54,8 +54,8 @@ module Stripe
         )
       end
 
-      def notify_payment_failed(payment_intent_id)
-        request = HomologationRequest.kept.find_by(stripe_payment_intent_id: payment_intent_id)
+      def notify_payment_failed(intent)
+        request = find_request(intent)
         return unless request
         admin = User.super_admin
         return unless admin
@@ -66,6 +66,12 @@ module Stripe
           body_key:   "notifications.payment_failed.body",
           subject:    request.subject
         )
+      end
+
+      def find_request(intent)
+        id = intent.respond_to?(:metadata) ? intent.metadata["homologation_request_id"] : nil
+        return unless id
+        HomologationRequest.kept.includes(:user).find_by(id: id)
       end
   end
 end

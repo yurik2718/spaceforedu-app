@@ -85,7 +85,7 @@ puts "Users: #{User.count}"
 
 # Draft — María just started, hasn't submitted yet
 HomologationRequest.find_or_create_by!(user: maria, subject: "Licenciatura en Psicología") do |r|
-  r.service_type     = "homologation"
+  r.plan_key         = "basico"
   r.description      = "Quiero homologar mi título de Licenciatura en Psicología obtenido en la Universidad de Buenos Aires."
   r.status           = "draft"
   r.education_system = "Argentina"
@@ -95,14 +95,13 @@ HomologationRequest.find_or_create_by!(user: maria, subject: "Licenciatura en Ps
   r.privacy_accepted = true
 end
 
-# Awaiting payment — Ivan reviewed, budget sent, waiting on wire transfer
+# Awaiting payment — Ivan reviewed, admin approved the case, waiting on payment
 ivan_request = HomologationRequest.find_or_create_by!(user: ivan, subject: "Диплом инженера-механика") do |r|
-  r.service_type       = "homologation"
+  r.plan_key           = "completo"
   r.description        = "Diploma de Ingeniería Mecánica expedido por la Universidad Técnica Estatal de Moscú (BMSTU)."
   r.status             = "awaiting_payment"
   r.status_changed_at  = 2.days.ago
   r.status_changed_by  = admin.id
-  r.payment_amount     = 350.00
   r.education_system   = "Russia"
   r.university         = "Bauman Moscow State Technical University"
   r.year               = 2012
@@ -113,16 +112,16 @@ end
 
 ivan_conv = Conversation.find_or_create_by!(homologation_request: ivan_request)
 if ivan_conv.messages.none?
-  ivan_conv.messages.create!(user: admin, body: "Buenos días Ivan. Hemos revisado tu expediente. El presupuesto para la homologación de tu título de Ingeniería Mecánica asciende a 350 €. Por favor realiza el pago en los próximos cinco días hábiles.", created_at: 2.days.ago)
-  ivan_conv.messages.create!(user: ivan,  body: "Muchas gracias. Haré el pago esta semana.", created_at: 1.day.ago)
+  ivan_conv.messages.create!(user: admin, body: "Buenos días Ivan. Hemos revisado tu expediente y podemos llevar tu caso con el plan Integral (1 750 €), que incluye la admisión universitaria. Pulsa «Pagar» cuando estés listo y arrancamos.", created_at: 2.days.ago)
+  ivan_conv.messages.create!(user: ivan,  body: "Muchas gracias. Pago hoy mismo.", created_at: 1.day.ago)
   ivan_conv.update!(last_message_at: 1.day.ago)
 
-  ivan.notifications.create!(notifiable: ivan_request, title: "Presupuesto listo — 350 €", body: "Hemos revisado tu solicitud. Realiza el pago para continuar.", created_at: 2.days.ago)
+  ivan.notifications.create!(notifiable: ivan_request, title: "Caso aprobado — listo para pagar", body: "Hemos revisado tu solicitud. Realiza el pago para continuar.", created_at: 2.days.ago)
 end
 
 # In progress — Alejandro paid, pipeline at redsara, one stage retreated earlier
 alejandro_request = HomologationRequest.find_or_create_by!(user: alejandro, subject: "Licenciatura en Administración de Empresas") do |r|
-  r.service_type         = "homologation"
+  r.plan_key             = "completo"
   r.description          = "Título universitario en Administración de Empresas expedido por el Tecnológico de Monterrey, Campus Ciudad de México."
   r.status               = "in_progress"
   r.status_changed_at    = 3.weeks.ago
@@ -131,7 +130,6 @@ alejandro_request = HomologationRequest.find_or_create_by!(user: alejandro, subj
   r.pipeline_changed_at  = 4.days.ago
   r.pipeline_changed_by  = admin.id
   r.pipeline_notes       = "Retrocedemos a tasas_volantes: el modelo 790 estaba sin firmar. Corregido y avanzamos de nuevo."
-  r.payment_amount       = 420.00
   r.payment_confirmed_at = 3.weeks.ago
   r.payment_confirmed_by = admin.id
   r.education_system     = "Mexico"
@@ -155,7 +153,7 @@ end
 
 # Awaiting reply — pipeline retreated to documentos, missing apostille on Lucia's certificate
 lucia_request = HomologationRequest.find_or_create_by!(user: lucia, subject: "Bachillerato Internacional") do |r|
-  r.service_type         = "homologation"
+  r.plan_key             = "basico"
   r.description          = "Homologación de Bachillerato Internacional para acceso a estudios universitarios en España."
   r.status               = "awaiting_reply"
   r.status_changed_at    = 1.week.ago
@@ -164,7 +162,6 @@ lucia_request = HomologationRequest.find_or_create_by!(user: lucia, subject: "Ba
   r.pipeline_changed_at  = 1.week.ago
   r.pipeline_changed_by  = admin.id
   r.pipeline_notes       = "Retrocedemos a documentos: el certificado de notas carece de apostilla. Pendiente de que el tutor lo gestione desde Colombia."
-  r.payment_amount       = 250.00
   r.payment_confirmed_at = 2.weeks.ago
   r.payment_confirmed_by = admin.id
   r.education_system     = "Colombia"
@@ -185,7 +182,7 @@ end
 
 # Resolved — Olga's homologation successfully completed after a full pipeline run
 olga_request = HomologationRequest.find_or_create_by!(user: olga, subject: "Licenciatura en Filología Española") do |r|
-  r.service_type         = "homologation"
+  r.plan_key             = "premium"
   r.description          = "Título de Filología Española y Latinoamericana expedido por la Universidad Estatal de Moscú (MSU)."
   r.status               = "resolved"
   r.status_changed_at    = 2.months.ago
@@ -193,7 +190,6 @@ olga_request = HomologationRequest.find_or_create_by!(user: olga, subject: "Lice
   r.pipeline_stage       = "completado"
   r.pipeline_changed_at  = 2.months.ago
   r.pipeline_changed_by  = admin.id
-  r.payment_amount       = 380.00
   r.payment_confirmed_at = 9.months.ago
   r.payment_confirmed_by = admin.id
   r.education_system     = "Russia"
@@ -213,6 +209,28 @@ if olga_conv.messages.none?
   olga_conv.update!(last_message_at: 2.months.ago + 3.hours, admin_last_read_at: 2.months.ago + 1.day, student_last_read_at: 2.months.ago + 3.hours)
 
   olga.notifications.create!(notifiable: olga_request, title: "Homologación resuelta favorablemente", body: "El Ministerio ha resuelto tu homologación. Enhorabuena.", read_at: 2.months.ago + 3.hours, created_at: 2.months.ago)
+end
+
+# Declined — Maria's earlier request that we couldn't take (degree not eligible for homologation)
+declined_request = HomologationRequest.find_or_create_by!(user: maria, subject: "Curso de Diseño Gráfico (no universitario)") do |r|
+  r.plan_key          = "basico"
+  r.description       = "Curso técnico de diseño gráfico de un año, sin titulación universitaria oficial."
+  r.status            = "declined"
+  r.status_changed_at = 5.days.ago
+  r.status_changed_by = admin.id
+  r.education_system  = "Argentina"
+  r.university        = "Instituto Superior de Diseño"
+  r.year              = 2019
+  r.studies_finished  = "yes"
+  r.privacy_accepted  = true
+end
+
+declined_conv = Conversation.find_or_create_by!(homologation_request: declined_request)
+if declined_conv.messages.none?
+  declined_conv.messages.create!(user: admin, body: "María, hemos revisado tu titulación. Lamentamos comunicarte que solo se pueden homologar títulos universitarios oficiales reconocidos por el ministerio educativo del país emisor; este curso técnico no es elegible. Te recomendamos consultar opciones de convalidación para formación profesional. No se ha emitido cargo alguno.", created_at: 5.days.ago)
+  declined_conv.update!(last_message_at: 5.days.ago)
+
+  maria.notifications.create!(notifiable: declined_request, title: "Solicitud no admitida", body: "Tu titulación no es elegible para homologación. Lee la nota del gestor en el chat.", created_at: 5.days.ago)
 end
 
 puts "Requests:      #{HomologationRequest.count}"

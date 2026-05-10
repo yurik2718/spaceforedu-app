@@ -58,31 +58,4 @@ class MessageTest < ActiveSupport::TestCase
     end
   end
 
-  test "student message on an awaiting_reply request flips it to in_review" do
-    request = @conversation.homologation_request
-    request.update_columns(status: "awaiting_reply", status_changed_by: users(:admin).id, status_changed_at: 1.hour.ago)
-
-    @conversation.messages.create!(user: @student, body: "here you go")
-
-    assert_equal "in_review", request.reload.status
-  end
-
-  test "admin message on an awaiting_reply request leaves the status unchanged" do
-    admin   = users(:admin)
-    request = @conversation.homologation_request
-    request.update_columns(status: "awaiting_reply", status_changed_by: admin.id, status_changed_at: 1.hour.ago)
-
-    @conversation.messages.create!(user: admin, body: "still waiting")
-
-    assert_equal "awaiting_reply", request.reload.status
-  end
-
-  test "auto-advance from a student message does not self-notify the student" do
-    request = @conversation.homologation_request
-    request.update_columns(status: "awaiting_reply", status_changed_by: users(:admin).id, status_changed_at: 1.hour.ago)
-
-    assert_no_difference -> { @student.notifications.count } do
-      @conversation.messages.create!(user: @student, body: "here you go")
-    end
-  end
 end

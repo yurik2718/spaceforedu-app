@@ -18,6 +18,8 @@ en:
     request_not_editable:   "This request can no longer be edited."
     request_not_submittable: "This request cannot be submitted."
     payment_confirmed:      "Payment confirmed. Your request is now in progress."
+    request_declined:       "Request marked as declined. The student has been notified in chat."
+    request_approved_for_payment: "Approved. The student can now pay."
     user_updated:           "Profile updated."
     message_sent:           "Message sent."
     pipeline_advanced:      "Moved to next stage."
@@ -150,6 +152,18 @@ en:
     privacy_accept_html:  "I accept the <a href=\"%{url}\" target=\"_blank\" class=\"link\">privacy policy</a>."
     have_account:         "Already have an account?"
 
+  plans:
+    compare_link: "Compare plans on our site"
+    compare_url:  "https://spaceforedu.com/en/pricing/#plans"
+    basico:
+      title:      "Homologation"
+      short_desc: "Degree homologation with full expert support."
+    completo:
+      title:      "Integral"
+      short_desc: "Homologation + university admission — the complete path."
+    premium:
+      title:      "VIP — Maximum Guarantee"
+
   pipeline:
     active:  "Active"
     revenue: "Revenue"
@@ -178,7 +192,7 @@ en:
       submit:    "Submit request"
       new:       "New request"
       open_chat: "Open chat"
-      submit_disabled_hint: "Upload all the documents from the checklist first."
+      submit_disabled_hint: "Upload at least one document first."
     attachments:
       intro:           "Upload scans of your diploma, passport and other documents."
       empty:           "No documents attached yet."
@@ -205,6 +219,8 @@ en:
       chat:      "Chat"
       status:    "Status"
       pipeline_notes: "Pipeline notes"
+      plan:      "Choose your plan"
+      plan_description: "You can change this while the request is still a draft."
       diploma:   "About your degree"
       diploma_description: "Where, when and what you studied."
       language:  "Spanish proficiency"
@@ -214,7 +230,7 @@ en:
     fields:
       subject:              "Subject"
       description:          "Description"
-      service_type:         "Service type"
+      plan_key:             "Plan"
       education_system:     "Education system"
       university:           "University"
       year:                 "Year"
@@ -223,7 +239,6 @@ en:
       language_certificate: "Language certificate"
       privacy_accepted:      "I accept the privacy policy."
       privacy_accepted_html: "I accept the <a href=\"%{url}\" target=\"_blank\" class=\"link\">privacy policy</a>."
-      payment_amount:       "Amount"
     placeholders:
       subject:              "e.g. Homologation of bachelor's degree"
       university:           "e.g. Universidad de Buenos Aires"
@@ -268,26 +283,32 @@ en:
       in_review:    "In review"
       in_progress:  "In progress"
       resolved:     "Done"
+    declined_note: "Your manager could not take this case. See the explanation in chat."
+    declined_card:
+      heading:    "Message from your manager"
+      empty:      "Your manager will post the explanation in chat."
+      open_chat:  "Open the full conversation"
     timeline:
       created_at: "Created"
       updated_at: "Updated"
     next_step:
       heading: "What's next?"
       ready:        "Ready to submit. Click “Submit request” to send the case to your manager."
-      missing_docs: "Upload the remaining documents from the checklist below."
       missing_app:  "Attach at least one document so the request can be submitted."
       submitted:    "Request submitted. We'll write in chat as soon as we start reviewing."
       in_review:    "Your case manager is reviewing the request. This usually takes 1–3 days."
       awaiting_reply:  "We're waiting for clarifications or additional documents — check the chat."
-      awaiting_payment: "The amount is set. Pay it to continue the process."
+      awaiting_payment: "Your manager has approved the case. Pay to start the work."
       in_progress:     "Your manager is working on the case. Follow progress in chat."
       resolved:        "All done. Check the final documents and ratings."
       closed:          "Request closed. The archive is read-only."
+      declined:        "We can't take this case. See your manager's note in chat."
     payment:
-      not_set:      "No amount set yet."
+      your_plan:    "Your plan"
       confirmed_at: "Confirmed at"
       confirmed_by: "Confirmed by"
-      pay_now:      "Pay now"
+      pay_now:      "Pay %{amount}"
+      pay_subtitle: "Secure payment via Stripe. You'll come back here once it's done."
     status:
       draft:             "Draft"
       submitted:         "Submitted"
@@ -298,6 +319,7 @@ en:
       in_progress:       "In Progress"
       resolved:          "Resolved"
       closed:            "Closed"
+      declined:          "Declined"
 
   roles:
     super_admin: "Administrator"
@@ -329,20 +351,27 @@ en:
         chat:           "Chat"
         pipeline_notes: "Pipeline notes"
       actions:
-        change_status:    "Change status"
-        confirm_payment:  "Confirm payment"
-        advance:          "Advance"
-        retreat:          "Retreat"
-        retreat_modal:    "Retreat to previous stage"
-        start_chat:       "Start conversation"
-        open_chat:        "Open conversation"
-        download_archive: "Download archive"
+        change_status:        "Change status"
+        confirm_payment:      "Mark as paid"
+        approve_for_payment:  "Approve — open payment"
+        decline:              "Decline (we can't help)"
+        decline_modal:        "Decline this request"
+        decline_submit:       "Send decline"
+        advance:              "Advance"
+        retreat:              "Retreat"
+        retreat_modal:        "Retreat to previous stage"
+        start_chat:           "Start conversation"
+        open_chat:            "Open conversation"
+        download_archive:     "Download archive"
       labels:
-        changed_at:    "Changed at"
-        changed_by:    "Changed by"
-        confirmed_at:  "Confirmed at"
-        confirmed_by:  "Confirmed by"
+        changed_at:     "Changed at"
+        changed_by:     "Changed by"
+        confirmed_at:   "Confirmed at"
+        confirmed_by:   "Confirmed by"
         retreat_reason: "Reason"
+        decline_reason: "Reason — the student will see this in chat"
+      errors:
+        decline_reason_required: "Add a reason for the decline — the student will see it in chat."
 
   footer:
     about:    "About"

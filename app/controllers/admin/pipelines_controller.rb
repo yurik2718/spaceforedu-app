@@ -21,7 +21,7 @@ class Admin::PipelinesController < ApplicationController
     def build_stats(records)
       {
         active:  records.count { _1.pipeline_stage != PipelineFlow::TERMINAL_STAGE },
-        revenue: records.sum { _1.payment_amount.to_f }
+        revenue: records.sum { _1.amount }
       }
     end
 end

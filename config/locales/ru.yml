@@ -18,6 +18,8 @@ ru:
     request_not_editable:   "Эту заявку больше нельзя редактировать."
     request_not_submittable: "Эту заявку нельзя отправить."
     payment_confirmed:      "Оплата подтверждена. Ваша заявка в работе."
+    request_declined:       "Заявка помечена как отклонённая. Студент получит сообщение в чате."
+    request_approved_for_payment: "Принято. Студент может оплачивать."
     user_updated:           "Профиль обновлён."
     message_sent:           "Сообщение отправлено."
     pipeline_advanced:      "Передвинуто на следующий этап."
@@ -152,6 +154,18 @@ ru:
     privacy_accept_html:  "Принимаю <a href=\"%{url}\" target=\"_blank\" class=\"link\">политику конфиденциальности</a>."
     have_account:         "Уже есть аккаунт?"
 
+  plans:
+    compare_link: "Подробнее о тарифах на сайте"
+    compare_url:  "https://spaceforedu.com/ru/pricing/#plans"
+    basico:
+      title:      "Омологация"
+      short_desc: "Омологация диплома с полной экспертной поддержкой."
+    completo:
+      title:      "Интеграл"
+      short_desc: "Омологация + поступление — полный путь."
+    premium:
+      title:      "VIP — Максимальная гарантия"
+
   pipeline:
     active:  "Активные"
     revenue: "Выручка"
@@ -180,7 +194,7 @@ ru:
       submit:    "Подать заявку"
       new:       "Новая заявка"
       open_chat: "Открыть чат"
-      submit_disabled_hint: "Сначала загрузите все документы из контрольного списка."
+      submit_disabled_hint: "Сначала загрузите хотя бы один документ."
     attachments:
       intro:           "Загрузите сканы дипломов, паспорта и других документов."
       empty:           "Документы пока не прикреплены."
@@ -207,6 +221,8 @@ ru:
       chat:      "Чат"
       status:    "Статус"
       pipeline_notes: "Заметки пайплайна"
+      plan:      "Выберите тариф"
+      plan_description: "Можно поменять, пока заявка в статусе черновика."
       diploma:   "Об образовании"
       diploma_description: "Где, когда и какую квалификацию вы получили."
       language:  "Знание испанского"
@@ -216,7 +232,7 @@ ru:
     fields:
       subject:              "Тема"
       description:          "Описание"
-      service_type:         "Тип услуги"
+      plan_key:             "Тариф"
       education_system:     "Система образования"
       university:           "Университет"
       year:                 "Год"
@@ -225,7 +241,6 @@ ru:
       language_certificate: "Сертификат о языке"
       privacy_accepted:      "Принимаю политику конфиденциальности."
       privacy_accepted_html: "Принимаю <a href=\"%{url}\" target=\"_blank\" class=\"link\">политику конфиденциальности</a>."
-      payment_amount:       "Сумма"
     placeholders:
       subject:              "Например: Гомологация диплома специалиста"
       university:           "Например: Universidad de Buenos Aires"
@@ -270,26 +285,32 @@ ru:
       in_review:    "На рассмотрении"
       in_progress:  "В работе"
       resolved:     "Готова"
+    declined_note: "Ваш ассистент не сможет взять это дело. Объяснение — в чате."
+    declined_card:
+      heading:    "Сообщение ассистента"
+      empty:      "Ассистент напишет объяснение в чате."
+      open_chat:  "Открыть переписку"
     timeline:
       created_at: "Создана"
       updated_at: "Обновлена"
     next_step:
       heading: "Что дальше?"
       ready:        "Готово к подаче. Нажмите «Подать заявку», чтобы отправить дело ассистенту."
-      missing_docs: "Загрузите оставшиеся документы из контрольного списка ниже."
       missing_app:  "Прикрепите хотя бы один документ, чтобы можно было подать заявку."
       submitted:    "Заявка подана. Мы напишем в чат, как только начнём проверку."
       in_review:    "Ваш ассистент изучает дело. Обычно это занимает 1–3 дня."
       awaiting_reply:  "Мы ждём от вас уточнений или дополнительных документов — проверьте чат."
-      awaiting_payment: "Сумма к оплате согласована. Оплатите, чтобы продолжить."
+      awaiting_payment: "Ассистент рассмотрел дело и берёт его. Оплатите — начинаем работу."
       in_progress:     "Дело в работе у ассистента. Следите за этапами в чате."
       resolved:        "Готово. Проверьте итоговые документы и рейтинги."
       closed:          "Заявка закрыта. Архив доступен только для просмотра."
+      declined:        "К сожалению, мы не можем взять этот случай. Объяснение — в чате."
     payment:
-      not_set:      "Сумма пока не задана."
+      your_plan:    "Ваш тариф"
       confirmed_at: "Подтверждено"
       confirmed_by: "Подтвердил"
-      pay_now:      "Оплатить"
+      pay_now:      "Оплатить %{amount}"
+      pay_subtitle: "Безопасный платёж через Stripe. После оплаты вернётесь сюда."
     status:
       draft:             "Черновик"
       submitted:         "Отправлена"
@@ -300,6 +321,7 @@ ru:
       in_progress:       "В работе"
       resolved:          "Решена"
       closed:            "Закрыта"
+      declined:          "Отклонена"
 
   roles:
     super_admin: "Администратор"
@@ -331,20 +353,27 @@ ru:
         chat:           "Чат"
         pipeline_notes: "Заметки пайплайна"
       actions:
-        change_status:    "Сменить статус"
-        confirm_payment:  "Подтвердить оплату"
-        advance:          "Дальше"
-        retreat:          "Назад"
-        retreat_modal:    "Откатить на предыдущий этап"
-        start_chat:       "Начать чат"
-        open_chat:        "Открыть чат"
-        download_archive: "Скачать архив"
+        change_status:        "Сменить статус"
+        confirm_payment:      "Отметить оплаченным"
+        approve_for_payment:  "Принять — открыть оплату"
+        decline:              "Не возьмёмся"
+        decline_modal:        "Отклонить заявку"
+        decline_submit:       "Отправить отказ"
+        advance:              "Дальше"
+        retreat:              "Назад"
+        retreat_modal:        "Откатить на предыдущий этап"
+        start_chat:           "Начать чат"
+        open_chat:            "Открыть чат"
+        download_archive:     "Скачать архив"
       labels:
-        changed_at:    "Изменено"
-        changed_by:    "Изменил"
-        confirmed_at:  "Подтверждено"
-        confirmed_by:  "Подтвердил"
+        changed_at:     "Изменено"
+        changed_by:     "Изменил"
+        confirmed_at:   "Подтверждено"
+        confirmed_by:   "Подтвердил"
         retreat_reason: "Причина"
+        decline_reason: "Причина — студент увидит её в чате"
+      errors:
+        decline_reason_required: "Укажите причину отказа — студент увидит её в чате."
 
   footer:
     about:    "О нас"

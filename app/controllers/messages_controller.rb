@@ -6,6 +6,7 @@ class MessagesController < ApplicationController
     authorize @message
 
     if @message.save
+      auto_advance_after_student_reply
       respond_to do |format|
         format.turbo_stream { head :no_content }
         format.html { redirect_to @conversation }
@@ -30,6 +31,15 @@ class MessagesController < ApplicationController
     end
 
     def message_params
-      params.require(:message).permit(:body)
+      params.expect(message: [ :body ])
+    end
+
+    def auto_advance_after_student_reply
+      hr = @conversation.homologation_request
+      return unless hr.status == "awaiting_reply" && Current.user.id == hr.user_id
+
+      hr.transition_to!("in_review", changed_by: Current.user)
+    rescue HomologationRequest::InvalidTransition
+      nil
     end
 end

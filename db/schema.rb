@@ -58,19 +58,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
     t.string "education_system"
     t.string "language_certificate"
     t.string "language_knowledge"
-    t.decimal "payment_amount", precision: 10, scale: 2
     t.datetime "payment_confirmed_at"
     t.integer "payment_confirmed_by"
     t.datetime "pipeline_changed_at"
     t.integer "pipeline_changed_by"
     t.text "pipeline_notes"
     t.string "pipeline_stage"
+    t.string "plan_key", null: false
     t.boolean "privacy_accepted", default: false, null: false
-    t.string "service_type", null: false
     t.string "status", default: "draft", null: false
     t.datetime "status_changed_at"
     t.integer "status_changed_by"
-    t.string "stripe_payment_intent_id"
     t.string "studies_finished"
     t.string "studies_spain"
     t.string "study_type_spain"
@@ -86,7 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
     t.index ["updated_at"], name: "index_homologation_requests_on_updated_at"
     t.index ["user_id", "status"], name: "index_homologation_requests_on_user_id_and_status"
     t.index ["user_id"], name: "index_homologation_requests_on_user_id"
-    t.check_constraint "status IN ('draft','submitted','in_review','awaiting_reply','awaiting_payment','payment_confirmed','in_progress','resolved','closed')", name: "valid_status"
+    t.check_constraint "plan_key IN ('basico','completo','premium')", name: "valid_plan_key"
+    t.check_constraint "status IN ('draft','submitted','in_review','awaiting_reply','awaiting_payment','payment_confirmed','in_progress','resolved','closed','declined')", name: "valid_status"
   end
 
   create_table "messages", force: :cascade do |t|

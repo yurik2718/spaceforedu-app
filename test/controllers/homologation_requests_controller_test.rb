@@ -14,7 +14,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
   test "GET index lists the signed-in student's kept requests, newest first" do
     sign_in_as @student
     second = @student.homologation_requests.create!(
-      subject: "Second diploma", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "Second diploma", plan_key: "basico", status: "draft", privacy_accepted: true
     )
 
     get homologation_requests_path
@@ -66,7 +66,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
       post homologation_requests_path, params: {
         homologation_request: {
           subject:              "My diploma",
-          service_type:         "homologation",
+          plan_key: "basico",
           description:          "Need help homologating",
           education_system:     "Universidad Nacional",
           university:           "UNAM",
@@ -92,7 +92,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
       post homologation_requests_path, params: {
         homologation_request: {
           subject:          "x",
-          service_type:     "homologation",
+          plan_key: "basico",
           privacy_accepted: "0"
         }
       }
@@ -103,7 +103,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
 
   test "POST create unauthenticated redirects to sign in" do
     assert_no_difference("HomologationRequest.count") do
-      post homologation_requests_path, params: { homologation_request: { subject: "x", service_type: "homologation", privacy_accepted: "1" } }
+      post homologation_requests_path, params: { homologation_request: { subject: "x", plan_key: "basico", privacy_accepted: "1" } }
     end
     assert_redirected_to new_session_path
   end
@@ -135,7 +135,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
   test "GET edit allowed for draft status" do
     sign_in_as @student
     draft_request = @student.homologation_requests.create!(
-      subject: "draft", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
     get edit_homologation_request_path(draft_request)
     assert_response :success
@@ -151,7 +151,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
   test "GET edit redirects for non-owner" do
     sign_in_as @other
     draft_request = @student.homologation_requests.create!(
-      subject: "draft", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
     get edit_homologation_request_path(draft_request)
     assert_redirected_to root_path
@@ -162,7 +162,7 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
   test "PATCH update updates a draft" do
     sign_in_as @student
     draft_request = @student.homologation_requests.create!(
-      subject: "draft", service_type: "homologation", status: "draft", privacy_accepted: true
+      subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
     patch homologation_request_path(draft_request), params: {
       homologation_request: { subject: "Updated subject", university: "UPM" }

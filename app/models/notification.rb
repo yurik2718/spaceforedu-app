@@ -1,5 +1,5 @@
 class Notification < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, strict_loading: false
   belongs_to :notifiable, polymorphic: true
 
   serialize :i18n_vars, coder: JSON
