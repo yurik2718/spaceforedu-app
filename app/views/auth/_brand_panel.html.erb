@@ -1,31 +1,20 @@
-<%# 1. Top — eyebrow names what we do (logo already shown left) %>
-<div class="relative z-10">
-  <%= render "auth/eyebrow" %>
-</div>
-
-<%# 2. Middle — tagline + lede + 3 steps, vertically centered in available space %>
-<div class="relative z-10 flex-1 flex flex-col justify-center gap-10 py-10">
+<%# Middle — tagline + 3 steps (titles only), vertically centered %>
+<div class="relative z-10 flex-1 flex flex-col justify-center gap-12 py-10">
   <%= render "auth/tagline" %>
 
-  <%# 3-step "How it works" — display numerals as typographic anchors %>
-  <ol class="space-y-7 max-w-md">
+  <ol class="space-y-8 max-w-md">
     <% %i[submit quote track].each_with_index do |key, i| %>
       <li class="grid grid-cols-[3.5rem_1fr] xl:grid-cols-[4rem_1fr] gap-x-5 items-baseline">
         <span class="font-display font-bold text-[2.75rem] xl:text-5xl text-primary leading-none tabular-nums tracking-tight" aria-hidden="true">
           <%= format("%02d", i + 1) %>
         </span>
-        <div>
-          <p class="font-display font-semibold text-ink text-lg leading-tight tracking-tight"><%= t("auth.brand.steps.#{key}.title") %></p>
-          <p class="text-sm text-mute leading-relaxed mt-1.5"><%= t("auth.brand.steps.#{key}.body") %></p>
-        </div>
+        <p class="font-display font-semibold text-ink text-lg leading-tight tracking-tight"><%= t("auth.brand.steps.#{key}.title") %></p>
       </li>
     <% end %>
   </ol>
 </div>
 
-<%# 3. Bottom — specific trust signals: location, jurisdiction, pricing.
-    Location label comes from ENV (it's brand data, not translatable copy);
-    the rest live in locale files. %>
+<%# Bottom — trust signals %>
 <div class="relative z-10 pt-6 border-t border-hairline-soft">
   <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-mute">
     <% trust_signals = {

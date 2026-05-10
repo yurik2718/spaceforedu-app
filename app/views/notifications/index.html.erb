@@ -8,23 +8,23 @@
   </div>
 
   <% if @pagy.pages > 1 %>
+    <%
+      page_btn = ->(label, page, position) {
+        rounding = { left: "rounded-r-none", center: "rounded-none", right: "rounded-l-none" }.fetch(position)
+        if page
+          link_to label, url_for(page: page), class: "btn btn-sm btn-secondary #{rounding}"
+        else
+          tag.span label, class: "btn btn-sm btn-disabled #{rounding}"
+        end
+      }
+    %>
     <div class="flex justify-center mt-6">
-      <div class="join">
-        <% if @pagy.page > 1 %>
-          <%= link_to "«", url_for(page: @pagy.page - 1), class: "btn btn-sm join-item" %>
-        <% else %>
-          <span class="btn btn-sm join-item btn-disabled">«</span>
-        <% end %>
-
-        <span class="btn btn-sm join-item pointer-events-none">
+      <div class="flex">
+        <%= page_btn.("«", (@pagy.page - 1 if @pagy.page > 1), :left) %>
+        <span class="btn btn-sm btn-secondary rounded-none pointer-events-none">
           <%= @pagy.page %> / <%= @pagy.pages %>
         </span>
-
-        <% if @pagy.page < @pagy.pages %>
-          <%= link_to "»", url_for(page: @pagy.page + 1), class: "btn btn-sm join-item" %>
-        <% else %>
-          <span class="btn btn-sm join-item btn-disabled">»</span>
-        <% end %>
+        <%= page_btn.("»", (@pagy.page + 1 if @pagy.page < @pagy.pages), :right) %>
       </div>
     </div>
   <% end %>

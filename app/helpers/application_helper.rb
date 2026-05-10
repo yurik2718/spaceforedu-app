@@ -21,8 +21,9 @@ module ApplicationHelper
     end
   end
 
-  def nav_link_class(section)
-    current_page_section?(section) ? "active" : ""
+  def nav_pill_class(*paths)
+    active = paths.any? { |path| current_page?(path) }
+    active ? "nav-pill nav-pill-active" : "nav-pill"
   end
 
   def available_locales
@@ -83,9 +84,4 @@ module ApplicationHelper
     return "•" * value.to_s.length if digits.length < 4
     "#{'•' * (digits.length - 4)}#{digits.last(4)}"
   end
-
-  private
-    def current_page_section?(section)
-      request.path.start_with?("/#{section}")
-    end
 end

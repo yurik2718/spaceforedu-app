@@ -20,27 +20,10 @@
       <%# Form column — narrower than the brand panel to give the panel visual dominance %>
       <section class="flex-1 lg:flex-none lg:w-[44%] xl:w-[40%] flex flex-col px-6 sm:px-12 lg:px-14 xl:px-16 py-8 lg:py-10">
         <header class="flex items-center justify-between">
-          <%= link_to root_path, class: "flex items-center gap-2 font-display font-bold text-lg text-ink no-underline" do %>
-            <span class="w-7 h-7 rounded-full bg-primary inline-flex items-center justify-center text-on-primary shrink-0">
-              <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M8 1.5C10 3.5 11 6 11 9v2H5V9c0-3 1-5.5 3-7.5z"/>
-                <path d="M5 10L3.2 12.5 5 12z"/>
-                <path d="M11 10l1.8 2.5L11 12z"/>
-                <path d="M6.5 12L8 14.5 9.5 12z" opacity="0.65"/>
-                <circle cx="8" cy="6.2" r="1.1" fill="#E8453C"/>
-              </svg>
-            </span>
-            <span>Space for Edu</span>
-          <% end %>
+          <%= render "shared/brand_logo" %>
 
           <%= render "layouts/locale_switcher" %>
         </header>
-
-        <%# Mobile-only condensed brand intro — desktop sees the full panel on the right %>
-        <div class="lg:hidden mt-10 max-w-sm space-y-4">
-          <%= render "auth/eyebrow" %>
-          <%= render "auth/tagline" %>
-        </div>
 
         <div class="flex-1 flex items-center justify-center py-10 lg:py-8">
           <div class="w-full max-w-sm space-y-7">
@@ -58,16 +41,8 @@
           </div>
         </div>
 
-        <footer class="text-xs text-ash text-center sm:text-left space-y-1">
-          <p>© <%= Date.current.year %> Space for Edu — <%= brand_location %></p>
-          <p class="flex flex-wrap justify-center sm:justify-start gap-x-2 gap-y-1">
-            <%= mail_to support_email, class: "hover:text-ink no-underline" %>
-            <span aria-hidden="true">·</span>
-            <%= link_to "WhatsApp #{support_whatsapp}", support_whatsapp_url,
-                  target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
-            <span aria-hidden="true">·</span>
-            <%= link_to t("nav.privacy"), privacy_path, class: "hover:text-ink no-underline" %>
-          </p>
+        <footer class="text-xs text-ash text-center sm:text-left">
+          <p>© <%= Date.current.year %> Space for Edu · <%= link_to t("nav.privacy"), privacy_path, class: "hover:text-ink no-underline" %></p>
         </footer>
       </section>
 

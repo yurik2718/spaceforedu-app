@@ -1,4 +1,5 @@
 class PasswordsController < ApplicationController
+  layout "auth", only: %i[new edit]
   allow_unauthenticated_access
   skip_after_action :verify_authorized
   before_action :set_user_by_token, only: %i[ edit update ]

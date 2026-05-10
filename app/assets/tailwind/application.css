@@ -109,7 +109,7 @@
   --color-info-light:       #e1ecfd;
 
   /* Focus stack */
-  --color-focus:            #435ee5;
+  --color-focus:            var(--color-primary-light);
 
   /* Radii — only 3 in active use */
   --radius-sm:   8px;
@@ -215,6 +215,7 @@ html {
 @utility btn-ghost    { background: transparent; color: var(--ink); &:hover { background: var(--surface-card); } }
 @utility btn-warning  { background: var(--color-warning); color: #fff; }
 @utility btn-success  { background: var(--color-success); color: #fff; }
+@utility btn-error    { background: var(--color-error); color: #fff; &:hover { background: var(--color-error-deep); } }
 @utility btn-disabled { background: var(--surface-card); color: var(--ash); cursor: not-allowed; opacity: 1; pointer-events: none; }
 @utility btn-pill     { border-radius: var(--r-full); height: auto; padding: 8px 14px; background: var(--canvas); color: var(--ink); }
 
@@ -280,7 +281,7 @@ html {
   background: var(--canvas);
   color: var(--ink);
   outline: none;
-  &:focus { border: 2px solid var(--ink); box-shadow: 0 0 0 4px var(--color-focus); padding: 10px 14px; }
+  &:focus { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--color-primary-light); padding: 10px 14px; }
 }
 @utility input-bordered { border: 1px solid var(--ash); }
 @utility input-sm       { height: 36px; padding-inline: 12px; font-size: 14px; }
@@ -296,7 +297,7 @@ html {
   color: var(--ink);
   appearance: auto;
   outline: none;
-  &:focus { border-color: var(--ink); }
+  &:focus { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--color-primary-light); padding: 0 14px; }
 }
 @utility select-bordered { border: 1px solid var(--ash); }
 @utility select-sm       { height: 36px; font-size: 14px; }
@@ -310,7 +311,7 @@ html {
   color: var(--ink);
   outline: none;
   resize: vertical;
-  &:focus { border-color: var(--ink); }
+  &:focus { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--color-primary-light); padding: 10px 14px; }
 }
 @utility textarea-bordered { border: 1px solid var(--ash); }
 
