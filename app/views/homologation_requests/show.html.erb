@@ -38,12 +38,7 @@
       <%= link_to t("actions.edit"), edit_homologation_request_path(hr), class: "btn btn-ghost btn-sm" %>
     <% end %>
 
-    <% if policy(hr).submit? && hr.status == "draft" && hr.documents.attached? %>
-      <%= button_to t("requests.actions.submit"),
-            homologation_request_submission_path(hr),
-            method: :post,
-            class: "btn btn-primary btn-sm" %>
-    <% end %>
+    <%= render "homologation_requests/submit_action", hr: hr %>
   </div>
 </header>
 
@@ -59,7 +54,7 @@
   next_step_key =
     case hr.status
     when "draft"
-      hr.documents.attached? ? :ready : :missing_app
+      hr.ready_to_submit? ? :ready : :missing_app
     when "submitted"                              then :submitted
     when "in_review"                              then :in_review
     when "awaiting_reply"                         then :awaiting_reply

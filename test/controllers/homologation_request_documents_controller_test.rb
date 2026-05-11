@@ -9,50 +9,62 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     )
   end
 
-  test "valid PDF attaches and redirects with a notice" do
+  test "POST create attaches a file to the slot and redirects with a notice" do
     sign_in_as @student
 
-    assert_difference -> { @draft.documents.attachments.count }, 1 do
+    assert_difference -> { @draft.request_documents.count }, 1 do
       post homologation_request_documents_path(@draft),
-           params: { files: [ direct_upload_blob ] }
+           params: { kind: "diploma", file: upload_fixture(filename: "diploma.pdf") }
     end
 
     assert_redirected_to homologation_request_path(@draft)
+    doc = @draft.request_documents.find_by(kind: "diploma")
+    assert doc.file.attached?
   end
 
-  test "rejecting an unsupported content_type does not keep the attachment" do
+  test "POST create on an existing slot replaces the file" do
+    sign_in_as @student
+    attach_request_document(@draft, kind: "diploma", filename: "first.pdf")
+
+    assert_no_difference -> { @draft.request_documents.count } do
+      post homologation_request_documents_path(@draft),
+           params: { kind: "diploma", file: upload_fixture(filename: "second.pdf") }
+    end
+
+    assert_redirected_to homologation_request_path(@draft)
+    assert_equal "second.pdf", @draft.request_documents.find_by(kind: "diploma").file.filename.to_s
+  end
+
+  test "POST create rejects an unsupported content_type and keeps the slot empty" do
     sign_in_as @student
 
     post homologation_request_documents_path(@draft),
-         params: { files: [ direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain") ] }
-
-    assert_response :unprocessable_entity
-    assert_select ".text-error", text: /document/i
-    assert_equal 0, @draft.reload.documents.attachments.count
-  end
-
-  test "a single oversized file is rejected and not retained" do
-    sign_in_as @student
-
-    post homologation_request_documents_path(@draft),
-         params: { files: [ direct_upload_blob(content: "x" * (16.megabytes), filename: "huge.pdf") ] }
-
-    assert_response :unprocessable_entity
-    assert_equal 0, @draft.reload.documents.attachments.count
-  end
-
-  test "Turbo Stream response replaces the documents frame with the errors-bearing partial" do
-    sign_in_as @student
-
-    post homologation_request_documents_path(@draft),
-         params:  { files: [ direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain") ] },
+         params:  { kind: "diploma", file: upload_fixture(filename: "notes.txt", content: "plain note", content_type: "text/plain") },
          headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
     assert_response :unprocessable_entity
-    assert_equal "text/vnd.turbo-stream.html", response.media_type
-    assert_match %r{<turbo-stream\s+action="replace"\s+target="#{ActionView::RecordIdentifier.dom_id(@draft, :documents)}"},
-                 response.body
-    assert_match(/text-error/, response.body)
+    assert_equal 0, @draft.request_documents.count
+    assert_match %r{<turbo-stream\s+action="replace"\s+target="request_document_slot_diploma"}, response.body
+  end
+
+  test "POST create rejects an oversized file" do
+    sign_in_as @student
+    big = Rack::Test::UploadedFile.new(StringIO.new("x" * (16.megabytes)), "application/pdf", original_filename: "huge.pdf")
+
+    post homologation_request_documents_path(@draft),
+         params: { kind: "diploma", file: big }
+
+    assert_equal 0, @draft.request_documents.count
+  end
+
+  test "POST create rejects an unknown kind" do
+    sign_in_as @student
+
+    post homologation_request_documents_path(@draft),
+         params: { kind: "secret_dossier", file: upload_fixture }
+
+    assert_redirected_to homologation_request_path(@draft)
+    assert_equal I18n.t("flash.invalid_document_kind"), flash[:alert]
   end
 
   test "uploading documents while awaiting_reply pings the super admin" do
@@ -67,7 +79,7 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
       admin.notifications.where(notifiable: awaiting_reply, title_key: "notifications.documents_added.title").count
     }, 1 do
       post homologation_request_documents_path(awaiting_reply),
-           params: { files: [ direct_upload_blob(filename: "reply.pdf") ] }
+           params: { kind: "diploma", file: upload_fixture }
     end
   end
 
@@ -77,23 +89,32 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
 
     assert_no_difference -> { admin.notifications.where(notifiable: @draft).count } do
       post homologation_request_documents_path(@draft),
-           params: { files: [ direct_upload_blob ] }
+           params: { kind: "diploma", file: upload_fixture }
     end
   end
 
-  test "a mixed-batch upload purges only the files attached in this request" do
+  test "DELETE destroy removes the slot record" do
     sign_in_as @student
-    @draft.documents.attach(io: StringIO.new("%PDF pre-existing"), filename: "old.pdf", content_type: "application/pdf")
-    pre_existing_id = @draft.documents.attachments.last.id
+    doc = attach_request_document(@draft, kind: "diploma")
 
-    post homologation_request_documents_path(@draft), params: {
-      files: [
-        direct_upload_blob(filename: "good.pdf"),
-        direct_upload_blob(filename: "notes.txt", content: "plain", content_type: "text/plain")
-      ]
-    }
+    assert_difference -> { @draft.request_documents.count }, -1 do
+      delete homologation_request_document_path(@draft, doc.id)
+    end
 
-    assert_response :unprocessable_entity
-    assert_equal [ pre_existing_id ], @draft.reload.documents.attachments.pluck(:id)
+    assert_redirected_to homologation_request_path(@draft)
+  end
+
+  test "non-editable status blocks uploads" do
+    sign_in_as @student
+    submitted = @student.homologation_requests.create!(
+      subject: "x", plan_key: "basico", status: "submitted", privacy_accepted: true
+    )
+
+    post homologation_request_documents_path(submitted),
+         params: { kind: "diploma", file: upload_fixture }
+
+    assert_redirected_to homologation_request_path(submitted)
+    assert_equal I18n.t("flash.request_not_editable"), flash[:alert]
+    assert_equal 0, submitted.request_documents.count
   end
 end

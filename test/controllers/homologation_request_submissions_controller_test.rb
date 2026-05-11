@@ -7,7 +7,7 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
     @draft   = @student.homologation_requests.create!(
       subject: "draft", plan_key: "basico", status: "draft", privacy_accepted: true
     )
-    @draft.documents.attach(io: StringIO.new("pdf"), filename: "doc.pdf", content_type: "application/pdf")
+    RequestDocument::REQUIRED_KINDS.each { |kind| attach_request_document(@draft, kind: kind) }
   end
 
   test "POST create transitions a draft to submitted and redirects" do

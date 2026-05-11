@@ -1,10 +1,10 @@
 <%# Locals:
       hr       — HomologationRequest
-      can_edit — boolean (uploader + delete buttons visible only when true)
+      can_edit — boolean (per-slot upload/replace/remove enabled only when true)
       intro    — optional String, copy under the section title; omit to use the student-facing default %>
 <%
-  attachments  = hr.documents.attachments.order(created_at: :desc)
-  intro_text   = local_assigns.fetch(:intro, t("requests.attachments.intro"))
+  intro_text        = local_assigns.fetch(:intro, t("requests.attachments.intro"))
+  documents_by_kind = hr.request_documents.includes(file_attachment: :blob).index_by(&:kind)
 %>
 <%= turbo_frame_tag dom_id(hr, :documents) do %>
 <div class="card bg-canvas border border-hairline-soft md:col-span-2">
@@ -16,96 +16,21 @@
           <p class="text-sm text-mute mt-1"><%= intro_text %></p>
         <% end %>
       </div>
-      <span class="text-sm font-mono text-mute tabular-nums"><%= attachments.size %></span>
+      <%= render "homologation_requests/documents_progress", hr: hr %>
     </header>
 
-    <% if attachments.any? %>
-      <ul class="mt-4 divide-y divide-hairline-soft border border-hairline-soft rounded-2xl overflow-hidden">
-        <% attachments.each do |attachment| %>
-          <li class="flex items-center gap-3 px-4 py-3 bg-canvas hover:bg-surface-soft transition-colors">
-            <span class="w-9 h-9 rounded-xl bg-surface-card inline-flex items-center justify-center shrink-0 text-mute" aria-hidden="true">
-              <%= heroicon "document-text", options: { class: "w-5 h-5" } %>
-            </span>
-            <div class="min-w-0 flex-1">
-              <p class="text-sm font-semibold text-ink truncate"><%= attachment.filename.to_s %></p>
-              <p class="text-xs text-mute">
-                <%= number_to_human_size(attachment.byte_size) %>
-                <span class="mx-1.5">·</span>
-                <%= l(attachment.created_at, format: :short) %>
-              </p>
-            </div>
-            <%= link_to rails_blob_path(attachment, disposition: "attachment"),
-                  class: "btn btn-ghost btn-sm gap-1.5 shrink-0",
-                  data:  { turbo_frame: "_top" } do %>
-              <%= heroicon "arrow-down-tray", options: { class: "w-4 h-4", "aria-hidden": true } %>
-              <span class="hidden sm:inline"><%= t("requests.attachments.download") %></span>
-            <% end %>
-            <% if can_edit %>
-              <%= button_to homologation_request_document_path(hr, attachment.id),
-                    method: :delete,
-                    form: { data: { turbo_confirm: t("requests.attachments.confirm_remove"), turbo_frame: "_top" } },
-                    class: "btn btn-ghost btn-sm shrink-0",
-                    aria: { label: t("requests.attachments.remove") } do %>
-                <%= heroicon "trash", options: { class: "w-4 h-4 text-mute", "aria-hidden": true } %>
-              <% end %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <% unless can_edit %>
-        <p class="text-sm text-ash text-center py-6 mt-3 border border-dashed border-hairline-soft rounded-2xl">
-          <%= t("requests.attachments.empty") %>
-        </p>
+    <div class="mt-4 grid sm:grid-cols-2 gap-2">
+      <% (RequestDocument::REQUIRED_KINDS + (RequestDocument::KINDS - RequestDocument::REQUIRED_KINDS)).each do |kind| %>
+        <%= render "homologation_requests/document_slot",
+              hr:       hr,
+              kind:     kind,
+              document: documents_by_kind[kind],
+              can_edit: can_edit %>
       <% end %>
-    <% end %>
+    </div>
 
-    <% upload_errors = hr.errors[:documents] %>
-    <% if upload_errors.any? %>
-      <ul class="mt-4 text-sm text-error space-y-1">
-        <% upload_errors.each do |msg| %>
-          <li><%= t("requests.attachments.error_prefix") %> <%= msg %></li>
-        <% end %>
-      </ul>
-    <% end %>
-
-    <% if can_edit %>
-      <div class="mt-4 rounded-2xl border-2 border-dashed border-hairline transition-colors data-[over=true]:border-ink data-[over=true]:bg-surface-soft"
-           data-controller="dropzone"
-           data-dropzone-busy-message="<%= t('requests.attachments.uploading', count: '%{count}') %>">
-        <%= form_with url: homologation_request_documents_path(hr),
-              multipart: true,
-              data: { dropzone_target: "form" },
-              class: "p-6 flex flex-col items-center justify-center gap-2 text-center" do |f| %>
-          <span class="w-10 h-10 rounded-full bg-surface-card text-ink inline-flex items-center justify-center" aria-hidden="true">
-            <%= heroicon "arrow-up-tray", variant: :solid, options: { class: "w-5 h-5" } %>
-          </span>
-          <p class="text-sm font-semibold text-ink" data-dropzone-target="label">
-            <%= t("requests.attachments.drop_here") %>
-          </p>
-          <label class="text-sm">
-            <span class="text-mute"><%= t("requests.attachments.or") %></span>
-            <span class="font-semibold text-ink underline underline-offset-2 cursor-pointer">
-              <%= t("requests.attachments.choose") %>
-            </span>
-            <%= file_field_tag "files[]",
-                  multiple:      true,
-                  direct_upload: true,
-                  class: "sr-only",
-                  data: { dropzone_target: "input", action: "change->dropzone#selected" } %>
-          </label>
-          <p class="text-xs text-ash mt-1"><%= t("requests.attachments.formats_hint") %></p>
-          <p class="text-xs text-ash mt-2 flex items-center gap-1 justify-center">
-            <%= t("requests.attachments.security_hint_before") %>
-            <span class="inline-flex items-center gap-1 mx-0.5">
-              <%= heroicon "lock-closed", variant: :micro, options: { class: "w-3 h-3", "aria-hidden": true } %>
-              <%= t("requests.attachments.security_hint_encrypted") %>
-            </span>
-            <%= t("requests.attachments.security_hint_after") %>
-          </p>
-        <% end %>
-        <ul class="px-6 pb-6 space-y-1.5 empty:hidden" data-dropzone-target="progress"></ul>
-      </div>
+    <% if !can_edit && documents_by_kind.empty? %>
+      <p class="text-xs text-ash text-center mt-4"><%= t("requests.attachments.empty") %></p>
     <% end %>
   </div>
 </div>

@@ -4,8 +4,7 @@ require "zip"
 class RequestArchiveTest < ActiveSupport::TestCase
   setup do
     @request = homologation_requests(:in_pipeline_es)
-    @request.documents.attach(io: StringIO.new("doc-bytes"), filename: "transcript.pdf", content_type: "application/pdf")
-    @request.save!
+    attach_request_document(@request, kind: "transcript", filename: "transcript.pdf", content: "doc-bytes")
   end
 
   test "zip_archive writes documents to the archive" do
@@ -15,7 +14,7 @@ class RequestArchiveTest < ActiveSupport::TestCase
         entries << entry.name
       end
 
-      assert_includes entries, "transcript.pdf"
+      assert_includes entries, "transcript-transcript.pdf"
     end
   end
 

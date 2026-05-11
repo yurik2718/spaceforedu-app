@@ -197,18 +197,15 @@ class HomologationRequestTest < ActiveSupport::TestCase
     assert_equal({ "sol" => true, "vol" => true, "extra" => false }, reloaded.document_checklist)
   end
 
-  test "documents are invalid when content_type is unsupported" do
-    @request.documents.attach(
-      io: StringIO.new("plain"),
-      filename: "notes.txt",
-      content_type: "text/plain"
-    )
+  test "request_document is invalid when content_type is unsupported" do
+    doc = @request.request_documents.build(kind: "diploma")
+    doc.file.attach(io: StringIO.new("plain"), filename: "notes.txt", content_type: "text/plain")
 
-    refute @request.valid?
-    assert @request.errors[:documents].any?
+    refute doc.valid?
+    assert doc.errors[:file].any?
   end
 
-  test "documents are invalid when a single file exceeds 15 megabytes" do
+  test "request_document is invalid when a single file exceeds 15 megabytes" do
     blob = ActiveStorage::Blob.create_and_upload!(
       io:           StringIO.new("x"),
       filename:     "huge.pdf",
@@ -216,10 +213,11 @@ class HomologationRequestTest < ActiveSupport::TestCase
     )
     blob.update_column(:byte_size, 16.megabytes)
 
-    @request.documents.attach(blob)
+    doc = @request.request_documents.build(kind: "diploma")
+    doc.file.attach(blob)
 
-    refute @request.valid?
-    assert @request.errors[:documents].any?
+    refute doc.valid?
+    assert doc.errors[:file].any?
   end
 
   test "transition_to!(submitted) rejects a draft with no documents" do

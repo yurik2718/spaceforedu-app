@@ -9,6 +9,13 @@ ru:
     password_reset_token_invalid:  "Ссылка для сброса пароля недействительна или истекла."
     avatar_invalid_type:           "должно быть изображение JPEG, PNG, WebP или GIF"
     avatar_too_large:              "не должно превышать %{max} МБ"
+    messages:
+      content_type_invalid:
+        one:   "Допустимы PDF, JPG, PNG или WebP"
+        few:   "Допустимы PDF, JPG, PNG или WebP"
+        many:  "Допустимы PDF, JPG, PNG или WebP"
+        other: "Допустимы PDF, JPG, PNG или WebP"
+      file_size_not_less_than: "Файл должен быть меньше %{max}"
 
   flash:
     request_created:        "Заявка создана."
@@ -28,13 +35,9 @@ ru:
     document_checklist_updated: "Чеклист обновлён."
     conversation_started:   "Чат создан."
     registered:             "Добро пожаловать."
-    documents_uploaded:
-      one:   "Файл загружен."
-      few:   "%{count} файла загружены."
-      many:  "%{count} файлов загружены."
-      other: "%{count} файлов загружены."
+    document_uploaded:      "Файл загружен."
     document_removed:       "Файл удалён."
-    no_files_selected:      "Файлы не выбраны."
+    invalid_document_kind:  "Неизвестный тип документа."
     payment_processing:     "Платёж получен. Скоро подтвердим."
     password_reset_sent:    "Инструкции по сбросу пароля отправлены (если пользователь с таким email существует)."
     password_reset_success:     "Пароль успешно изменён."
@@ -196,31 +199,45 @@ ru:
       open_chat: "Открыть чат"
       submit_disabled_hint: "Сначала загрузите хотя бы один документ."
     attachments:
-      intro:           "Загрузите сканы дипломов, паспорта и других документов."
-      empty:           "Документы пока не прикреплены."
-      drop_here:       "Перетащите файлы сюда"
-      or:              "или"
-      choose:          "выберите вручную"
+      intro:           "Прикрепите перечисленные ниже документы. Сразу всё или по мере готовности."
+      empty:           "Файлы появятся здесь, как только вы их загрузите."
+      required_label:  "обязательно"
+      optional_label:  "желательно"
+      expected:
+        diploma:
+          title: "Диплом"
+          body:  "Скан с обеих сторон. Если есть апостиль — приложите вместе."
+        transcript:
+          title: "Академическая справка"
+          body:  "Список дисциплин, оценок и часов за весь период обучения."
+        passport:
+          title: "Паспорт"
+          body:  "Страница с фото и личными данными."
+        language_certificate:
+          title: "Сертификат испанского"
+          body:  "DELE, SIELE или аналог — если уже сдавали."
+        apostille:
+          title: "Апостиль"
+          body:  "Если уже проставлен на дипломе или академической справке."
+        translation:
+          title: "Присяжный перевод"
+          body:  "Если уже есть перевод от traductor jurado."
       formats_hint:    "PDF, JPG, PNG, WebP · до 15 МБ за файл"
-      security_hint_before:    "Серверы в ЕС ·"
-      security_hint_encrypted: "Зашифровано"
-      security_hint_after:     "· GDPR"
       download:        "Скачать"
       remove:          "Удалить"
+      replace:         "Заменить"
       confirm_remove:  "Удалить этот файл?"
-      uploading:       "Загружаю %{count}…"
-      error_prefix:    "Документ:"
     sections:
       info:        "Информация о заявке"
-      documents:         "Контрольный список"
+      documents:         "Этапы проверки"
       documents_subtitle: "Наша команда отмечает пункты по мере рассмотрения заявки."
       attachments: "Документы"
       payment:     "Оплата"
       student:   "Студент"
-      pipeline:  "Пайплайн"
+      pipeline:  "Работа над заявкой"
       chat:      "Чат"
       status:    "Статус"
-      pipeline_notes: "Заметки пайплайна"
+      pipeline_notes: "Внутренние заметки"
       plan:      "Выберите тариф"
       plan_description: "Можно поменять, пока заявка в статусе черновика."
       diploma:   "Об образовании"
@@ -268,16 +285,16 @@ ru:
       C2:     "C2"
       native: "Носитель"
     checklist:
-      sol: "Заявление (solicitud)"
-      vol: "Волант (volante)"
-      tas: "Тасы (tasas)"
-      cer: "Академическая справка"
-      tit: "Диплом"
+      sol: "Solicitud"
+      vol: "Volante"
+      tas: "Tasas"
+      cer: "Certificación académica"
+      tit: "Título"
     checklist_descriptions:
       sol: "Официальное заявление по форме министерства. Шаблон выдаст ваш ассистент после подачи."
-      vol: "Платёжный волант — подтверждение оплаты госпошлины."
-      tas: "Квитанции об оплате тас (tasas) за процедуру."
-      cer: "Академическая справка с перечнем дисциплин и оценок (certificación académica)."
+      vol: "Подтверждение оплаты госпошлины — документ из банка."
+      tas: "Квитанции об оплате процедурных пошлин."
+      cer: "Справка с перечнем дисциплин и оценок за весь период обучения."
       tit: "Скан или фото диплома с обеих сторон. Апостиль и присяжный перевод — отдельно, если уже есть."
     stepper:
       draft:        "Черновик"
@@ -348,10 +365,10 @@ ru:
         student:        "Студент"
         status:         "Статус"
         payment:        "Оплата"
-        pipeline:       "Пайплайн"
+        pipeline:       "Работа над заявкой"
         checklist:      "Чеклист документов"
         chat:           "Чат"
-        pipeline_notes: "Заметки пайплайна"
+        pipeline_notes: "Внутренние заметки"
       actions:
         change_status:        "Сменить статус"
         confirm_payment:      "Отметить оплаченным"
@@ -423,7 +440,7 @@ ru:
     my_requests:   "Мои заявки"
     new_request:   "Новая заявка"
     conversations: "Сообщения"
-    pipeline:      "Пайплайн"
+    pipeline:      "Производство"
     profile:       "Профиль"
     notifications: "Уведомления"
     sign_in:       "Войти"
@@ -467,7 +484,7 @@ ru:
       body:  "%{student} только что оплатил. Заявка ушла в работу."
     documents_added:
       title: "Новые документы по заявке «%{subject}»"
-      body:  "%{student} загрузил %{count} файл(ов) в ответ на ваш запрос."
+      body:  "%{student} загрузил файл в ответ на ваш запрос."
 
   passwords_mailer:
     reset:

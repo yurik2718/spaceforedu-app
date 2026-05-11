@@ -748,3 +748,12 @@ dialog.modal::backdrop {
   font-size: 13px;
   font-weight: 500;
 }
+
+/* While the user drags any file over the document, every empty document slot
+   gets a soft cue so it's clear where the file can land. The slot directly
+   under the cursor adds its own stronger highlight (see data-drag-over=true
+   utility classes on the partial). */
+:root[data-dragging-files="true"] [data-empty-slot="true"]:not([data-drag-over="true"]) {
+  border-color: var(--primary);
+  border-style: dashed;
+}

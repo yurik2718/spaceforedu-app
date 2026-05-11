@@ -9,6 +9,11 @@ es:
     password_reset_token_invalid:  "El enlace de recuperación no es válido o ha expirado."
     avatar_invalid_type:           "debe ser una imagen JPEG, PNG, WebP o GIF"
     avatar_too_large:              "no puede superar %{max} MB"
+    messages:
+      content_type_invalid:
+        one:   "Solo se permiten PDF, JPG, PNG o WebP"
+        other: "Solo se permiten PDF, JPG, PNG o WebP"
+      file_size_not_less_than: "El archivo debe pesar menos de %{max}"
 
   flash:
     request_created:        "Solicitud creada."
@@ -28,11 +33,9 @@ es:
     document_checklist_updated: "Lista actualizada."
     conversation_started:   "Conversación iniciada."
     registered:             "Bienvenido a bordo."
-    documents_uploaded:
-      one:   "Archivo cargado."
-      other: "%{count} archivos cargados."
+    document_uploaded:      "Archivo cargado."
     document_removed:       "Archivo eliminado."
-    no_files_selected:      "No has seleccionado ningún archivo."
+    invalid_document_kind:  "Tipo de documento desconocido."
     payment_processing:     "Pago recibido. Lo confirmaremos en breve."
     password_reset_sent:    "Instrucciones de recuperación enviadas (si existe un usuario con ese correo)."
     password_reset_success: "Contraseña actualizada."
@@ -194,23 +197,37 @@ es:
       open_chat: "Abrir chat"
       submit_disabled_hint: "Sube primero al menos un documento."
     attachments:
-      intro:           "Sube escaneos de tu título, pasaporte y otros documentos."
-      empty:           "Aún no hay documentos adjuntos."
-      drop_here:       "Suelta los archivos aquí"
-      or:              "o"
-      choose:          "selecciona manualmente"
+      intro:           "Adjunta los documentos indicados abajo. De golpe o a medida que los tengas."
+      empty:           "Tus archivos aparecerán aquí en cuanto los subas."
+      required_label:  "obligatorio"
+      optional_label:  "recomendado"
+      expected:
+        diploma:
+          title: "Título"
+          body:  "Escaneo por ambas caras. Si ya tiene apostilla, adjúntala junto al título."
+        transcript:
+          title: "Certificación académica"
+          body:  "Listado de asignaturas, notas y horas o créditos de toda la carrera."
+        passport:
+          title: "Pasaporte"
+          body:  "Página con la foto y los datos personales."
+        language_certificate:
+          title: "Certificado de español"
+          body:  "DELE, SIELE u otro equivalente, si ya lo tienes."
+        apostille:
+          title: "Apostilla"
+          body:  "Si ya está colocada sobre el título o la certificación académica."
+        translation:
+          title: "Traducción jurada"
+          body:  "Si ya cuentas con traducción de un traductor jurado."
       formats_hint:    "PDF, JPG, PNG, WebP · hasta 15 MB por archivo"
-      security_hint_before:    "Servidores en la UE ·"
-      security_hint_encrypted: "Cifrado"
-      security_hint_after:     "· RGPD"
       download:        "Descargar"
       remove:          "Eliminar"
+      replace:         "Reemplazar"
       confirm_remove:  "¿Eliminar este archivo?"
-      uploading:       "Subiendo %{count}…"
-      error_prefix:    "Documento:"
     sections:
       info:        "Información de la solicitud"
-      documents:         "Lista de verificación"
+      documents:         "Avance de la revisión"
       documents_subtitle: "Nuestro equipo marca los puntos a medida que se revisa la solicitud."
       attachments: "Documentos"
       payment:     "Pago"
@@ -463,7 +480,7 @@ es:
       body:  "%{student} acaba de pagar. La solicitud entró en el pipeline."
     documents_added:
       title: "Nuevos documentos en «%{subject}»"
-      body:  "%{student} subió %{count} archivo(s) en respuesta a tu petición."
+      body:  "%{student} subió un archivo en respuesta a tu petición."
 
   passwords_mailer:
     reset:

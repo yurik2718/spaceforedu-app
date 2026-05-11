@@ -1,0 +1,8 @@
+<%# Locals: hr — HomologationRequest %>
+<%
+  filled = (RequestDocument::REQUIRED_KINDS & hr.request_documents.pluck(:kind)).size
+  total  = RequestDocument::REQUIRED_KINDS.size
+%>
+<span id="request_documents_progress" class="text-sm font-mono text-mute tabular-nums shrink-0">
+  <%= filled %>/<%= total %>
+</span>

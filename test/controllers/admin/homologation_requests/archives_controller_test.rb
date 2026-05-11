@@ -3,8 +3,7 @@ require "test_helper"
 class Admin::HomologationRequests::ArchivesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @hr = homologation_requests(:in_pipeline_es)
-    @hr.documents.attach(io: StringIO.new("d"), filename: "transcript.pdf", content_type: "application/pdf")
-    @hr.save!
+    attach_request_document(@hr, kind: "transcript", filename: "transcript.pdf")
   end
 
   test "super_admin downloads a zip archive" do

@@ -8,6 +8,17 @@ module ActiveStorageTestHelper
       content_type: content_type
     ).signed_id
   end
+
+  def upload_fixture(filename: "test.pdf", content: "%PDF-1.4 fake", content_type: "application/pdf")
+    Rack::Test::UploadedFile.new(StringIO.new(content), content_type, original_filename: filename)
+  end
+
+  def attach_request_document(hr, kind:, filename: "file.pdf", content: "%PDF-1.4 ok", content_type: "application/pdf")
+    doc = hr.request_documents.build(kind: kind)
+    doc.file.attach(io: StringIO.new(content), filename: filename, content_type: content_type)
+    doc.save!
+    doc
+  end
 end
 
 ActiveSupport.on_load(:active_support_test_case) { include ActiveStorageTestHelper }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_10_080252) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -69,6 +69,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
     t.string "status", default: "draft", null: false
     t.datetime "status_changed_at"
     t.integer "status_changed_by"
+    t.string "stripe_payment_intent_id"
     t.string "studies_finished"
     t.string "studies_spain"
     t.string "study_type_spain"
@@ -127,6 +128,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
     t.integer "user_id", null: false
     t.index ["endpoint"], name: "index_push_subscriptions_on_endpoint", unique: true
     t.index ["user_id"], name: "index_push_subscriptions_on_user_id"
+  end
+
+  create_table "request_documents", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "homologation_request_id", null: false
+    t.string "kind", null: false
+    t.datetime "updated_at", null: false
+    t.index ["homologation_request_id", "kind"], name: "index_request_documents_on_homologation_request_id_and_kind", unique: true
+    t.index ["homologation_request_id"], name: "index_request_documents_on_homologation_request_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -188,5 +198,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_07_040515) do
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "push_subscriptions", "users"
+  add_foreign_key "request_documents", "homologation_requests"
   add_foreign_key "sessions", "users"
 end

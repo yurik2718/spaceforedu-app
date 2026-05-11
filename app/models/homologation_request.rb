@@ -6,13 +6,9 @@ class HomologationRequest < ApplicationRecord
   belongs_to :pipeline_changer,  class_name: "User", optional: true, foreign_key: :pipeline_changed_by,  strict_loading: false
   has_one    :conversation, dependent: :destroy
 
-  has_many_attached :documents
+  has_many :request_documents, dependent: :destroy, inverse_of: :homologation_request
 
   broadcasts_refreshes
-
-  validates :documents,
-            content_type: %w[application/pdf image/jpeg image/png image/webp],
-            size:         { less_than: 15.megabytes }
 
   serialize :document_checklist, coder: JSON
 
@@ -38,7 +34,7 @@ class HomologationRequest < ApplicationRecord
   def plan      = Plan.find(plan_key)
   def amount    = plan.amount
 
-  def notify_admin_of_documents_reply!(count:)
+  def notify_admin_of_documents_reply!
     return unless status == "awaiting_reply"
     admin = User.super_admin
     return unless admin
@@ -48,8 +44,7 @@ class HomologationRequest < ApplicationRecord
       title_key:  "notifications.documents_added.title",
       body_key:   "notifications.documents_added.body",
       subject:    subject,
-      student:    user.name,
-      count:      count
+      student:    user.name
     )
   end
 
@@ -151,7 +146,7 @@ class HomologationRequest < ApplicationRecord
   end
 
   def ready_to_submit?
-    documents.attached?
+    (RequestDocument::REQUIRED_KINDS - request_documents.pluck(:kind)).empty?
   end
 
   def checklist_done?(key)
@@ -162,9 +157,10 @@ class HomologationRequest < ApplicationRecord
 
   def zip_archive
     buffer = Zip::OutputStream.write_buffer do |zip|
-      documents.attachments.each do |attachment|
-        zip.put_next_entry(attachment.filename.to_s)
-        attachment.blob.download { |chunk| zip.write(chunk) }
+      request_documents.includes(file_attachment: :blob).each do |doc|
+        next unless doc.file.attached?
+        zip.put_next_entry("#{doc.kind}-#{doc.file.filename}")
+        doc.file.blob.download { |chunk| zip.write(chunk) }
       end
     end
     buffer.string

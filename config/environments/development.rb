@@ -91,6 +91,14 @@ Rails.application.configure do
     Bullet.bullet_logger = false
     Bullet.console       = true
     Bullet.add_footer    = true
+
+    # ActiveStorage's Attached::One proxy delegates `filename`, `signed_id`,
+    # etc. to the blob via `delegate_missing_to`, which Bullet doesn't see as
+    # an explicit `attachment.blob` call. The blob IS used (we render the
+    # filename and download path); the warning is a known false positive.
+    Bullet.add_safelist type: :unused_eager_loading,
+                        class_name: "ActiveStorage::Attachment",
+                        association: :blob
   end
 
   # Hardcoded encryption keys for local dev. Production reads these from credentials —

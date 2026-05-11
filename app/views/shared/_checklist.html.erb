@@ -59,26 +59,21 @@
         <% end %>
       </ul>
     <% else %>
-      <ul class="mt-4 -mx-2">
+      <ul class="mt-4 space-y-3">
         <% keys.each do |key| %>
           <% is_done = hr.checklist_done?(key) %>
-          <li>
-            <details class="group rounded-md hover:bg-surface-soft">
-              <summary class="flex items-center gap-2 px-2 py-1.5 cursor-pointer list-none text-sm">
-                <% if is_done %>
-                  <%= heroicon "check-circle", variant: :solid, options: { class: "w-5 h-5 text-success shrink-0", "aria-hidden": true } %>
-                <% else %>
-                  <%= heroicon "clock", variant: :solid, options: { class: "w-5 h-5 text-ash shrink-0", "aria-hidden": true } %>
-                <% end %>
-                <span class="flex-1 <%= is_done ? 'text-ash' : 'text-ink' %>">
-                  <%= t("requests.checklist.#{key}") %>
-                </span>
-                <%= heroicon "chevron-down", options: { class: "w-4 h-4 text-ash transition-transform group-open:rotate-180", "aria-hidden": true } %>
-              </summary>
-              <p class="px-9 pb-2 pt-0.5 text-xs text-mute leading-relaxed">
+          <li class="flex items-start gap-2 text-sm">
+            <% if is_done %>
+              <%= heroicon "check-circle", variant: :solid, options: { class: "w-5 h-5 text-success shrink-0 mt-0.5", "aria-hidden": true } %>
+            <% else %>
+              <%= heroicon "clock", variant: :solid, options: { class: "w-5 h-5 text-ash shrink-0 mt-0.5", "aria-hidden": true } %>
+            <% end %>
+            <div class="flex-1">
+              <p class="<%= is_done ? 'text-ash' : 'text-ink' %>"><%= t("requests.checklist.#{key}") %></p>
+              <p class="text-xs text-mute leading-relaxed mt-0.5">
                 <%= t("requests.checklist_descriptions.#{key}", default: "") %>
               </p>
-            </details>
+            </div>
           </li>
         <% end %>
       </ul>

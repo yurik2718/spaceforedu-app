@@ -9,6 +9,11 @@ en:
     password_reset_token_invalid:  "Password reset link is invalid or has expired."
     avatar_invalid_type:           "must be a JPEG, PNG, WebP or GIF image"
     avatar_too_large:              "must be %{max} MB or smaller"
+    messages:
+      content_type_invalid:
+        one:   "Only PDF, JPG, PNG or WebP allowed"
+        other: "Only PDF, JPG, PNG or WebP allowed"
+      file_size_not_less_than: "File must be smaller than %{max}"
 
   flash:
     request_created:        "Request created."
@@ -28,11 +33,9 @@ en:
     document_checklist_updated: "Checklist updated."
     conversation_started:   "Conversation started."
     registered:             "Welcome aboard."
-    documents_uploaded:
-      one:   "File uploaded."
-      other: "%{count} files uploaded."
+    document_uploaded:      "File uploaded."
     document_removed:       "File removed."
-    no_files_selected:      "No files selected."
+    invalid_document_kind:  "Unknown document kind."
     payment_processing:     "Payment received. We'll confirm it shortly."
     password_reset_sent:    "Password reset instructions sent (if user with that email address exists)."
     password_reset_success:     "Password has been reset."
@@ -194,23 +197,37 @@ en:
       open_chat: "Open chat"
       submit_disabled_hint: "Upload at least one document first."
     attachments:
-      intro:           "Upload scans of your diploma, passport and other documents."
-      empty:           "No documents attached yet."
-      drop_here:       "Drop files here"
-      or:              "or"
-      choose:          "choose manually"
+      intro:           "Attach the documents listed below — all at once, or as they become ready."
+      empty:           "Your files will appear here once you upload them."
+      required_label:  "required"
+      optional_label:  "optional"
+      expected:
+        diploma:
+          title: "Diploma"
+          body:  "Scan of both sides. If you already have the apostille, attach it together."
+        transcript:
+          title: "Academic transcript"
+          body:  "Full list of subjects, grades and hours or credits across your studies."
+        passport:
+          title: "Passport"
+          body:  "Photo page with personal details."
+        language_certificate:
+          title: "Spanish certificate"
+          body:  "DELE, SIELE or equivalent — if you already have one."
+        apostille:
+          title: "Apostille"
+          body:  "If already affixed to your diploma or academic transcript."
+        translation:
+          title: "Sworn translation"
+          body:  "If you already have a translation from a traductor jurado."
       formats_hint:    "PDF, JPG, PNG, WebP · up to 15 MB per file"
-      security_hint_before:    "EU storage ·"
-      security_hint_encrypted: "Encrypted"
-      security_hint_after:     "· GDPR"
       download:        "Download"
       remove:          "Remove"
+      replace:         "Replace"
       confirm_remove:  "Remove this file?"
-      uploading:       "Uploading %{count}…"
-      error_prefix:    "Document:"
     sections:
       info:        "Request information"
-      documents:         "Verification checklist"
+      documents:         "Review progress"
       documents_subtitle: "Our team marks these off as your application is reviewed."
       attachments: "Documents"
       payment:     "Payment"
@@ -463,7 +480,7 @@ en:
       body:  "%{student} just paid. The request moved into the pipeline."
     documents_added:
       title: "New documents on \"%{subject}\""
-      body:  "%{student} uploaded %{count} file(s) in reply to your request."
+      body:  "%{student} uploaded a file in reply to your request."
 
   passwords_mailer:
     reset:

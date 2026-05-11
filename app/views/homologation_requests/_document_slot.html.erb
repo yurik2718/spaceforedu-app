@@ -1,0 +1,130 @@
+<%# Locals:
+      hr       — HomologationRequest
+      kind     — slot key (RequestDocument::KINDS)
+      document — RequestDocument or nil
+      can_edit — boolean %>
+<%
+  required     = RequestDocument::REQUIRED_KINDS.include?(kind)
+  filled       = document&.persisted? && document.file.attached?
+  errors       = document&.errors&.[](:file).to_a
+  accept_types = "application/pdf,image/jpeg,image/png,image/webp"
+  field_id     = "file_input_#{kind}"
+  form_id      = "upload_form_#{kind}"
+%>
+<%= turbo_frame_tag "request_document_slot_#{kind}" do %>
+  <% if filled %>
+    <div class="flex items-start gap-3 rounded-xl border border-success/40 bg-success/5 px-3 py-2.5">
+      <span class="w-8 h-8 rounded-lg bg-success text-white inline-flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
+        <%= heroicon "check", variant: :solid, options: { class: "w-4 h-4" } %>
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="text-sm font-semibold text-ink flex items-center gap-2 flex-wrap">
+          <span><%= t("requests.attachments.expected.#{kind}.title") %></span>
+          <% if required %>
+            <span class="badge badge-warning badge-sm"><%= t("requests.attachments.required_label") %></span>
+          <% else %>
+            <span class="badge badge-ghost badge-sm"><%= t("requests.attachments.optional_label") %></span>
+          <% end %>
+        </p>
+        <p class="text-xs text-mute mt-0.5 truncate"><%= document.file.filename.to_s %></p>
+
+        <div class="flex items-center gap-3 mt-1.5 text-xs">
+          <%= link_to t("requests.attachments.download"),
+                rails_blob_path(document.file, disposition: "attachment"),
+                data:  { turbo_frame: "_top" },
+                class: "text-mute hover:text-ink underline-offset-2 hover:underline" %>
+
+          <% if can_edit %>
+            <%= form_with url:    homologation_request_documents_path(hr),
+                          method: :post,
+                          multipart: true,
+                          id:     form_id,
+                          data:   { controller: "slot-uploader",
+                                    turbo_frame: "_top" },
+                          class:  "inline data-[uploading=true]:opacity-50 data-[uploading=true]:pointer-events-none" do |f| %>
+              <%= f.hidden_field :kind, value: kind %>
+              <label for="<%= field_id %>" class="text-mute hover:text-ink underline-offset-2 hover:underline cursor-pointer">
+                <%= t("requests.attachments.replace") %>
+              </label>
+              <%= f.file_field :file,
+                    id:     field_id,
+                    accept: accept_types,
+                    class:  "sr-only",
+                    data:   { action: "change->slot-uploader#submit" } %>
+            <% end %>
+
+            <%= button_to t("requests.attachments.remove"),
+                  homologation_request_document_path(hr, document.id),
+                  method: :delete,
+                  form:   { data: { turbo_frame: "_top" } },
+                  data:   { turbo_confirm: t("requests.attachments.confirm_remove") },
+                  class:  "text-mute hover:text-error underline-offset-2 hover:underline bg-transparent p-0 border-0 cursor-pointer" %>
+          <% end %>
+        </div>
+
+        <% if errors.any? %>
+          <p class="text-xs text-error mt-1.5"><%= errors.first %></p>
+        <% end %>
+      </div>
+    </div>
+
+  <% elsif can_edit %>
+    <%= form_with url:    homologation_request_documents_path(hr),
+                  method: :post,
+                  multipart: true,
+                  id:     form_id,
+                  data:   { controller: "slot-uploader",
+                            empty_slot: "true",
+                            turbo_frame: "_top",
+                            action: "dragover->slot-uploader#dragover dragleave->slot-uploader#dragleave drop->slot-uploader#drop" },
+                  class:  "block rounded-xl border border-hairline-soft bg-canvas transition-colors hover:border-primary/60 hover:ring-1 hover:ring-primary/20 data-[drag-over=true]:border-primary data-[drag-over=true]:bg-primary/5 data-[drag-over=true]:ring-2 data-[drag-over=true]:ring-primary/30 data-[uploading=true]:opacity-60 data-[uploading=true]:pointer-events-none" do |f| %>
+      <%= f.hidden_field :kind, value: kind %>
+      <label for="<%= field_id %>" class="flex items-start gap-3 px-3 py-2.5 cursor-pointer">
+        <span class="w-8 h-8 rounded-lg bg-surface-card text-mute inline-flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
+          <%= heroicon "arrow-up-tray", options: { class: "w-4 h-4" } %>
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-semibold text-ink flex items-center gap-2 flex-wrap">
+            <span><%= t("requests.attachments.expected.#{kind}.title") %></span>
+            <% if required %>
+              <span class="badge badge-warning badge-sm"><%= t("requests.attachments.required_label") %></span>
+            <% else %>
+              <span class="badge badge-ghost badge-sm"><%= t("requests.attachments.optional_label") %></span>
+            <% end %>
+          </p>
+          <p class="text-xs text-mute leading-relaxed mt-0.5">
+            <%= t("requests.attachments.expected.#{kind}.body") %>
+          </p>
+          <% if errors.any? %>
+            <p class="text-xs text-error mt-1.5"><%= errors.first %></p>
+          <% end %>
+        </div>
+        <%= f.file_field :file,
+              id:     field_id,
+              accept: accept_types,
+              class:  "sr-only",
+              data:   { action: "change->slot-uploader#submit" } %>
+      </label>
+    <% end %>
+
+  <% else %>
+    <div class="flex items-start gap-3 rounded-xl border border-hairline-soft bg-canvas px-3 py-2.5">
+      <span class="w-8 h-8 rounded-lg bg-surface-card text-mute inline-flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">
+        <%= heroicon "document-text", options: { class: "w-4 h-4" } %>
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="text-sm font-semibold text-ink flex items-center gap-2 flex-wrap">
+          <span><%= t("requests.attachments.expected.#{kind}.title") %></span>
+          <% if required %>
+            <span class="badge badge-warning badge-sm"><%= t("requests.attachments.required_label") %></span>
+          <% else %>
+            <span class="badge badge-ghost badge-sm"><%= t("requests.attachments.optional_label") %></span>
+          <% end %>
+        </p>
+        <p class="text-xs text-mute leading-relaxed mt-0.5">
+          <%= t("requests.attachments.expected.#{kind}.body") %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+<% end %>
