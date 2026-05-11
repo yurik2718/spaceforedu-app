@@ -39,5 +39,4 @@ class ProfilesController < ApplicationController
         :avatar, :remove_avatar
       ])
     end
-
 end

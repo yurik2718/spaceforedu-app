@@ -23,7 +23,7 @@ class Notification < ApplicationRecord
   end
 
   def group_key
-    [notifiable_type, notifiable_id, title_key]
+    [ notifiable_type, notifiable_id, title_key ]
   end
 
   private

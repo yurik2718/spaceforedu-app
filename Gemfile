@@ -33,7 +33,7 @@ gem "solid_cable",  "~> 3.0"
 gem "bootsnap",        "~> 1.23", require: false
 gem "kamal",           "~> 2.11", require: false
 gem "thruster",        "~> 0.1",  require: false
-gem "image_processing","~> 1.2"
+gem "image_processing", "~> 1.2"
 gem "heroicons",        "~> 1.0", require: "heroicon"
 
 # Active Storage attachment validations (content_type, size)
@@ -67,6 +67,6 @@ end
 
 group :test do
   gem "capybara",          "~> 3.40"
-  gem "selenium-webdriver","~> 4.43"
+  gem "selenium-webdriver", "~> 4.43"
   gem "webmock",           "~> 3.26"
 end

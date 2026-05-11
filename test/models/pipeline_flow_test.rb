@@ -112,5 +112,4 @@ class PipelineFlowTest < ActiveSupport::TestCase
       assert_equal "cotejo_delegacion", PipelineFlow.cotejo_for("AR")
     end
   end
-
 end

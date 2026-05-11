@@ -11,6 +11,6 @@ class Admin::HomologationRequests::PipelineRetreatsController < ApplicationContr
 
   private
     def retreat_params
-      params.expect(pipeline_retreat: [:reason])
+      params.expect(pipeline_retreat: [ :reason ])
     end
 end

@@ -129,7 +129,7 @@ class HomologationRequest < ApplicationRecord
       pipeline_stage:      prev_stage,
       pipeline_changed_at: Time.current,
       pipeline_changed_by: changed_by.id,
-      pipeline_notes:      [pipeline_notes.presence, log_entry].compact.join("\n\n")
+      pipeline_notes:      [ pipeline_notes.presence, log_entry ].compact.join("\n\n")
     )
   end
 
