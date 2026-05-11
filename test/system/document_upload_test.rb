@@ -34,17 +34,24 @@ class DocumentUploadTest < ApplicationSystemTestCase
     assert_button submit_label
     click_on submit_label
 
-    # Wait for the post-submission redirect first — gives a clearer failure if
-    # something blocks the form POST — then assert the new "what's next" copy.
-    # CI runners ship a slower headless Chrome, so the default 2s timeout is
-    # not always enough for: POST → DB transaction → callbacks → 303 → reload.
-    assert_current_path homologation_request_path(@draft), wait: 10
-    assert_text I18n.t("requests.next_step.submitted"),    wait: 10
-    @draft.reload
-    assert_equal "submitted", @draft.status
+    # Server-side first: the transition is the actual contract, not the UI
+    # copy. Wait for it via the database to avoid racing Turbo's DOM swap on
+    # slower CI runners.
+    assert_request_status "submitted"
+    assert_text I18n.t("requests.next_step.submitted"), wait: 10
   end
 
   private
+    def assert_request_status(expected, timeout: 10)
+      deadline = Time.current + timeout
+      loop do
+        @draft.reload
+        return if @draft.status == expected
+        raise Minitest::Assertion, "expected status #{expected.inspect}, still #{@draft.status.inspect} after #{timeout}s" if Time.current > deadline
+        sleep 0.1
+      end
+    end
+
     def make_pdf(name)
       path = Rails.root.join("tmp", "system_test_#{name}")
       File.binwrite(path, "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n1 0 obj\n<</Type/Catalog>>\nendobj\nxref\n0 1\n0000000000 65535 f\ntrailer\n<</Size 1>>\n%%EOF\n".b)
