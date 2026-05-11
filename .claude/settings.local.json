@@ -15,7 +15,8 @@
       "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/pipeline -o /tmp/pipeline.html)",
       "Bash(bin/rails test:system)",
       "Bash(bin/brakeman --no-pager -i config/brakeman.ignore)",
-      "Bash(echo \"brakeman exit: $?\")"
+      "Bash(echo \"brakeman exit: $?\")",
+      "Bash(RAILS_MASTER_KEY= bin/rails runner 'puts \"before: #{Rails.application.credentials.config.inspect}\"; Rails.application.credentials.config.deep_merge!\\(stripe: { webhook_secret: \"whsec_test_only\" }\\); puts \"after: #{Rails.application.credentials.config.inspect}\"; puts \"dig: #{Rails.application.credentials.dig\\(:stripe, :webhook_secret\\)}\"')"
     ]
   }
 }
