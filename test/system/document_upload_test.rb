@@ -34,7 +34,12 @@ class DocumentUploadTest < ApplicationSystemTestCase
     assert_button submit_label
     click_on submit_label
 
-    assert_text I18n.t("requests.next_step.submitted"), wait: 5
+    # Wait for the post-submission redirect first — gives a clearer failure if
+    # something blocks the form POST — then assert the new "what's next" copy.
+    # CI runners ship a slower headless Chrome, so the default 2s timeout is
+    # not always enough for: POST → DB transaction → callbacks → 303 → reload.
+    assert_current_path homologation_request_path(@draft), wait: 10
+    assert_text I18n.t("requests.next_step.submitted"),    wait: 10
     @draft.reload
     assert_equal "submitted", @draft.status
   end
