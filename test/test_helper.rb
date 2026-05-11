@@ -9,9 +9,13 @@ require_relative "test_helpers/active_storage_test_helper"
 # CI runs without RAILS_MASTER_KEY, so the real credentials store is empty —
 # this gives the Stripe webhook signing test a stable secret without coupling
 # the suite to a production key.
+#
+# Reset @options so the InheritableOptions snapshot picks up the merged config
+# (otherwise `credentials.dig(...)` reads from the pre-merge cache).
 Rails.application.credentials.config.deep_merge!(
   stripe: { webhook_secret: "whsec_test_only" }
 )
+Rails.application.credentials.instance_variable_set(:@options, nil)
 
 module ActiveSupport
   class TestCase
