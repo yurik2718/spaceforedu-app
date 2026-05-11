@@ -3,7 +3,7 @@ class HomologationRequestCheckoutsController < ApplicationController
     hr = HomologationRequest.kept.find(params[:homologation_request_id])
     authorize hr, :checkout?
 
-    session = hr.start_checkout!(
+    session = StripeCheckoutSession.new(hr).create(
       success_url: homologation_request_url(hr, payment: "success"),
       cancel_url:  homologation_request_url(hr)
     )

@@ -1,9 +1,16 @@
 <%# Locals: hr — HomologationRequest %>
 <%= tag.span id: "request_submit_action" do %>
-  <% if policy(hr).submit? && hr.status == "draft" && hr.ready_to_submit? %>
-    <%= button_to t("requests.actions.submit"),
-          homologation_request_submission_path(hr),
-          method: :post,
-          class:  "btn btn-primary btn-sm" %>
+  <% if policy(hr).submit? %>
+    <% if hr.status == "draft" && hr.ready_to_submit? %>
+      <%= button_to t("requests.actions.submit"),
+            homologation_request_submission_path(hr),
+            method: :post,
+            class:  "btn btn-primary btn-sm" %>
+    <% elsif hr.status == "awaiting_reply" %>
+      <%= button_to t("requests.actions.send_reply"),
+            homologation_request_submission_path(hr),
+            method: :post,
+            class:  "btn btn-primary btn-sm" %>
+    <% end %>
   <% end %>
 <% end %>

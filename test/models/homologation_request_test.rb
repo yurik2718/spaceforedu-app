@@ -234,6 +234,102 @@ class HomologationRequestTest < ActiveSupport::TestCase
     assert_equal "draft", draft.reload.status
   end
 
+  test "transition_to! refuses to move a documentless draft to in_review (admin dropdown bypass)" do
+    draft = HomologationRequest.create!(
+      user: users(:student_es), subject: "Empty draft",
+      plan_key: "basico", privacy_accepted: true
+    )
+
+    assert_raises(HomologationRequest::InvalidTransition) do
+      draft.transition_to!("in_review", changed_by: @admin)
+    end
+    assert_equal "draft", draft.reload.status
+  end
+
+  test "transition_to! still allows declining a draft without documents" do
+    # Admin should always be able to refuse a half-baked request outright;
+    # only the active-flow transitions need the doc-completeness guard.
+    draft = HomologationRequest.create!(
+      user: users(:student_es), subject: "Empty draft",
+      plan_key: "basico", privacy_accepted: true
+    )
+
+    draft.transition_to!("declined", changed_by: @admin)
+
+    assert_equal "declined", draft.reload.status
+  end
+
+  test "request_more_documents! flips status to awaiting_reply and stamps the audit columns" do
+    @request.transition_to!("in_review", changed_by: @admin)
+
+    freeze_time do
+      @request.request_more_documents!(by: @admin, reason: "Please re-scan the diploma.")
+
+      @request.reload
+      assert_equal "awaiting_reply", @request.status
+      assert_equal Time.current,     @request.status_changed_at
+      assert_equal @admin.id,        @request.status_changed_by
+    end
+  end
+
+  test "request_more_documents! posts the reason as a chat message from the admin" do
+    @request.transition_to!("in_review", changed_by: @admin)
+
+    assert_difference -> { @request.conversation.messages.count }, 1 do
+      @request.request_more_documents!(by: @admin, reason: "Need page 2 of the transcript.")
+    end
+
+    message = @request.conversation.messages.order(:created_at).last
+    assert_equal @admin,                              message.user
+    assert_equal "Need page 2 of the transcript.",    message.body
+  end
+
+  test "request_more_documents! requires a non-blank reason" do
+    @request.transition_to!("in_review", changed_by: @admin)
+
+    assert_raises(ArgumentError) do
+      @request.request_more_documents!(by: @admin, reason: "")
+    end
+    assert_raises(ArgumentError) do
+      @request.request_more_documents!(by: @admin, reason: "   ")
+    end
+    assert_equal "in_review", @request.reload.status
+  end
+
+  test "transition from awaiting_reply to in_review by the student notifies the super admin" do
+    # When the student presses "Send reply" from awaiting_reply, the admin's
+    # queue should learn about it via a single notification — replacing the
+    # per-file ping we used to fire from the documents controller.
+    @request.update_columns(status: "awaiting_reply", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+    student = @request.user
+
+    assert_difference -> {
+      @admin.notifications.where(notifiable: @request, title_key: "notifications.documents_added.title").count
+    }, 1 do
+      @request.transition_to!("in_review", changed_by: student)
+    end
+  end
+
+  test "transition from awaiting_reply to in_review by the admin does not self-notify the admin" do
+    @request.update_columns(status: "awaiting_reply", status_changed_by: @admin.id, status_changed_at: 1.hour.ago)
+
+    assert_no_difference -> {
+      @admin.notifications.where(notifiable: @request, title_key: "notifications.documents_added.title").count
+    } do
+      @request.transition_to!("in_review", changed_by: @admin)
+    end
+  end
+
+  test "request_more_documents! is atomic: rolls back status if the chat write fails" do
+    @request.transition_to!("in_review", changed_by: @admin)
+    @request.singleton_class.define_method(:conversation) { raise "boom" }
+
+    assert_raises(RuntimeError) do
+      @request.request_more_documents!(by: @admin, reason: "won't land")
+    end
+    assert_equal "in_review", @request.reload.status
+  end
+
   test "transition_to! refuses to leave a terminal status" do
     request = homologation_requests(:at_completado)
     assert request.terminal?

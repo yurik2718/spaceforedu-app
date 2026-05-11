@@ -130,6 +130,88 @@ class HomologationRequestsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # --- show: documents section ---
+  #
+  # The documents card has three responsibilities:
+  #   1. Upload affordance (forms with data-empty-slot=true) — only when the
+  #      request is in an editable status (draft, awaiting_reply).
+  #   2. A progress counter (X/3) toward the required documents — only useful
+  #      while the student can still act on it.
+  #   3. A read-only listing of what was uploaded — for download/audit.
+  #
+  # Earlier the card always rendered all 6 placeholders regardless of state,
+  # which made non-editable statuses look like a to-do list the student
+  # couldn't satisfy. These tests pin down the intended state-aware rendering.
+
+  test "GET show in draft with no documents renders all upload slots and the progress counter" do
+    draft = @student.homologation_requests.create!(
+      subject: "Draft state", plan_key: "basico", status: "draft", privacy_accepted: true
+    )
+    sign_in_as @student
+
+    get homologation_request_path(draft)
+
+    assert_response :success
+    assert_select "[data-empty-slot='true']", count: RequestDocument::KINDS.size
+    assert_select "#request_documents_progress"
+  end
+
+  test "GET show in awaiting_reply renders the upload slots (student can act on admin's request)" do
+    awaiting = @student.homologation_requests.create!(
+      subject: "Send us more", plan_key: "basico", status: "awaiting_reply", privacy_accepted: true
+    )
+    sign_in_as @student
+
+    get homologation_request_path(awaiting)
+
+    assert_response :success
+    assert_select "[data-empty-slot='true']", count: RequestDocument::KINDS.size
+  end
+
+  test "GET show in a locked status (submitted) renders only what was uploaded and hides the progress counter" do
+    submitted = @student.homologation_requests.create!(
+      subject: "Already submitted", plan_key: "basico", status: "submitted", privacy_accepted: true
+    )
+    attach_request_document(submitted, kind: "diploma", filename: "diploma.pdf")
+    sign_in_as @student
+
+    get homologation_request_path(submitted)
+
+    assert_response :success
+    assert_select "##{ActionView::RecordIdentifier.dom_id(submitted, :documents)}"
+    assert_select "turbo-frame#request_document_slot_diploma"
+    assert_select "turbo-frame#request_document_slot_passport", count: 0
+    assert_select "[data-empty-slot='true']",                  count: 0
+    assert_select "#request_documents_progress",               count: 0
+  end
+
+  test "GET show in declined with no documents hides the documents section entirely" do
+    denied = @student.homologation_requests.create!(
+      subject: "Denied empty", plan_key: "basico", status: "declined", privacy_accepted: true
+    )
+    sign_in_as @student
+
+    get homologation_request_path(denied)
+
+    assert_response :success
+    assert_select "##{ActionView::RecordIdentifier.dom_id(denied, :documents)}", count: 0
+  end
+
+  test "GET show in declined with uploaded documents shows them read-only, with no progress and no upload slots" do
+    denied = @student.homologation_requests.create!(
+      subject: "Denied with files", plan_key: "basico", status: "declined", privacy_accepted: true
+    )
+    attach_request_document(denied, kind: "diploma", filename: "diploma.pdf")
+    sign_in_as @student
+
+    get homologation_request_path(denied)
+
+    assert_response :success
+    assert_select "turbo-frame#request_document_slot_diploma"
+    assert_select "[data-empty-slot='true']",      count: 0
+    assert_select "#request_documents_progress",   count: 0
+  end
+
   # --- edit ---
 
   test "GET edit allowed for draft status" do

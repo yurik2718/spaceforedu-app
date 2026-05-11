@@ -13,7 +13,7 @@ class Admin::HomologationRequests::ArchivesControllerTest < ActionDispatch::Inte
 
     assert_response :success
     assert_equal "application/zip",                                 response.media_type
-    assert_match %r{filename="request_#{@hr.id}\.zip"},        response.headers["Content-Disposition"]
+    assert_match %r{filename="homologation_Anna_#{@hr.id}\.zip"}, response.headers["Content-Disposition"]
   end
 
   test "students are redirected to root with not-authorized alert" do

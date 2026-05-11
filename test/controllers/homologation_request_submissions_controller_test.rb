@@ -70,4 +70,43 @@ class HomologationRequestSubmissionsControllerTest < ActionDispatch::Integration
     assert_equal I18n.t("flash.request_not_submittable"), flash[:alert]
     assert_equal "draft", empty_draft.reload.status
   end
+
+  # --- reply flow (awaiting_reply → in_review) ---
+  #
+  # Mirror of the initial submit: when the admin has asked for more documents
+  # and the student is done responding, the same "send to admin" endpoint
+  # flips status into in_review. One explicit click — no per-file notification
+  # spam, no orphan awaiting_reply requests that the admin forgets about.
+
+  test "POST create on awaiting_reply flips status to in_review and notifies the admin once" do
+    awaiting = @student.homologation_requests.create!(
+      subject: "Reply ready", plan_key: "basico", status: "awaiting_reply", privacy_accepted: true
+    )
+    RequestDocument::REQUIRED_KINDS.each { |kind| attach_request_document(awaiting, kind: kind) }
+    admin = users(:admin)
+    sign_in_as @student
+
+    assert_difference -> {
+      admin.notifications.where(notifiable: awaiting, title_key: "notifications.documents_added.title").count
+    }, 1 do
+      post homologation_request_submission_path(awaiting)
+    end
+
+    assert_redirected_to homologation_request_path(awaiting)
+    assert_equal I18n.t("flash.reply_sent"), flash[:notice]
+    assert_equal "in_review", awaiting.reload.status
+  end
+
+  test "POST create on awaiting_reply by a different student is rejected" do
+    awaiting = @student.homologation_requests.create!(
+      subject: "Reply ready", plan_key: "basico", status: "awaiting_reply", privacy_accepted: true
+    )
+    RequestDocument::REQUIRED_KINDS.each { |kind| attach_request_document(awaiting, kind: kind) }
+    sign_in_as @other
+
+    post homologation_request_submission_path(awaiting)
+
+    assert_redirected_to root_path
+    assert_equal "awaiting_reply", awaiting.reload.status
+  end
 end

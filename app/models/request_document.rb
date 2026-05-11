@@ -13,4 +13,11 @@ class RequestDocument < ApplicationRecord
   scope :required, -> { where(kind: REQUIRED_KINDS) }
 
   def required? = REQUIRED_KINDS.include?(kind)
+
+  # The browser saves this as Content-Disposition's filename. Predictable
+  # across students so admin can pile downloads into one folder without
+  # collisions: passport_Anna.pdf, passport_Maria.pdf, not two IMG_2841.JPG.
+  def download_filename
+    "#{kind}_#{FilenameSlug.from(homologation_request.user.name)}#{File.extname(file.filename.to_s)}"
+  end
 end

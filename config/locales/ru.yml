@@ -20,6 +20,7 @@ ru:
   flash:
     request_created:        "Заявка создана."
     request_submitted:      "Заявка отправлена. Мы уведомим вас после проверки."
+    reply_sent:             "Ответ отправлен. Ассистент проверит в ближайшее время."
     request_updated:        "Заявка обновлена."
     request_deleted:        "Заявка удалена."
     request_not_editable:   "Эту заявку больше нельзя редактировать."
@@ -27,6 +28,7 @@ ru:
     payment_confirmed:      "Оплата подтверждена. Ваша заявка в работе."
     request_declined:       "Заявка помечена как отклонённая. Студент получит сообщение в чате."
     request_approved_for_payment: "Принято. Студент может оплачивать."
+    request_documents_requested:  "Запрос отправлен. Студент сможет загрузить дополнения."
     user_updated:           "Профиль обновлён."
     message_sent:           "Сообщение отправлено."
     pipeline_advanced:      "Передвинуто на следующий этап."
@@ -194,15 +196,16 @@ ru:
     next_step_title:    "Что дальше?"
     next_step_intro:    "После сохранения вы загрузите документы для проверки. Готовьте сканы или фото — заранее ничего не нужно."
     actions:
-      submit:    "Подать заявку"
+      submit:     "Подать заявку"
+      send_reply: "Отправить ответ"
       new:       "Новая заявка"
       open_chat: "Открыть чат"
       submit_disabled_hint: "Сначала загрузите хотя бы один документ."
     attachments:
       intro:           "Прикрепите перечисленные ниже документы. Сразу всё или по мере готовности."
-      empty:           "Файлы появятся здесь, как только вы их загрузите."
       required_label:  "обязательно"
-      optional_label:  "желательно"
+      optional_label:  "не обязательно"
+      drop_hint:       "Нажмите или перетащите файл"
       expected:
         diploma:
           title: "Диплом"
@@ -373,6 +376,9 @@ ru:
         change_status:        "Сменить статус"
         confirm_payment:      "Отметить оплаченным"
         approve_for_payment:  "Принять — открыть оплату"
+        request_documents:    "Запросить документы"
+        request_documents_modal:  "Запросить дополнительные документы"
+        request_documents_submit: "Отправить запрос"
         decline:              "Не возьмёмся"
         decline_modal:        "Отклонить заявку"
         decline_submit:       "Отправить отказ"
@@ -389,8 +395,10 @@ ru:
         confirmed_by:   "Подтвердил"
         retreat_reason: "Причина"
         decline_reason: "Причина — студент увидит её в чате"
+        document_request_reason: "Что нужно загрузить или исправить? Студент увидит это в чате."
       errors:
         decline_reason_required: "Укажите причину отказа — студент увидит её в чате."
+        document_request_reason_required: "Напишите, что именно загрузить или исправить — студент увидит это в чате."
       navigation:
         previous:    "Предыдущая"
         next:        "Следующая"

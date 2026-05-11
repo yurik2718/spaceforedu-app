@@ -27,26 +27,14 @@ class HomologationRequest < ApplicationRecord
   validates :privacy_accepted, acceptance: true, on: :create
 
   after_create_commit :create_conversation
-  after_commit :notify_admin_of_submission, on: :update, if: -> { saved_change_to_status?(to: "submitted") }
+  after_commit :notify_admin_of_submission,       on: :update, if: -> { saved_change_to_status?(to: "submitted") }
+  after_commit :notify_admin_of_documents_reply,  on: :update,
+               if: -> { saved_change_to_status?(from: "awaiting_reply", to: "in_review") && status_changed_by == user_id }
 
   def editable? = status.in?(EDITABLE_STATUSES)
   def declined? = status == "declined"
   def plan      = Plan.find(plan_key)
   def amount    = plan.amount
-
-  def notify_admin_of_documents_reply!
-    return unless status == "awaiting_reply"
-    admin = User.super_admin
-    return unless admin
-
-    admin.notify(
-      notifiable: self,
-      title_key:  "notifications.documents_added.title",
-      body_key:   "notifications.documents_added.body",
-      subject:    subject,
-      student:    user.name
-    )
-  end
 
   def terminal? = status.in?(TERMINAL_STATUSES)
 
@@ -59,8 +47,15 @@ class HomologationRequest < ApplicationRecord
       raise InvalidTransition, "cannot transition from terminal status #{status}"
     end
 
-    if new_status.to_s == "submitted" && !ready_to_submit?
-      raise InvalidTransition, "Request needs at least one document"
+    # All required documents must be on file before a request becomes "submitted"
+    # OR moves out of "draft" into any active status. The only exempt destinations
+    # are staying in "draft" and being "declined" (admin can refuse a half-baked
+    # request outright).
+    needs_full_documents = new_status.to_s == "submitted" ||
+                           (status == "draft" && !new_status.to_s.in?(%w[draft declined]))
+
+    if needs_full_documents && !ready_to_submit?
+      raise InvalidTransition, "Request needs all required documents"
     end
 
     transaction do
@@ -89,29 +84,22 @@ class HomologationRequest < ApplicationRecord
     end
   end
 
-  def start_checkout!(success_url:, cancel_url:)
-    Stripe::Checkout::Session.create(
-      payment_method_types: ["card"],
-      line_items: [{
-        price_data: {
-          currency:    "eur",
-          unit_amount: plan.amount * 100,
-          product_data: { name: "#{plan.title} — #{subject}" }
-        },
-        quantity: 1
-      }],
-      mode: "payment",
-      payment_intent_data: { metadata: { homologation_request_id: id } },
-      success_url:,
-      cancel_url:
-    )
-  end
-
   def decline!(by:, reason:)
     raise ArgumentError, "reason can't be blank" if reason.to_s.strip.empty?
 
     transaction do
       transition_to!("declined", changed_by: by)
+      conv = conversation || Conversation.create!(homologation_request: self)
+      conv.messages.create!(user: by, body: reason.strip)
+      conv.update!(last_message_at: Time.current)
+    end
+  end
+
+  def request_more_documents!(by:, reason:)
+    raise ArgumentError, "reason can't be blank" if reason.to_s.strip.empty?
+
+    transaction do
+      transition_to!("awaiting_reply", changed_by: by)
       conv = conversation || Conversation.create!(homologation_request: self)
       conv.messages.create!(user: by, body: reason.strip)
       conv.update!(last_message_at: Time.current)
@@ -153,19 +141,6 @@ class HomologationRequest < ApplicationRecord
     document_checklist.is_a?(Hash) && document_checklist[key.to_s]
   end
 
-  def zip_filename = "request_#{id}.zip"
-
-  def zip_archive
-    buffer = Zip::OutputStream.write_buffer do |zip|
-      request_documents.includes(file_attachment: :blob).each do |doc|
-        next unless doc.file.attached?
-        zip.put_next_entry("#{doc.kind}-#{doc.file.filename}")
-        doc.file.blob.download { |chunk| zip.write(chunk) }
-      end
-    end
-    buffer.string
-  end
-
   class InvalidTransition < StandardError; end
 
   private
@@ -199,6 +174,19 @@ class HomologationRequest < ApplicationRecord
         title_key:  "notifications.payment_confirmed.title",
         body_key:   "notifications.payment_confirmed.body",
         subject:    subject
+      )
+    end
+
+    def notify_admin_of_documents_reply
+      admin = User.super_admin
+      return unless admin
+
+      admin.notify(
+        notifiable: self,
+        title_key:  "notifications.documents_added.title",
+        body_key:   "notifications.documents_added.body",
+        subject:    subject,
+        student:    user.name
       )
     end
 

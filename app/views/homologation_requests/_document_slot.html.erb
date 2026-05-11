@@ -30,7 +30,7 @@
 
         <div class="flex items-center gap-3 mt-1.5 text-xs">
           <%= link_to t("requests.attachments.download"),
-                rails_blob_path(document.file, disposition: "attachment"),
+                rails_blob_path(document.file, disposition: "attachment", filename: document.download_filename),
                 data:  { turbo_frame: "_top" },
                 class: "text-mute hover:text-ink underline-offset-2 hover:underline" %>
 
@@ -95,6 +95,7 @@
           <p class="text-xs text-mute leading-relaxed mt-0.5">
             <%= t("requests.attachments.expected.#{kind}.body") %>
           </p>
+          <p class="text-xs text-ash mt-1.5"><%= t("requests.attachments.drop_hint") %></p>
           <% if errors.any? %>
             <p class="text-xs text-error mt-1.5"><%= errors.first %></p>
           <% end %>

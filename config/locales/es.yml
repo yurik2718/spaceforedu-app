@@ -18,6 +18,7 @@ es:
   flash:
     request_created:        "Solicitud creada."
     request_submitted:      "Solicitud enviada. Te notificaremos cuando sea revisada."
+    reply_sent:             "Respuesta enviada. Tu gestor la revisará en breve."
     request_updated:        "Solicitud actualizada."
     request_deleted:        "Solicitud eliminada."
     request_not_editable:   "Esta solicitud ya no se puede editar."
@@ -25,6 +26,7 @@ es:
     payment_confirmed:      "Pago confirmado. Tu solicitud está en proceso."
     request_declined:       "Solicitud marcada como rechazada. El estudiante recibirá un mensaje en el chat."
     request_approved_for_payment: "Aprobada. El estudiante ya puede pagar."
+    request_documents_requested:  "Solicitud enviada. El estudiante ya puede subir más documentos."
     user_updated:           "Perfil actualizado."
     message_sent:           "Mensaje enviado."
     pipeline_advanced:      "Avanzada a la siguiente etapa."
@@ -192,15 +194,16 @@ es:
     next_step_title:    "¿Qué sigue?"
     next_step_intro:    "Después de guardar, podrás subir los documentos. Ten escaneos o fotos a mano — antes no hace falta nada."
     actions:
-      submit:    "Enviar solicitud"
+      submit:     "Enviar solicitud"
+      send_reply: "Enviar respuesta"
       new:       "Nueva solicitud"
       open_chat: "Abrir chat"
       submit_disabled_hint: "Sube primero al menos un documento."
     attachments:
       intro:           "Adjunta los documentos indicados abajo. De golpe o a medida que los tengas."
-      empty:           "Tus archivos aparecerán aquí en cuanto los subas."
       required_label:  "obligatorio"
-      optional_label:  "recomendado"
+      optional_label:  "opcional"
+      drop_hint:       "Haz clic o arrastra un archivo"
       expected:
         diploma:
           title: "Título"
@@ -371,6 +374,9 @@ es:
         change_status:        "Cambiar estado"
         confirm_payment:      "Marcar como pagada"
         approve_for_payment:  "Aprobar — abrir pago"
+        request_documents:    "Pedir más documentos"
+        request_documents_modal:  "Pedir más documentos al estudiante"
+        request_documents_submit: "Enviar petición"
         decline:              "Rechazar (no podemos ayudar)"
         decline_modal:        "Rechazar esta solicitud"
         decline_submit:       "Enviar rechazo"
@@ -387,8 +393,10 @@ es:
         confirmed_by:   "Confirmado por"
         retreat_reason: "Motivo"
         decline_reason: "Motivo — el estudiante lo verá en el chat"
+        document_request_reason: "¿Qué debe subir o corregir el estudiante? Lo verá en el chat."
       errors:
         decline_reason_required: "Indica un motivo para el rechazo — el estudiante lo verá en el chat."
+        document_request_reason_required: "Indica qué debe subir o corregir el estudiante — lo verá en el chat."
       navigation:
         previous:    "Anterior"
         next:        "Siguiente"

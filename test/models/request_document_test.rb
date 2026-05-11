@@ -36,6 +36,26 @@ class RequestDocumentTest < ActiveSupport::TestCase
     assert_equal %w[diploma], @hr.request_documents.required.pluck(:kind)
   end
 
+  test "download_filename combines kind and a transliterated student slug" do
+    @hr.user.update!(name: "María García")
+    doc = attach_request_document(@hr, kind: "diploma", filename: "scan.pdf")
+
+    assert_equal "diploma_Maria_Garcia.pdf", doc.download_filename
+  end
+
+  test "download_filename preserves the original file extension" do
+    doc = attach_request_document(@hr, kind: "passport", filename: "photo.JPG", content_type: "image/jpeg")
+
+    assert_equal "passport_Anna.JPG", doc.download_filename
+  end
+
+  test "download_filename falls back to 'student' when the student's name has no ASCII content" do
+    @hr.user.update_columns(name: "")
+    doc = attach_request_document(@hr, kind: "diploma", filename: "scan.pdf")
+
+    assert_equal "diploma_student.pdf", doc.download_filename
+  end
+
   test "ready_to_submit? requires all REQUIRED_KINDS" do
     refute @hr.ready_to_submit?
 

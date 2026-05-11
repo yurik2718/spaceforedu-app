@@ -17,8 +17,6 @@ class HomologationRequestDocumentsController < ApplicationController
       @document.save!
     end
 
-    @homologation_request.notify_admin_of_documents_reply!
-
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @homologation_request, notice: t("flash.document_uploaded") }

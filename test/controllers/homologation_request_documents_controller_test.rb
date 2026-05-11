@@ -67,7 +67,10 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     assert_equal I18n.t("flash.invalid_document_kind"), flash[:alert]
   end
 
-  test "uploading documents while awaiting_reply pings the super admin" do
+  test "uploading documents while awaiting_reply does not ping the super admin per file" do
+    # The admin learns about the response once, when the student presses
+    # "Send reply" — not every time they drop a file. Each individual upload
+    # must be silent on the admin side.
     awaiting_reply = @student.homologation_requests.create!(
       subject: "Reply needed", plan_key: "basico",
       status: "awaiting_reply", privacy_accepted: true
@@ -75,9 +78,9 @@ class HomologationRequestDocumentsControllerTest < ActionDispatch::IntegrationTe
     admin = users(:admin)
     sign_in_as @student
 
-    assert_difference -> {
+    assert_no_difference -> {
       admin.notifications.where(notifiable: awaiting_reply, title_key: "notifications.documents_added.title").count
-    }, 1 do
+    } do
       post homologation_request_documents_path(awaiting_reply),
            params: { kind: "diploma", file: upload_fixture }
     end

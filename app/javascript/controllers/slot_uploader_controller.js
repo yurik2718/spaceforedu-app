@@ -1,26 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Drives one document slot. The slot's empty state is the whole card; clicking
-// or dropping a file submits the inner form. While a file is being dragged
-// anywhere over the page, every slot with this controller marks the document
-// element so empty slots can highlight (see CSS in application.css).
+// Drives one document slot: the slot's empty state is the whole card, clicking
+// or dropping a file submits the inner form. Page-wide drag state — the
+// data-dragging-files attribute on <html> — is owned by drag_indicator.
 export default class extends Controller {
-  connect() {
-    this._onWindowDragEnter = this._onWindowDragEnter.bind(this)
-    this._onWindowDragLeave = this._onWindowDragLeave.bind(this)
-    this._onWindowDrop = this._onWindowDrop.bind(this)
-    window.addEventListener("dragenter", this._onWindowDragEnter)
-    window.addEventListener("dragleave", this._onWindowDragLeave)
-    window.addEventListener("drop", this._onWindowDrop)
-  }
-
-  disconnect() {
-    window.removeEventListener("dragenter", this._onWindowDragEnter)
-    window.removeEventListener("dragleave", this._onWindowDragLeave)
-    window.removeEventListener("drop", this._onWindowDrop)
-    delete document.documentElement.dataset.draggingFiles
-  }
-
   submit(event) {
     if (event.target.files?.length) this._submit()
   }
@@ -51,18 +34,6 @@ export default class extends Controller {
   _submit() {
     this.element.dataset.uploading = "true"
     this.element.requestSubmit()
-  }
-
-  _onWindowDragEnter(event) {
-    if (this._hasFiles(event)) document.documentElement.dataset.draggingFiles = "true"
-  }
-
-  _onWindowDragLeave(event) {
-    if (event.relatedTarget == null) delete document.documentElement.dataset.draggingFiles
-  }
-
-  _onWindowDrop() {
-    delete document.documentElement.dataset.draggingFiles
   }
 
   _hasFiles(event) {

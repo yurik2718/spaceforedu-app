@@ -157,7 +157,7 @@
 
   <%# ── 2. VERDICT BANNER — only when admin must decide ───── %>
   <% if verdict_pending %>
-    <div class="card bg-primary/5 border border-primary/30" data-controller="dialog">
+    <div class="card bg-primary/5 border border-primary/30">
       <div class="card-body" style="--card-body-pad: 1.5rem">
         <div class="flex items-start gap-3">
           <span class="shrink-0 w-9 h-9 rounded-full bg-primary text-on-primary inline-flex items-center justify-center" aria-hidden="true">
@@ -174,31 +174,60 @@
                 method: :post,
                 params: { status_transition: { status: "awaiting_payment" } },
                 class: "btn btn-primary" %>
-          <button type="button" data-action="dialog#open" class="btn btn-error">
-            <%= t("admin.requests.actions.decline") %>
-          </button>
-        </div>
 
-        <dialog data-dialog-target="dialog" class="modal">
-          <div class="modal-box">
-            <form method="dialog">
-              <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-            </form>
-            <h3 class="font-bold text-lg mb-4"><%= t("admin.requests.actions.decline_modal") %></h3>
-            <%= form_with url: admin_homologation_request_status_transitions_path(hr),
-                          scope: :status_transition do |f| %>
-              <%= f.hidden_field :status, value: "declined" %>
-              <fieldset class="fieldset">
-                <label class="label" for="<%= f.field_id(:reason) %>"><%= t("admin.requests.labels.decline_reason") %></label>
-                <%= f.text_area :reason, class: "textarea textarea-bordered w-full", rows: 4, required: true %>
-              </fieldset>
-              <div class="modal-action">
-                <%= f.submit t("admin.requests.actions.decline_submit"), class: "btn btn-error" %>
+          <span data-controller="dialog">
+            <button type="button" data-action="dialog#open" class="btn btn-secondary">
+              <%= t("admin.requests.actions.request_documents") %>
+            </button>
+
+            <dialog data-dialog-target="dialog" class="modal">
+              <div class="modal-box">
+                <form method="dialog">
+                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                <h3 class="font-bold text-lg mb-4"><%= t("admin.requests.actions.request_documents_modal") %></h3>
+                <%= form_with url: admin_homologation_request_document_request_path(hr),
+                              scope: :document_request do |f| %>
+                  <fieldset class="fieldset">
+                    <label class="label" for="<%= f.field_id(:reason) %>"><%= t("admin.requests.labels.document_request_reason") %></label>
+                    <%= f.text_area :reason, class: "textarea textarea-bordered w-full", rows: 4, required: true %>
+                  </fieldset>
+                  <div class="modal-action">
+                    <%= f.submit t("admin.requests.actions.request_documents_submit"), class: "btn btn-primary" %>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
-          </div>
-          <form method="dialog" class="modal-backdrop"><button>close</button></form>
-        </dialog>
+              <form method="dialog" class="modal-backdrop"><button>close</button></form>
+            </dialog>
+          </span>
+
+          <span data-controller="dialog">
+            <button type="button" data-action="dialog#open" class="btn btn-error">
+              <%= t("admin.requests.actions.decline") %>
+            </button>
+
+            <dialog data-dialog-target="dialog" class="modal">
+              <div class="modal-box">
+                <form method="dialog">
+                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+                <h3 class="font-bold text-lg mb-4"><%= t("admin.requests.actions.decline_modal") %></h3>
+                <%= form_with url: admin_homologation_request_status_transitions_path(hr),
+                              scope: :status_transition do |f| %>
+                  <%= f.hidden_field :status, value: "declined" %>
+                  <fieldset class="fieldset">
+                    <label class="label" for="<%= f.field_id(:reason) %>"><%= t("admin.requests.labels.decline_reason") %></label>
+                    <%= f.text_area :reason, class: "textarea textarea-bordered w-full", rows: 4, required: true %>
+                  </fieldset>
+                  <div class="modal-action">
+                    <%= f.submit t("admin.requests.actions.decline_submit"), class: "btn btn-error" %>
+                  </div>
+                <% end %>
+              </div>
+              <form method="dialog" class="modal-backdrop"><button>close</button></form>
+            </dialog>
+          </span>
+        </div>
       </div>
     </div>
   <% end %>
@@ -207,7 +236,7 @@
   <%= render "shared/checklist", hr: hr, editable: true, terminal: hr.terminal? %>
 
   <%# ── 4. DOCUMENTS — reference for the checklist ────────── %>
-  <%= render "homologation_requests/documents", hr: hr, can_edit: false, intro: nil %>
+  <%= render "homologation_requests/documents", hr: hr, can_edit: false, show_empty_slots: true, intro: nil %>
 
   <%# ── 5. STUDENT + PAYMENT — context, compact ───────────── %>
   <% plan = hr.plan %>

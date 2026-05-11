@@ -12,7 +12,8 @@
       "Bash(bin/rails db:reset)",
       "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/homologation_requests/4 -o /tmp/admin4.html)",
       "Read(//tmp/**)",
-      "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/pipeline -o /tmp/pipeline.html)"
+      "Bash(curl -s -b /tmp/cookies_admin.txt http://localhost:3000/admin/pipeline -o /tmp/pipeline.html)",
+      "Bash(bin/rails test:system)"
     ]
   }
 }
