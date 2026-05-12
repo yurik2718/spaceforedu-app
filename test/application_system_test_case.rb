@@ -20,14 +20,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       if (window._diag_installed) return
       window._diag_installed = true
       window._diag = []
-      const log = (...args) => window._diag.push(args)
-      document.addEventListener("click", e => {
-        const t = e.target
-        log("click", t.tagName, t.id || "", (t.textContent || "").trim().slice(0, 40), "prevented=" + e.defaultPrevented)
-      }, true)
-      document.addEventListener("submit", e => {
-        log("submit", e.target.action || "", "prevented=" + e.defaultPrevented)
-      }, true)
+      const log = (...args) => window._diag.push([Date.now(), ...args])
+      const desc = el => el.tagName + (el.id ? "#" + el.id : "") + " text=" + (el.textContent || "").trim().slice(0, 40)
+      ;["pointerdown", "pointerup", "mousedown", "mouseup", "click"].forEach(type => {
+        document.addEventListener(type, e => log(type, desc(e.target), "prevented=" + e.defaultPrevented), true)
+      })
+      document.addEventListener("submit", e => log("submit", e.target.action || "", "prevented=" + e.defaultPrevented), true)
       window.addEventListener("error", e => log("js-error", e.message, e.filename + ":" + e.lineno))
       window.addEventListener("unhandledrejection", e => log("rejection", String(e.reason)))
     })()
@@ -65,6 +63,25 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
     diag = page.evaluate_script("window._diag || []")
     File.write(dir.join("#{base}.diag.json"), JSON.pretty_generate(diag))
+
+    state = page.evaluate_script(<<~JS)
+      (() => {
+        const sub = document.querySelector('form[action$="/submission"] button')
+        const r = sub && sub.getBoundingClientRect()
+        return {
+          activeElement: document.activeElement && document.activeElement.tagName + " text=" + (document.activeElement.textContent || "").trim().slice(0, 40),
+          viewport: { w: window.innerWidth, h: window.innerHeight, scrollY: window.scrollY },
+          submitButton: sub ? {
+            outerHTML: sub.outerHTML,
+            visible: r.width > 0 && r.height > 0,
+            rect: { x: r.x, y: r.y, w: r.width, h: r.height },
+            inViewport: r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth,
+            elementAtCenter: (() => { const el = document.elementFromPoint(r.x + r.width/2, r.y + r.height/2); return el ? el.tagName + " text=" + (el.textContent || "").trim().slice(0, 40) : null })()
+          } : null
+        }
+      })()
+    JS
+    File.write(dir.join("#{base}.state.json"), JSON.pretty_generate(state))
   rescue StandardError => e
     File.write(dir.join("#{base}.dump_error.txt"), "#{e.class}: #{e.message}\n#{e.backtrace.first(5).join("\n")}") rescue nil
   end
