@@ -3,12 +3,41 @@ require "capybara/rails"
 require "capybara/minitest"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  # The block enables Chrome's browser-log channel so we can grab the JS
-  # console (and uncaught network errors) on failure — Selenium's default
-  # turns it off, which is the difference between a useful and a useless
-  # CI failure dump.
+  # Browser-log channel + diagnostic event capture so CI failures yield
+  # something we can actually read instead of a screenshot and a shrug.
   driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1000 ] do |options|
     options.add_option("goog:loggingPrefs", { browser: "ALL" })
+  end
+
+  # Document-level capture of click + submit events. Lets us see *whether*
+  # the submit fired, *which* element actually received the click, and
+  # whether anyone called preventDefault. Persists across Turbo navigation
+  # because the listeners attach to `document`, but a full page navigation
+  # (e.g. redirect after login) wipes them — so we re-install after every
+  # explicit `visit`.
+  DIAG_JS = <<~JS
+    (() => {
+      if (window._diag_installed) return
+      window._diag_installed = true
+      window._diag = []
+      const log = (...args) => window._diag.push(args)
+      document.addEventListener("click", e => {
+        const t = e.target
+        log("click", t.tagName, t.id || "", (t.textContent || "").trim().slice(0, 40), "prevented=" + e.defaultPrevented)
+      }, true)
+      document.addEventListener("submit", e => {
+        log("submit", e.target.action || "", "prevented=" + e.defaultPrevented)
+      }, true)
+      window.addEventListener("error", e => log("js-error", e.message, e.filename + ":" + e.lineno))
+      window.addEventListener("unhandledrejection", e => log("rejection", String(e.reason)))
+    })()
+  JS
+
+  def visit(path)
+    super
+    page.execute_script(DIAG_JS)
+  rescue StandardError
+    # Diagnostic injection must never mask the real test outcome.
   end
 
   def sign_in_as(user, password: "password")
@@ -18,23 +47,24 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     find('input[type="submit"]').click
   end
 
-  # Dump page.html + URL + browser console logs alongside the auto-screenshot.
-  # Has to live in `before_teardown` AFTER `super` — Rails' base class snaps
-  # the screenshot in `before_teardown`, then `Capybara.reset_sessions!` runs
-  # in `after_teardown` and blanks the page. Doing it here keeps the browser
-  # alive for inspection.
+  # Dump page.html + URL + browser console + captured DOM events alongside
+  # the auto-screenshot. Lives in before_teardown AFTER super so it runs
+  # post-screenshot but before Capybara.reset_sessions! blanks the page.
   def before_teardown
     super
     return if passed?
 
-    dir = Rails.root.join("tmp/capybara")
+    dir  = Rails.root.join("tmp/capybara")
     base = "failures_#{name}"
 
     File.write(dir.join("#{base}.html"), page.html)
-    File.write(dir.join("#{base}.url"), "#{page.current_url}\n")
+    File.write(dir.join("#{base}.url"),  "#{page.current_url}\n")
 
     logs = page.driver.browser.logs.get(:browser).map { |e| "[#{e.level}] #{e.timestamp} #{e.message}" }.join("\n")
     File.write(dir.join("#{base}.console.log"), logs)
+
+    diag = page.evaluate_script("window._diag || []")
+    File.write(dir.join("#{base}.diag.json"), JSON.pretty_generate(diag))
   rescue StandardError => e
     File.write(dir.join("#{base}.dump_error.txt"), "#{e.class}: #{e.message}\n#{e.backtrace.first(5).join("\n")}") rescue nil
   end
