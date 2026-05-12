@@ -38,6 +38,17 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Diagnostic injection must never mask the real test outcome.
   end
 
+  # Breadcrumb around click_on so we can correlate the Capybara call with
+  # what (if anything) the browser actually saw. If diag shows
+  # "before_click_on" / "after_click_on" but no pointer/mouse/click
+  # between them, Capybara reports success but Selenium delivered nothing.
+  def click_on(*args, **opts, &block)
+    label = args.first.to_s
+    page.execute_script("if (window._diag) window._diag.push([Date.now(), 'before_click_on', #{label.to_json}])") rescue nil
+    super
+    page.execute_script("if (window._diag) window._diag.push([Date.now(), 'after_click_on'])") rescue nil
+  end
+
   def sign_in_as(user, password: "password")
     visit new_session_path
     find_field("email_address").set(user.email_address)
@@ -60,6 +71,20 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
     logs = page.driver.browser.logs.get(:browser).map { |e| "[#{e.level}] #{e.timestamp} #{e.message}" }.join("\n")
     File.write(dir.join("#{base}.console.log"), logs)
+
+    # Control dispatch: send a synthetic click on the submit button to verify
+    # the listener is still alive at failure time. If THIS shows up in diag
+    # but the real Capybara click_on didn't, Capybara/Selenium silently
+    # ate the click. We use dispatchEvent so no form submission actually fires.
+    page.execute_script(<<~JS) rescue nil
+      (() => {
+        const btn = document.querySelector('form[action$="/submission"] button[type="submit"]')
+        if (!btn || !window._diag) return
+        window._diag.push([Date.now(), "control_dispatch_attempt"])
+        btn.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }))
+        window._diag.push([Date.now(), "control_dispatch_done"])
+      })()
+    JS
 
     diag = page.evaluate_script("window._diag || []")
     File.write(dir.join("#{base}.diag.json"), JSON.pretty_generate(diag))
