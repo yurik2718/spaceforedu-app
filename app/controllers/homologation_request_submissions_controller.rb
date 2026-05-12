@@ -20,7 +20,8 @@ class HomologationRequestSubmissionsController < ApplicationController
     else
       redirect_to homologation_request, alert: t("flash.request_not_submittable")
     end
-  rescue HomologationRequest::InvalidTransition
+  rescue HomologationRequest::InvalidTransition => e
+    Rails.logger.warn("[submission] InvalidTransition for HR ##{homologation_request.id}: #{e.message}")
     redirect_to homologation_request, alert: t("flash.request_not_submittable")
   end
 end
