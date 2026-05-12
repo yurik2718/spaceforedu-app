@@ -131,3 +131,11 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/capybara
           if-no-files-found: ignore
+
+      - name: Keep Rails log from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: rails-test-log
+          path: ${{ github.workspace }}/log/test.log
+          if-no-files-found: ignore
