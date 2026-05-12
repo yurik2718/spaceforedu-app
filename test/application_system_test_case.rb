@@ -11,4 +11,15 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     find_field("password").set(password)
     find('input[type="submit"]').click
   end
+
+  # Dump the rendered HTML next to the failure screenshot so we can see what
+  # the browser actually had when an assertion blew up. Lives alongside the
+  # auto-screenshot in tmp/capybara/, which the CI workflow uploads on failure.
+  def after_teardown
+    super
+    return if passed?
+    File.write(Rails.root.join("tmp/capybara/failures_#{name}.html"), page.html)
+  rescue StandardError
+    # best-effort; never let a dump failure mask the real test failure
+  end
 end

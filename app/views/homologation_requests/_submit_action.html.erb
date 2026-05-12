@@ -5,13 +5,13 @@
       <%= button_to t("requests.actions.submit"),
             homologation_request_submission_path(hr),
             method: :post,
-            data:   { turbo: false },
+            form:   { data: { turbo: false } },
             class:  "btn btn-primary btn-sm" %>
     <% elsif hr.status == "awaiting_reply" %>
       <%= button_to t("requests.actions.send_reply"),
             homologation_request_submission_path(hr),
             method: :post,
-            data:   { turbo: false },
+            form:   { data: { turbo: false } },
             class:  "btn btn-primary btn-sm" %>
     <% end %>
   <% end %>
