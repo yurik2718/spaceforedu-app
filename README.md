@@ -10,6 +10,20 @@ A case-management web app for international students going through document homo
 - In-app and web push notifications
 - Role-based access: student and super-admin
 
+## Screenshots
+
+Sign-in:
+
+![Sign in](docs/screenshots/login.png)
+
+Request detail — pipeline, document checklist, review progress:
+
+![Request detail](docs/screenshots/request-detail.png)
+
+Per-request chat between student and admin:
+
+![Chat](docs/screenshots/chat.png)
+
 ## Requirements
 
 - **Ruby** 3.4.9
