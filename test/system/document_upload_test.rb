@@ -32,28 +32,17 @@ class DocumentUploadTest < ApplicationSystemTestCase
 
     submit_label = I18n.t("requests.actions.submit")
     assert_button submit_label
-    Rails.logger.warn("[test] before click_on: conn=#{ActiveRecord::Base.connection.object_id} thr=#{Thread.current.object_id}")
     click_on submit_label
-    Rails.logger.warn("[test] after click_on: conn=#{ActiveRecord::Base.connection.object_id} thr=#{Thread.current.object_id}")
 
-    # Server-side first: the transition is the actual contract, not the UI
-    # copy. Wait for it via the database to avoid racing Turbo's DOM swap on
-    # slower CI runners.
-    assert_request_status "submitted"
-    assert_text I18n.t("requests.next_step.submitted"), wait: 10
+    # UI-only wait. Polling the DB from the test thread holds the shared
+    # transactional connection long enough to starve Puma serving the POST
+    # on CI — Capybara polling the DOM via Selenium is out-of-process and
+    # doesn't contend with the server-side connection.
+    assert_text I18n.t("requests.next_step.submitted"), wait: 15
+    assert_equal "submitted", @draft.reload.status
   end
 
   private
-    def assert_request_status(expected, timeout: 10)
-      deadline = Time.current + timeout
-      loop do
-        @draft.reload
-        return if @draft.status == expected
-        raise Minitest::Assertion, "expected status #{expected.inspect}, still #{@draft.status.inspect} after #{timeout}s" if Time.current > deadline
-        sleep 0.1
-      end
-    end
-
     def make_pdf(name)
       path = Rails.root.join("tmp", "system_test_#{name}")
       File.binwrite(path, "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n1 0 obj\n<</Type/Catalog>>\nendobj\nxref\n0 1\n0000000000 65535 f\ntrailer\n<</Size 1>>\n%%EOF\n".b)

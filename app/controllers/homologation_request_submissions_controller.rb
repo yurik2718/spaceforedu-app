@@ -5,7 +5,6 @@ class HomologationRequestSubmissionsController < ApplicationController
   # Both flip status, both notify the admin. The student-facing button looks
   # identical; only the label changes.
   def create
-    Rails.logger.warn("[submission] hit create: hr_id=#{params[:homologation_request_id].inspect} user=#{Current.user&.id.inspect} conn=#{ActiveRecord::Base.connection.object_id} thr=#{Thread.current.object_id}")
     homologation_request = HomologationRequest.kept
       .includes(:user, :request_documents)
       .find(params[:homologation_request_id])
