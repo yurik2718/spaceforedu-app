@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= content_for(:title) || "Homologation" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <meta name="theme-color" content="#E8453C">
+    <meta name="vapid-public-key" content="<%= Rails.application.credentials.dig(:vapid, :public_key) %>">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+  </head>
+  <body class="min-h-screen flex flex-col bg-surface-soft text-body antialiased font-sans" data-controller="drag-indicator">
+    <%= render "layouts/navbar" %>
+    <%= render "shared/flash" %>
+    <main class="flex-1 <%= content_for?(:main_class) ? yield(:main_class) : 'container mx-auto px-4 py-6' %>">
+      <%= yield %>
+    </main>
+    <%= render "layouts/footer" %>
+    <%= render "shared/cookie_notice" %>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker", { scope: "/" })
+      }
+    </script>
+  </body>
+</html>

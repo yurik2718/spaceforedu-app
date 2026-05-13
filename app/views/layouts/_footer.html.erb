@@ -1,0 +1,13 @@
+<footer class="bg-surface-card border-t border-hairline-soft text-mute text-xs">
+  <div class="flex items-center justify-between px-5 py-3 flex-wrap gap-x-6 gap-y-2">
+    <span>© <%= Date.current.year %> Space for Edu — <%= brand_location %></span>
+    <nav class="flex flex-wrap items-center gap-x-4 gap-y-2">
+      <%= link_to t("footer.about"),   marketing_url,                 target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
+      <%= link_to t("footer.pricing"), marketing_url("pricing"),      target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
+      <%= link_to t("nav.privacy"),    privacy_path,                                                     class: "hover:text-ink no-underline" %>
+      <%= link_to t("footer.legal"),   marketing_url("aviso-legal"),  target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
+      <%= link_to t("footer.cookies"), marketing_url("cookies"),      target: "_blank", rel: "noopener", class: "hover:text-ink no-underline" %>
+      <%= mail_to support_email, t("footer.contact"),                                                   class: "hover:text-ink no-underline" %>
+    </nav>
+  </div>
+</footer>

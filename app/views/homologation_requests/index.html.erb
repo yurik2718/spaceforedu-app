@@ -1,0 +1,48 @@
+<% content_for :title, t("nav.my_requests") %>
+
+<%= render "shared/page_header",
+      title: t("nav.my_requests"),
+      actions: capture {
+        concat link_to(t("requests.actions.new"), new_homologation_request_path, class: "btn btn-primary btn-sm")
+      } %>
+
+<% if @homologation_requests.empty? %>
+  <div class="card bg-canvas border border-hairline-soft">
+    <div class="card-body items-center text-center py-16 gap-4">
+      <span class="w-14 h-14 rounded-full bg-primary inline-flex items-center justify-center text-on-primary" aria-hidden="true">
+        <svg viewBox="0 0 16 16" class="w-7 h-7" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.5C10 3.5 11 6 11 9v2H5V9c0-3 1-5.5 3-7.5z"/>
+          <path d="M5 10L3.2 12.5 5 12z"/>
+          <path d="M11 10l1.8 2.5L11 12z"/>
+          <path d="M6.5 12L8 14.5 9.5 12z" opacity="0.65"/>
+          <circle cx="8" cy="6.2" r="1.1" fill="#E8453C"/>
+        </svg>
+      </span>
+      <h2 class="text-lg font-semibold"><%= t("requests.empty_heading") %></h2>
+      <p class="text-mute"><%= t("requests.empty") %></p>
+      <%= link_to t("requests.actions.new"), new_homologation_request_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% else %>
+  <ul class="divide-y divide-hairline-soft border border-hairline-soft rounded-2xl overflow-hidden bg-canvas">
+    <% @homologation_requests.each do |r| %>
+      <li id="<%= dom_id(r) %>">
+        <%= link_to homologation_request_path(r),
+              class: "flex items-center gap-4 px-4 py-3 hover:bg-surface-soft transition-colors no-underline" do %>
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold text-ink truncate" title="<%= r.subject %>"><%= r.subject %></p>
+            <% if r.university.present? %>
+              <p class="text-xs text-mute truncate"><%= r.university %></p>
+            <% end %>
+          </div>
+          <span class="badge <%= status_badge_class(r.status) %> shrink-0">
+            <%= t("requests.status.#{r.status}") %>
+          </span>
+          <time class="text-xs text-mute font-mono tabular-nums shrink-0 hidden sm:inline">
+            <%= l r.updated_at, format: :short %>
+          </time>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

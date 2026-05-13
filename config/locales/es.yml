@@ -1,0 +1,596 @@
+es:
+  errors:
+    not_authorized:        "No tienes permiso para realizar esta acción."
+    privacy_required:      "debe ser aceptada para registrarse"
+    rate_limited:                  "Demasiados intentos. Inténtalo más tarde."
+    unknown_checklist_key:         "Clave de lista de documentos desconocida."
+    invalid_credentials:           "Correo o contraseña incorrectos."
+    passwords_mismatch:            "Las contraseñas no coinciden."
+    password_reset_token_invalid:  "El enlace de recuperación no es válido o ha expirado."
+    avatar_invalid_type:           "debe ser una imagen JPEG, PNG, WebP o GIF"
+    avatar_too_large:              "no puede superar %{max} MB"
+    messages:
+      content_type_invalid:
+        one:   "Solo se permiten PDF, JPG, PNG o WebP"
+        other: "Solo se permiten PDF, JPG, PNG o WebP"
+      file_size_not_less_than: "El archivo debe pesar menos de %{max}"
+
+  flash:
+    request_created:        "Solicitud creada."
+    request_submitted:      "Solicitud enviada. Te notificaremos cuando sea revisada."
+    reply_sent:             "Respuesta enviada. Tu gestor la revisará en breve."
+    request_updated:        "Solicitud actualizada."
+    request_deleted:        "Solicitud eliminada."
+    request_not_editable:   "Esta solicitud ya no se puede editar."
+    request_not_submittable: "Esta solicitud no se puede enviar."
+    payment_confirmed:      "Pago confirmado. Tu solicitud está en proceso."
+    request_declined:       "Solicitud marcada como rechazada. El estudiante recibirá un mensaje en el chat."
+    request_approved_for_payment: "Aprobada. El estudiante ya puede pagar."
+    request_documents_requested:  "Solicitud enviada. El estudiante ya puede subir más documentos."
+    user_updated:           "Perfil actualizado."
+    message_sent:           "Mensaje enviado."
+    pipeline_advanced:      "Avanzada a la siguiente etapa."
+    pipeline_retreated:     "Devuelta a la etapa anterior."
+    status_changed:         "Estado actualizado."
+    document_checklist_updated: "Lista actualizada."
+    conversation_started:   "Conversación iniciada."
+    registered:             "Bienvenido a bordo."
+    document_uploaded:      "Archivo cargado."
+    document_removed:       "Archivo eliminado."
+    invalid_document_kind:  "Tipo de documento desconocido."
+    payment_processing:     "Pago recibido. Lo confirmaremos en breve."
+    password_reset_sent:    "Instrucciones de recuperación enviadas (si existe un usuario con ese correo)."
+    password_reset_success: "Contraseña actualizada."
+    data_exported:              "Tus datos han sido exportados."
+    deletion_requested:         "Solicitud de eliminación registrada. Procesaremos tu solicitud en un plazo máximo de 30 días."
+    deletion_already_requested: "Ya tienes una solicitud de eliminación pendiente."
+
+  profile:
+    edit_title: "Editar perfil"
+    show:
+      conditions: "Privacidad"
+      conditions_accepted: "Aceptada"
+    sections:
+      account:        "Cuenta"
+      notifications:  "Notificaciones"
+      guardian:       "Tutor"
+      personal_info:  "Datos personales"
+      contacts:       "Contactos"
+      guardian_description: "Obligatorio para menores — necesario para la verificación de identidad."
+    fields:
+      name:                  "Nombre"
+      email_address:         "Email"
+      avatar:                "Foto de perfil"
+      avatar_hint:           "JPEG, PNG, WebP o GIF, hasta 5 MB."
+      avatar_choose:         "Elige una imagen…"
+      avatar_remove:         "Quitar imagen actual"
+      country:               "País"
+      birthday:              "Fecha de nacimiento"
+      phone:                 "Teléfono"
+      phone_hint:            "+XX XXX XXX XXXX"
+      whatsapp:              "WhatsApp"
+      whatsapp_hint:         "+XX XXX XXX XXXX"
+      locale:                "Idioma"
+      notification_email:    "Notificaciones por email"
+      notification_telegram: "Notificaciones por Telegram"
+      notification_push:     "Notificaciones push en este dispositivo"
+      notification_push_hint: "Recibirás alertas del navegador aunque la pestaña esté cerrada."
+      privacy_accepted_at:   "Privacidad aceptada el"
+      guardian_name:         "Nombre del tutor"
+      guardian_email:        "Email del tutor"
+      guardian_phone:        "Teléfono del tutor"
+    toggle:
+      on:  "Activado"
+      off: "Desactivado"
+    notifications:
+      email_description:    "Actualizaciones de tu solicitud y mensajes."
+      telegram_description: "Notificaciones por Telegram."
+      push_description:     "Alertas del navegador, aunque la pestaña esté cerrada."
+    locales:
+      es: "Español"
+      en: "Inglés"
+      ru: "Ruso"
+    countries:
+      ES: "España"
+      AR: "Argentina"
+      MX: "México"
+      CO: "Colombia"
+      RU: "Rusia"
+      UA: "Ucrania"
+      BY: "Bielorrusia"
+      KZ: "Kazajistán"
+      PE: "Perú"
+      CL: "Chile"
+      VE: "Venezuela"
+      EC: "Ecuador"
+      US: "Estados Unidos"
+      OTHER: "Otro"
+    gdpr:
+      title:                      "Mis datos (RGPD)"
+      export_button:              "Exportar mis datos"
+      export_hint:                "Descarga un archivo JSON con todos tus datos personales (art. 20 RGPD)."
+      deletion_button:            "Solicitar eliminación de cuenta"
+      deletion_hint:              "Tu cuenta y datos personales serán anonimizados en un plazo máximo de 30 días."
+      deletion_confirm:           "¿Confirmar solicitud de eliminación de tu cuenta? Esta acción no se puede deshacer."
+      deletion_requested_at:      "Eliminación solicitada el"
+      deletion_requested_notice:  "Solicitud de eliminación registrada el %{date}. Será procesada en un plazo de 30 días."
+
+  home:
+    hero:
+      title:    "Homologación de títulos universitarios"
+      subtitle: "Gestionamos el reconocimiento de tu título en España de forma eficiente, transparente y con seguimiento en tiempo real."
+
+  auth:
+    password:               "Contraseña"
+    new_password:           "Nueva contraseña"
+    repeat_password:        "Repetir nueva contraseña"
+    forgot_password:        "¿Olvidaste tu contraseña?"
+    password_reset_title:   "Recuperar contraseña"
+    password_reset_hint:    "Introduce tu email y te enviaremos un enlace para restablecer tu contraseña."
+    password_reset_submit:  "Enviar instrucciones"
+    password_update_title:  "Establecer nueva contraseña"
+    no_account:             "¿Aún no tienes cuenta?"
+    secure_login:           "Tus datos están cifrados"
+    welcome_back:
+      title:  "Bienvenido de vuelta"
+      submit: "Entrar a mi panel"
+    or:       "o"
+    brand:
+      tagline_line_1: "15 años"
+      tagline_line_2: "abriendo puertas en España."
+      lede:           "Nos encargamos de la burocracia — Ministerio, RedSARA, cotejo — para que puedas centrarte en construir tu vida aquí."
+      steps:
+        submit:
+          title: "Revisamos antes de presentar"
+        quote:
+          title: "Precio fijo, antes de empezar"
+        track:
+          title: "Hasta el cotejo final"
+      trust:
+        gdpr:           "RGPD · datos en UE"
+        no_hidden_fees: "Sin tasas ocultas"
+
+  registrations:
+    title:                "Crea tu cuenta"
+    submit:               "Registrarse"
+    privacy_accept:       "Acepto la política de privacidad."
+    privacy_accept_html:  "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
+    have_account:         "¿Ya tienes una cuenta?"
+
+  plans:
+    compare_link: "Comparar planes en la web"
+    compare_url:  "https://spaceforedu.com/es/pricing/#plans"
+    basico:
+      title:      "Homologación"
+      short_desc: "Homologación de título con soporte experto completo."
+    completo:
+      title:      "Integral"
+      short_desc: "Homologación + admisión universitaria — el camino completo."
+    premium:
+      title:      "VIP — Máxima Garantía"
+
+  pipeline:
+    active:  "Activas"
+    revenue: "Ingresos"
+    empty:   "No hay solicitudes en esta etapa."
+    stages:
+      pago_recibido:     "Pago recibido"
+      documentos:        "Documentos"
+      traduccion:        "Traducción"
+      tasas_volantes:    "Tasas y volantes"
+      redsara:           "Envío RedSARA"
+      cotejo_ministerio: "Cotejo (Ministerio)"
+      cotejo_delegacion: "Cotejo (Delegación)"
+      completado:        "Completado"
+
+  requests:
+    empty: "Todavía no tienes ninguna solicitud."
+    empty_heading: "Despeguemos juntos"
+    new_title:  "Nueva solicitud"
+    edit_title: "Editar solicitud"
+    new_lede:   "Cuéntanos sobre tu título y qué necesitas. Tarda un par de minutos — puedes guardarla como borrador y volver más tarde."
+    edit_lede:  "Puedes editar la solicitud mientras esté en estado «Borrador» o «Esperando respuesta»."
+    save_draft: "Guardar borrador"
+    next_step_title:    "¿Qué sigue?"
+    next_step_intro:    "Después de guardar, podrás subir los documentos. Ten escaneos o fotos a mano — antes no hace falta nada."
+    actions:
+      submit:     "Enviar solicitud"
+      send_reply: "Enviar respuesta"
+      new:       "Nueva solicitud"
+      open_chat: "Abrir chat"
+      submit_disabled_hint: "Sube primero al menos un documento."
+    attachments:
+      intro:           "Adjunta los documentos indicados abajo. De golpe o a medida que los tengas."
+      required_label:  "obligatorio"
+      optional_label:  "opcional"
+      drop_hint:       "Haz clic o arrastra un archivo"
+      expected:
+        diploma:
+          title: "Título"
+          body:  "Escaneo por ambas caras. Si ya tiene apostilla, adjúntala junto al título."
+        transcript:
+          title: "Certificación académica"
+          body:  "Listado de asignaturas, notas y horas o créditos de toda la carrera."
+        passport:
+          title: "Pasaporte"
+          body:  "Página con la foto y los datos personales."
+        language_certificate:
+          title: "Certificado de español"
+          body:  "DELE, SIELE u otro equivalente, si ya lo tienes."
+        apostille:
+          title: "Apostilla"
+          body:  "Si ya está colocada sobre el título o la certificación académica."
+        translation:
+          title: "Traducción jurada"
+          body:  "Si ya cuentas con traducción de un traductor jurado."
+      formats_hint:    "PDF, JPG, PNG, WebP · hasta 15 MB por archivo"
+      download:        "Descargar"
+      remove:          "Eliminar"
+      replace:         "Reemplazar"
+      confirm_remove:  "¿Eliminar este archivo?"
+    sections:
+      info:        "Información de la solicitud"
+      documents:         "Avance de la revisión"
+      documents_subtitle: "Nuestro equipo marca los puntos a medida que se revisa la solicitud."
+      attachments: "Documentos"
+      payment:     "Pago"
+      student:   "Estudiante"
+      pipeline:  "Pipeline"
+      chat:      "Chat"
+      status:    "Estado"
+      pipeline_notes: "Notas del pipeline"
+      plan:      "Elige tu plan"
+      plan_description: "Puedes cambiarlo mientras la solicitud sea un borrador."
+      diploma:   "Sobre tu título"
+      diploma_description: "Dónde, cuándo y qué estudiaste."
+      language:  "Nivel de español"
+      language_description: "Si aún no tienes certificado, elige el nivel más cercano."
+      request:   "Qué tenemos que hacer"
+      request_description: "Un resumen breve — tu gestor lo verá."
+    fields:
+      subject:              "Asunto"
+      description:          "Descripción"
+      plan_key:             "Plan"
+      education_system:     "Sistema educativo"
+      university:           "Universidad"
+      year:                 "Año"
+      studies_finished:     "¿Estudios finalizados?"
+      language_knowledge:   "Nivel de idioma"
+      language_certificate: "Certificado de idioma"
+      privacy_accepted:      "Acepto la política de privacidad."
+      privacy_accepted_html: "Acepto la <a href=\"%{url}\" target=\"_blank\" class=\"link\">política de privacidad</a>."
+    placeholders:
+      subject:              "Por ejemplo: Homologación de licenciatura"
+      university:           "Por ejemplo: Universidad de Buenos Aires"
+      education_system:     "País o sistema educativo"
+      language_certificate: "Por ejemplo: DELE B2, SIELE 750"
+      description:          "Describe la titulación, tus objetivos, cualquier detalle — tu gestor lo verá."
+    hints:
+      subject:              "Un título corto para reconocer la solicitud en la lista."
+      university:           "Nombre completo de la institución, como aparece en el título."
+      education_system:     "País y sistema educativo donde estudiaste."
+      year:                 "Año de obtención o defensa prevista."
+      studies_finished:     "«No» si aún no has defendido."
+      language_knowledge:   "Una autoevaluación es suficiente — la confirmamos luego."
+      language_certificate: "Déjalo vacío si aún no tienes ninguno."
+      description:          "Lo que sea relevante: especialidad, planes después de la homologación."
+    studies_finished:
+      yes_label: "Sí"
+      no_label:  "No"
+    language_knowledge:
+      A1:     "A1"
+      A2:     "A2"
+      B1:     "B1"
+      B2:     "B2"
+      C1:     "C1"
+      C2:     "C2"
+      native: "Nativo"
+    checklist:
+      sol: "Solicitud"
+      vol: "Volante"
+      tas: "Tasas"
+      cer: "Certificado académico"
+      tit: "Título"
+    checklist_descriptions:
+      sol: "Formulario oficial del ministerio. Tu gestor te enviará la plantilla tras la presentación."
+      vol: "Volante de pago — comprobante del trámite."
+      tas: "Justificantes del pago de las tasas administrativas."
+      cer: "Certificación académica con todas las asignaturas y notas."
+      tit: "Escaneo o foto del título por ambos lados. Apostilla y traducción jurada van aparte si ya las tienes."
+    stepper:
+      draft:        "Borrador"
+      submitted:    "Enviada"
+      in_review:    "En revisión"
+      in_progress:  "En proceso"
+      resolved:     "Lista"
+    declined_note: "Tu gestor no ha podido aceptar este caso. Lee la explicación en el chat."
+    declined_card:
+      heading:    "Mensaje del gestor"
+      empty:      "Tu gestor escribirá la explicación en el chat."
+      open_chat:  "Ver conversación completa"
+    timeline:
+      created_at: "Creada"
+      updated_at: "Actualizada"
+    next_step:
+      heading: "¿Qué sigue?"
+      ready:        "Lista para enviar. Pulsa «Enviar solicitud» para que tu gestor reciba el caso."
+      missing_app:  "Adjunta al menos un documento para poder enviar la solicitud."
+      submitted:    "Solicitud enviada. Te escribiremos por chat en cuanto empecemos a revisarla."
+      in_review:    "Tu gestor está revisando la solicitud. Suele llevar entre 1 y 3 días."
+      awaiting_reply:  "Esperamos aclaraciones o documentos adicionales — revisa el chat."
+      awaiting_payment: "Tu gestor ha aprobado el caso. Paga para que empecemos a trabajar."
+      in_progress:     "Tu gestor está trabajando en el caso. Sigue el progreso en el chat."
+      resolved:        "Todo listo. Revisa los documentos finales."
+      closed:          "Solicitud cerrada. El archivo es de solo lectura."
+      declined:        "No podemos aceptar este caso. Lee la nota de tu gestor en el chat."
+    payment:
+      your_plan:    "Tu plan"
+      confirmed_at: "Confirmado el"
+      confirmed_by: "Confirmado por"
+      pay_now:      "Pagar %{amount}"
+      pay_subtitle: "Pago seguro a través de Stripe. Volverás aquí cuando termine."
+    status:
+      draft:             "Borrador"
+      submitted:         "Enviada"
+      in_review:         "En revisión"
+      awaiting_reply:    "Esperando respuesta"
+      awaiting_payment:  "Pendiente de pago"
+      payment_confirmed: "Pago confirmado"
+      in_progress:       "En proceso"
+      resolved:          "Resuelta"
+      closed:            "Cerrada"
+      declined:          "Rechazada"
+
+  roles:
+    super_admin: "Administrador"
+    student:     "Estudiante"
+
+  actions:
+    view:   "Ver"
+    edit:   "Editar"
+    delete: "Eliminar"
+    cancel: "Cancelar"
+    save:   "Guardar"
+    submit: "Enviar"
+    back:   "Volver"
+    send:   "Enviar"
+
+  messages:
+    placeholder: "Escribe un mensaje..."
+    empty: "Aún no hay mensajes."
+    enter_hint: "Enter — enviar · Shift+Enter — nueva línea"
+
+  admin:
+    requests:
+      sections:
+        student:        "Estudiante"
+        status:         "Estado"
+        payment:        "Pago"
+        pipeline:       "Pipeline"
+        checklist:      "Lista de documentos"
+        chat:           "Chat"
+        pipeline_notes: "Notas del pipeline"
+      actions:
+        change_status:        "Cambiar estado"
+        confirm_payment:      "Marcar como pagada"
+        approve_for_payment:  "Aprobar — abrir pago"
+        request_documents:    "Pedir más documentos"
+        request_documents_modal:  "Pedir más documentos al estudiante"
+        request_documents_submit: "Enviar petición"
+        decline:              "Rechazar (no podemos ayudar)"
+        decline_modal:        "Rechazar esta solicitud"
+        decline_submit:       "Enviar rechazo"
+        advance:              "Avanzar"
+        retreat:              "Retroceder"
+        retreat_modal:        "Retroceder a la etapa anterior"
+        start_chat:           "Iniciar conversación"
+        open_chat:            "Abrir conversación"
+        download_archive:     "Descargar archivo"
+      labels:
+        changed_at:     "Cambiado el"
+        changed_by:     "Cambiado por"
+        confirmed_at:   "Confirmado el"
+        confirmed_by:   "Confirmado por"
+        retreat_reason: "Motivo"
+        decline_reason: "Motivo — el estudiante lo verá en el chat"
+        document_request_reason: "¿Qué debe subir o corregir el estudiante? Lo verá en el chat."
+      errors:
+        decline_reason_required: "Indica un motivo para el rechazo — el estudiante lo verá en el chat."
+        document_request_reason_required: "Indica qué debe subir o corregir el estudiante — lo verá en el chat."
+      navigation:
+        previous:    "Anterior"
+        next:        "Siguiente"
+        position:    "%{position} de %{total}"
+      documents:
+        admin_intro: "Documentos subidos por el estudiante."
+      latest_message:
+        title: "Último mensaje"
+        empty: "Aún no hay mensajes en este expediente."
+      verdict:
+        heading: "Este caso necesita tu veredicto"
+        intro:   "Revisa los documentos y la conversación, luego aprueba o rechaza."
+      checklist:
+        final_state: "Estado final"
+    pipeline:
+      inbox:
+        title:     "Inbox"
+        subtitle:  "Necesita tu veredicto o respuesta"
+        empty:     "Inbox limpio. Nada espera tu acción."
+      unread:      "Sin leer"
+      stale_hint:  "Sin movimiento desde hace más de 7 días."
+    quick_replies:
+      label: "Respuestas rápidas"
+
+  countries:
+    AR: "Argentina"
+    BR: "Brasil"
+    CO: "Colombia"
+    DE: "Alemania"
+    ES: "España"
+    JP: "Japón"
+    MX: "México"
+    PE: "Perú"
+    RU: "Rusia"
+    TR: "Turquía"
+
+  footer:
+    about:    "Sobre nosotros"
+    pricing:  "Precios"
+    legal:    "Aviso legal"
+    cookies:  "Cookies"
+    contact:  "Contacto"
+
+  nav:
+    dashboard:     "Panel"
+    requests:      "Solicitudes"
+    my_requests:   "Mis solicitudes"
+    new_request:   "Nueva solicitud"
+    conversations: "Mensajes"
+    pipeline:      "Pipeline"
+    profile:       "Perfil"
+    notifications: "Notificaciones"
+    sign_in:       "Iniciar sesión"
+    sign_out:      "Cerrar sesión"
+    language:      "Idioma"
+    menu:          "Menú"
+    privacy:       "Privacidad"
+
+  notification_mailer:
+    new_event:
+      greeting: "Hola, %{name}."
+      open_app: "Abrir Space for Edu"
+      footer:   "Recibes este correo porque tienes notificaciones activas en Space for Edu."
+
+  notifications:
+    empty:         "Aún no tienes notificaciones."
+    empty_heading: "Todo al día"
+    mark_all_read: "Marcar todas como leídas"
+    group_count:
+      one:   "×%{count}"
+      other: "×%{count}"
+    status_changed:
+      title: "Tu solicitud «%{subject}» cambió de estado"
+      body:  "Estado actual: %{status}."
+    payment_confirmed:
+      title: "Pago confirmado para «%{subject}»"
+      body:  "Hemos recibido tu pago. Empezamos con la tramitación."
+    new_message:
+      title: "Nuevo mensaje en «%{subject}»"
+      body:  "Tienes un mensaje nuevo de %{sender}."
+    payment_failed:
+      title: "Pago fallido en «%{subject}»"
+      body:  "Stripe reporta que la intención de pago falló. Revisa y contacta al estudiante."
+    request_submitted:
+      title: "Nueva solicitud: «%{subject}»"
+      body:  "%{student} acaba de enviar su solicitud. Toca revisarla."
+    payment_received:
+      title: "Pago recibido en «%{subject}»"
+      body:  "%{student} acaba de pagar. La solicitud entró en el pipeline."
+    documents_added:
+      title: "Nuevos documentos en «%{subject}»"
+      body:  "%{student} subió un archivo en respuesta a tu petición."
+
+  passwords_mailer:
+    reset:
+      subject: "Recupera el acceso a Space for Edu"
+
+  cookie_notice:
+    text:          "Este sitio utiliza únicamente una cookie de sesión, estrictamente necesaria para el funcionamiento del servicio."
+    privacy_link:  "Más información"
+    dismiss:       "Entendido"
+
+  privacy:
+    page_title:   "Política de Privacidad"
+    last_updated: "Última actualización: mayo de 2025"
+
+    controller:
+      title: "1. Responsable del tratamiento"
+      body_html: "%{company}, con domicilio en %{address} y CIF %{cif}, es el responsable del tratamiento de los datos personales recabados a través de esta plataforma. Contacto para cuestiones de protección de datos: <a href='mailto:%{email}' class='link'>%{email}</a>."
+
+    data_collected:
+      title:          "2. Datos que recopilamos y su finalidad"
+      items_label:    "Datos"
+      purpose_label:  "Finalidad"
+      basis_label:    "Base jurídica"
+      categories:
+        account:
+          title:    "Datos de cuenta"
+          items:    "Nombre, correo electrónico, país, idioma."
+          purpose:  "Creación de cuenta y prestación del servicio."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        contact:
+          title:    "Datos de contacto"
+          items:    "Teléfono, WhatsApp."
+          purpose:  "Coordinación operativa del expediente."
+          basis:    "Contrato / Consentimiento (art. 6.1.b y 6.1.a RGPD)"
+        identity:
+          title:    "Documentos de identidad"
+          items:    "Número de pasaporte o documento de identidad."
+          purpose:  "Verificación de identidad para la tramitación de la homologación."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        application:
+          title:    "Datos de la solicitud"
+          items:    "Universidad, año, asignatura, sistema educativo, documentos académicos adjuntos."
+          purpose:  "Tramitación del expediente de homologación."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        session:
+          title:    "Datos de acceso"
+          items:    "Dirección IP y agente de usuario del navegador."
+          purpose:  "Seguridad de la plataforma y prevención del fraude."
+          basis:    "Interés legítimo (art. 6.1.f RGPD)"
+        payment:
+          title:    "Datos de pago"
+          items:    "Space for Edu no almacena números de tarjeta. Los pagos son gestionados íntegramente por Stripe, Inc."
+          purpose:  "Procesamiento del pago del servicio."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+        messages:
+          title:    "Comunicaciones"
+          items:    "Mensajes del chat interno entre estudiante y administrador."
+          purpose:  "Gestión del expediente y atención al usuario."
+          basis:    "Ejecución de contrato (art. 6.1.b RGPD)"
+
+    retention:
+      title: "3. Plazos de conservación"
+      intro: "Conservamos sus datos únicamente durante el tiempo necesario para cada finalidad:"
+      rows:
+        account:    "Datos de cuenta — mientras dure la relación contractual y, tras su finalización, 5 años (normativa fiscal española)."
+        identity:   "Documentos de identidad — vigencia del expediente y hasta su resolución definitiva."
+        session:    "Datos de sesión (IP, navegador) — 90 días."
+        requests:   "Expedientes y documentos adjuntos — 5 años tras el cierre."
+        payments:   "Eventos de pago — 13 meses."
+        messages:   "Mensajes de chat — vinculados a la vigencia del expediente."
+
+    recipients:
+      title: "4. Destinatarios y transferencias internacionales"
+      intro: "Sus datos podrán ser comunicados a los siguientes destinatarios:"
+      stripe:
+        name:     "Stripe, Inc."
+        role:     "Procesador de pagos. Stripe puede transferir datos fuera del Espacio Económico Europeo al amparo de las Cláusulas Contractuales Tipo de la Comisión Europea. Acuerdo de procesamiento de datos disponible en"
+        dpa_link: "stripe.com/es/legal/dpa"
+      hosting:
+        name: "Proveedor de alojamiento"
+        role: "Servidor que aloja la aplicación, ubicado en el Espacio Económico Europeo."
+
+    rights:
+      title: "5. Sus derechos"
+      intro: "En virtud del RGPD y la LOPD-GDD, tiene derecho a:"
+      items:
+        access:          "Acceso — conocer qué datos personales tratamos sobre usted."
+        rectification:   "Rectificación — corregir datos inexactos desde su perfil."
+        erasure:         "Supresión — solicitar la eliminación de sus datos."
+        restriction:     "Limitación del tratamiento."
+        portability:     "Portabilidad — recibir sus datos en formato JSON estructurado."
+        objection:       "Oposición — cuando el tratamiento se base en interés legítimo."
+        withdraw:        "Retirada del consentimiento — en cualquier momento, sin efectos retroactivos."
+
+    how_to_exercise:
+      title:     "6. Cómo ejercer sus derechos"
+      body_html: "Puede exportar sus datos o solicitar la eliminación de su cuenta directamente desde <a href='%{profile_url}' class='link'>su perfil</a>. Para el resto de derechos, envíe un correo a <a href='mailto:%{email}' class='link'>%{email}</a> indicando su nombre, correo registrado y el derecho que desea ejercer. Responderemos en un plazo máximo de un mes (art. 12 RGPD)."
+
+    cookies:
+      title: "7. Cookies"
+      body:  "Este sitio web utiliza exclusivamente una cookie de sesión estrictamente necesaria para gestionar su acceso autenticado. Esta cookie caduca a los 90 días o al cerrar sesión. No utilizamos cookies de seguimiento, publicidad ni analítica de terceros."
+
+    complaints:
+      title:     "8. Reclamaciones ante la AEPD"
+      body_html: "Si considera que el tratamiento de sus datos infringe la normativa, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD): <a href='https://www.aepd.es' target='_blank' rel='noopener' class='link'>www.aepd.es</a>."

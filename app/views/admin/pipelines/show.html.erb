@@ -1,0 +1,142 @@
+<%= render "shared/page_header", title: t("nav.pipeline") %>
+
+<%# ── INBOX — pre-payment, needs admin verdict / reply ─────────── %>
+<section class="card bg-canvas border border-hairline-soft mb-6">
+  <header class="flex items-center justify-between gap-3 px-5 py-3 border-b border-hairline-soft">
+    <div class="flex items-center gap-2">
+      <%= heroicon "inbox", variant: :solid, options: { class: "w-5 h-5 text-primary", "aria-hidden": true } %>
+      <h2 class="font-semibold text-ink"><%= t("admin.pipeline.inbox.title") %></h2>
+      <span class="text-sm text-mute"><%= t("admin.pipeline.inbox.subtitle") %></span>
+    </div>
+    <span class="badge <%= @inbox.any? ? 'badge-warning' : 'badge-neutral' %>"><%= @inbox.size %></span>
+  </header>
+
+  <% if @inbox.empty? %>
+    <p class="text-sm text-mute text-center py-6"><%= t("admin.pipeline.inbox.empty") %></p>
+  <% else %>
+    <ul class="divide-y divide-hairline-soft">
+      <% @inbox.each do |r| %>
+        <% unread = r.conversation&.unread_for?(Current.user) %>
+        <% stale  = r.updated_at < @stale_cutoff %>
+        <li>
+          <%= link_to admin_homologation_request_path(r),
+                id: dom_id(r, :inbox),
+                class: "flex items-center gap-3 px-5 py-3 hover:bg-surface-soft transition no-underline" do %>
+            <span class="badge <%= status_badge_class(r.status) %> shrink-0">
+              <%= t("requests.status.#{r.status}") %>
+            </span>
+            <div class="min-w-0 flex-1">
+              <p class="font-semibold text-ink truncate"><%= r.user.name %> — <%= r.subject %></p>
+              <p class="text-xs text-mute mt-0.5">
+                <%= r.plan.title %>
+                <span aria-hidden="true">·</span>
+                <%= t("requests.timeline.updated_at") %> <%= time_ago_in_words(r.updated_at) %>
+              </p>
+            </div>
+            <% if unread %>
+              <span class="inline-flex items-center gap-1 text-xs text-primary font-medium shrink-0">
+                <%= heroicon "chat-bubble-left-right", options: { class: "w-4 h-4", "aria-hidden": true } %>
+                <%= t("admin.pipeline.unread") %>
+              </span>
+            <% end %>
+            <% if stale %>
+              <span class="inline-flex items-center gap-1 text-xs text-error font-medium shrink-0" title="<%= t('admin.pipeline.stale_hint') %>">
+                <%= heroicon "clock", variant: :solid, options: { class: "w-4 h-4", "aria-hidden": true } %>
+                <%= time_ago_in_words(r.updated_at) %>
+              </span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>
+
+<%# ── PIPELINE STATS ──────────────────────────────────────────── %>
+<div class="stats stats-vertical sm:stats-horizontal w-full bg-canvas mb-6">
+  <div class="stat">
+    <div class="stat-title"><%= t("pipeline.active") %></div>
+    <div class="stat-value tabular-nums"><%= @stats[:active] %></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title"><%= t("pipeline.revenue") %></div>
+    <div class="stat-value tabular-nums"><%= format_eur @stats[:revenue] %></div>
+  </div>
+  <div class="stat">
+    <div class="stat-title"><%= t("pipeline.stages.completado") %></div>
+    <div class="stat-value tabular-nums"><%= @grouped[PipelineFlow::TERMINAL_STAGE].size %></div>
+  </div>
+</div>
+
+<%# ── KANBAN — full pipeline in one horizontal row ─────────────── %>
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x">
+  <% @kanban_stages.each do |stage| %>
+    <% records = @grouped[stage] %>
+    <% any     = records.any? %>
+    <section class="card bg-canvas border border-hairline-soft <%= any ? 'w-64' : 'w-44' %> shrink-0 snap-start" data-stage="<%= stage %>">
+      <header class="flex items-center justify-between gap-2 px-4 py-3 <%= 'border-b border-hairline-soft' if any %> min-h-14">
+        <h3 class="font-semibold text-[11px] uppercase tracking-[0.06em] text-mute leading-tight truncate"><%= t("pipeline.stages.#{stage}") %></h3>
+        <span class="badge <%= any ? 'badge-neutral' : 'badge-ghost' %> badge-sm shrink-0"><%= records.size %></span>
+      </header>
+
+      <% if any %>
+        <div class="p-3">
+          <div class="flex flex-col gap-2">
+            <% records.each do |r| %>
+              <% stale  = r.pipeline_changed_at && r.pipeline_changed_at < @stale_cutoff %>
+              <% unread = r.conversation&.unread_for?(Current.user) %>
+              <%= link_to admin_homologation_request_path(r),
+                    id: dom_id(r),
+                    class: "block rounded-xl border bg-canvas px-3 py-2 hover:border-ink hover:bg-surface-soft transition no-underline #{stale ? 'border-error/40' : 'border-hairline-soft'}" do %>
+                <div class="flex items-start justify-between gap-2">
+                  <p class="font-medium text-sm text-ink truncate"><%= r.user.name %></p>
+                  <% if unread %>
+                    <span class="text-primary text-base leading-none shrink-0" title="<%= t('admin.pipeline.unread') %>">•</span>
+                  <% end %>
+                </div>
+                <p class="text-xs text-mute truncate mt-0.5"><%= r.subject %></p>
+                <p class="text-[11px] text-ash truncate mt-1.5 font-mono tabular-nums">
+                  <%= r.plan.title %>
+                  <span aria-hidden="true">·</span>
+                  <% reference_at = r.pipeline_changed_at || r.updated_at %>
+                  <span class="<%= 'text-error font-semibold' if stale %>">
+                    <%= time_ago_in_words(reference_at) %>
+                  </span>
+                </p>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+</div>
+
+<%# ── COMPLETED — terminal, separate scroll area ───────────────── %>
+<%
+  completed = @grouped[PipelineFlow::TERMINAL_STAGE]
+%>
+<section class="card bg-canvas border border-hairline-soft mt-6" data-stage="completado">
+  <header class="flex items-center justify-between gap-2 px-4 py-3 border-b border-hairline-soft">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-success shrink-0"></span>
+      <h3 class="font-semibold text-[11px] uppercase tracking-[0.06em] text-mute"><%= t("pipeline.stages.completado") %></h3>
+    </div>
+    <span class="badge badge-ghost badge-sm shrink-0"><%= completed.size %></span>
+  </header>
+  <% if completed.empty? %>
+    <p class="text-xs text-ash text-center py-4"><%= t("pipeline.empty") %></p>
+  <% else %>
+    <ul class="divide-y divide-hairline-soft">
+      <% completed.each do |r| %>
+        <li>
+          <%= link_to admin_homologation_request_path(r),
+                class: "flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-body hover:bg-surface-soft transition no-underline" do %>
+            <span class="truncate"><%= r.subject %></span>
+            <span class="text-xs text-mute shrink-0 truncate max-w-[40%]"><%= r.user.name %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

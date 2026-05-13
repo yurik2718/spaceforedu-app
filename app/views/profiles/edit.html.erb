@@ -1,0 +1,165 @@
+<% content_for :title, t("profile.edit_title") %>
+
+<header class="mb-8">
+  <h1 class="t-heading-xl"><%= t("profile.edit_title") %></h1>
+</header>
+
+<%= form_with model: @user, url: profile_path, class: "card bg-canvas border border-hairline-soft" do |f| %>
+
+  <%# Identity header — avatar upload + who is being edited %>
+  <div class="flex items-center gap-4 px-6 py-4 border-b border-hairline-soft">
+    <%= render "shared/avatar", user: @user, size: :lg %>
+    <div class="min-w-0 flex-1">
+      <p class="font-semibold text-sm text-ink truncate"><%= @user.name %></p>
+      <p class="text-xs text-mute truncate mb-2"><%= @user.email_address %></p>
+      <%= f.label :avatar, t("profile.fields.avatar_choose"),
+            class: "btn btn-secondary btn-sm cursor-pointer" %>
+      <%= f.file_field :avatar, accept: User::AVATAR_CONTENT_TYPES.join(","), class: "sr-only" %>
+      <% if @user.avatar.attached? %>
+        <label class="text-xs text-mute ml-2 cursor-pointer hover:text-ink">
+          <%= f.check_box :remove_avatar, class: "sr-only peer" %>
+          <span class="peer-checked:line-through peer-checked:text-error">
+            <%= t("profile.fields.avatar_remove") %>
+          </span>
+        </label>
+      <% end %>
+      <p class="text-xs text-mute mt-1.5"><%= t("profile.fields.avatar_hint") %></p>
+    </div>
+  </div>
+
+  <div class="card-body space-y-6" style="--card-body-pad: 1.5rem">
+
+    <% if @user.errors.any? %>
+      <div class="alert alert-error">
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%# SECTION 1 — Personal info %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 1,
+            title: t("profile.sections.personal_info") %>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <%= render "shared/field", form: f, name: :name,
+              label: t("profile.fields.name"),
+              required: true %>
+
+        <%= render "shared/field", form: f, name: :country,
+              type: :select,
+              label: t("profile.fields.country"),
+              choices: %w[ES AR MX CO RU UA BY KZ PE CL VE EC US OTHER].map { |c| [t("profile.countries.#{c}", default: c), c] },
+              include_blank: true %>
+
+        <%= render "shared/field", form: f, name: :locale,
+              type: :select,
+              label: t("profile.fields.locale"),
+              choices: %w[es en ru].map { |loc| [t("profile.locales.#{loc}"), loc] },
+              include_blank: false %>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <%# SECTION 2 — Contacts %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 2,
+            title: t("profile.sections.contacts") %>
+
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <div>
+          <label class="label" for="<%= f.field_id(:phone) %>"><%= t("profile.fields.phone") %></label>
+          <%= f.telephone_field :phone, class: "input input-bordered w-full" %>
+          <p class="label-text-alt mt-1"><%= t("profile.fields.phone_hint") %></p>
+        </div>
+
+        <div>
+          <label class="label" for="<%= f.field_id(:whatsapp) %>"><%= t("profile.fields.whatsapp") %></label>
+          <%= f.telephone_field :whatsapp, class: "input input-bordered w-full" %>
+          <p class="label-text-alt mt-1"><%= t("profile.fields.whatsapp_hint") %></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <%# SECTION 3 — Notifications %>
+    <section class="space-y-4">
+      <%= render "shared/section_heading",
+            step: 3,
+            title: t("profile.sections.notifications") %>
+
+      <div class="mt-4 space-y-1">
+        <label class="flex items-start gap-3 cursor-pointer py-2.5 px-1 rounded-lg hover:bg-surface-soft">
+          <%= heroicon "envelope", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_email") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.email_description") %></span>
+          </div>
+          <%= f.check_box :notification_email, class: "checkbox mt-0.5 shrink-0" %>
+        </label>
+
+        <label class="flex items-start gap-3 cursor-pointer py-2.5 px-1 rounded-lg hover:bg-surface-soft">
+          <%= heroicon "paper-airplane", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_telegram") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.telegram_description") %></span>
+          </div>
+          <%= f.check_box :notification_telegram, class: "checkbox mt-0.5 shrink-0" %>
+        </label>
+
+        <div data-controller="push-notifications" class="flex items-start gap-3 py-2.5 px-1 rounded-lg">
+          <%= heroicon "bell", options: { class: "w-5 h-5 text-ash mt-0.5 shrink-0", "aria-hidden": true } %>
+          <div class="flex-1 min-w-0">
+            <span class="text-sm font-medium text-ink block"><%= t("profile.fields.notification_push") %></span>
+            <span class="text-xs text-mute"><%= t("profile.notifications.push_description") %></span>
+          </div>
+          <input type="checkbox" class="checkbox mt-0.5 shrink-0"
+                 data-push-notifications-target="checkbox"
+                 data-action="change->push-notifications#toggle">
+        </div>
+      </div>
+    </section>
+
+    <% if @user.is_minor %>
+      <div class="divider"></div>
+
+      <%# SECTION 4 — Guardian %>
+      <section class="space-y-4">
+        <%= render "shared/section_heading",
+              step: 4,
+              title: t("profile.sections.guardian"),
+              description: t("profile.sections.guardian_description") %>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-4">
+          <%= render "shared/field", form: f, name: :guardian_name,
+                label: t("profile.fields.guardian_name") %>
+
+          <div>
+            <label class="label" for="<%= f.field_id(:guardian_email) %>"><%= t("profile.fields.guardian_email") %></label>
+            <%= f.email_field :guardian_email, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <label class="label" for="<%= f.field_id(:guardian_phone) %>"><%= t("profile.fields.guardian_phone") %></label>
+            <%= f.telephone_field :guardian_phone, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+      </section>
+    <% end %>
+
+  </div>
+
+  <%# Action strip %>
+  <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-hairline-soft">
+    <%= link_to t("actions.cancel"), profile_path, class: "btn btn-ghost" %>
+    <%= f.submit t("actions.save"), class: "btn btn-primary" %>
+  </div>
+
+<% end %>

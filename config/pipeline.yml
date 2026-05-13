@@ -1,0 +1,28 @@
+stages:
+  - key: pago_recibido
+    display: kanban
+  - key: documentos
+    display: kanban
+  - key: traduccion
+    display: kanban
+  - key: tasas_volantes
+    display: kanban
+  - key: redsara
+    display: kanban
+  - key: cotejo_ministerio
+    display: horizontal
+  - key: cotejo_delegacion
+    display: horizontal
+  - key: completado
+    display: horizontal
+
+cotejo:
+  default: cotejo_delegacion
+  ministerio_countries: []
+
+checklist_keys:
+  - sol
+  - vol
+  - tas
+  - cer
+  - tit

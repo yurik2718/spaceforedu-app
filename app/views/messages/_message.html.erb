@@ -1,0 +1,11 @@
+<div id="<%= dom_id(message) %>"
+     class="chat chat-start"
+     data-controller="message"
+     data-user-id="<%= message.user_id %>">
+  <div class="chat-header text-mute">
+    <%= message.user.name %>
+    <span class="opacity-40 mx-1">·</span>
+    <time class="text-xs"><%= l message.created_at, format: :short %></time>
+  </div>
+  <div class="chat-bubble"><%= message.body %></div>
+</div>

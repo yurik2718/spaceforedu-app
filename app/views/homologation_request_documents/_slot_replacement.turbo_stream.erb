@@ -1,0 +1,14 @@
+<%# Locals:
+      kind     — slot key being affected
+      document — the RequestDocument (nil after destroy or replace-failure recovery) %>
+<%= turbo_stream.replace "request_document_slot_#{kind}",
+      partial: "homologation_requests/document_slot",
+      locals:  { hr: @homologation_request, kind: kind, document: document, can_edit: true } %>
+
+<%= turbo_stream.replace "request_documents_progress",
+      partial: "homologation_requests/documents_progress",
+      locals:  { hr: @homologation_request } %>
+
+<%= turbo_stream.replace "request_submit_action",
+      partial: "homologation_requests/submit_action",
+      locals:  { hr: @homologation_request } %>

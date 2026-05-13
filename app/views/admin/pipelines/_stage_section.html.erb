@@ -1,0 +1,27 @@
+<% dot_class = { "info" => "bg-accent", "success" => "bg-success" }.fetch(accent, "bg-stone") %>
+
+<section class="card bg-canvas border border-hairline-soft" data-stage="<%= stage %>">
+  <header class="flex items-center justify-between gap-2 px-4 py-3 border-b border-hairline-soft">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="inline-block w-2 h-2 rounded-full <%= dot_class %> shrink-0"></span>
+      <h3 class="font-semibold text-[11px] uppercase tracking-[0.06em] text-mute truncate"><%= t("pipeline.stages.#{stage}") %></h3>
+    </div>
+    <span class="badge badge-ghost badge-sm shrink-0"><%= records.size %></span>
+  </header>
+
+  <% if records.empty? %>
+    <p class="text-xs text-ash text-center py-4"><%= t("pipeline.empty") %></p>
+  <% else %>
+    <ul class="divide-y divide-hairline-soft">
+      <% records.each do |request_record| %>
+        <li>
+          <%= link_to admin_homologation_request_path(request_record),
+                class: "flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-body hover:bg-surface-soft transition no-underline" do %>
+            <span class="truncate"><%= request_record.subject %></span>
+            <span class="text-xs text-mute shrink-0 truncate max-w-[40%]"><%= request_record.user.name %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

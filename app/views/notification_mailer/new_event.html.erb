@@ -1,0 +1,11 @@
+<p><%= t(".greeting", name: @user.name) %></p>
+
+<h2><%= @notification.title %></h2>
+
+<% if @notification.body.present? %>
+  <p><%= @notification.body %></p>
+<% end %>
+
+<p><%= link_to t(".open_app"), polymorphic_url(@notification.notifiable) %></p>
+
+<p><small><%= t(".footer") %></small></p>

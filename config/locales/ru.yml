@@ -1,0 +1,600 @@
+ru:
+  errors:
+    not_authorized:        "У вас нет прав для выполнения этого действия."
+    privacy_required:      "должна быть принята для регистрации"
+    rate_limited:                  "Слишком много попыток. Попробуйте позже."
+    unknown_checklist_key:         "Неизвестный ключ чеклиста."
+    invalid_credentials:           "Неверный email или пароль."
+    passwords_mismatch:            "Пароли не совпадают."
+    password_reset_token_invalid:  "Ссылка для сброса пароля недействительна или истекла."
+    avatar_invalid_type:           "должно быть изображение JPEG, PNG, WebP или GIF"
+    avatar_too_large:              "не должно превышать %{max} МБ"
+    messages:
+      content_type_invalid:
+        one:   "Допустимы PDF, JPG, PNG или WebP"
+        few:   "Допустимы PDF, JPG, PNG или WebP"
+        many:  "Допустимы PDF, JPG, PNG или WebP"
+        other: "Допустимы PDF, JPG, PNG или WebP"
+      file_size_not_less_than: "Файл должен быть меньше %{max}"
+
+  flash:
+    request_created:        "Заявка создана."
+    request_submitted:      "Заявка отправлена. Мы уведомим вас после проверки."
+    reply_sent:             "Ответ отправлен. Ассистент проверит в ближайшее время."
+    request_updated:        "Заявка обновлена."
+    request_deleted:        "Заявка удалена."
+    request_not_editable:   "Эту заявку больше нельзя редактировать."
+    request_not_submittable: "Эту заявку нельзя отправить."
+    payment_confirmed:      "Оплата подтверждена. Ваша заявка в работе."
+    request_declined:       "Заявка помечена как отклонённая. Студент получит сообщение в чате."
+    request_approved_for_payment: "Принято. Студент может оплачивать."
+    request_documents_requested:  "Запрос отправлен. Студент сможет загрузить дополнения."
+    user_updated:           "Профиль обновлён."
+    message_sent:           "Сообщение отправлено."
+    pipeline_advanced:      "Передвинуто на следующий этап."
+    pipeline_retreated:     "Возвращено на предыдущий этап."
+    status_changed:         "Статус обновлён."
+    document_checklist_updated: "Чеклист обновлён."
+    conversation_started:   "Чат создан."
+    registered:             "Добро пожаловать."
+    document_uploaded:      "Файл загружен."
+    document_removed:       "Файл удалён."
+    invalid_document_kind:  "Неизвестный тип документа."
+    payment_processing:     "Платёж получен. Скоро подтвердим."
+    password_reset_sent:    "Инструкции по сбросу пароля отправлены (если пользователь с таким email существует)."
+    password_reset_success:     "Пароль успешно изменён."
+    data_exported:              "Ваши данные экспортированы."
+    deletion_requested:         "Запрос на удаление принят. Обработаем в течение 30 дней."
+    deletion_already_requested: "У вас уже есть активный запрос на удаление аккаунта."
+
+  profile:
+    edit_title: "Редактировать профиль"
+    show:
+      conditions: "Условия"
+      conditions_accepted: "Приняты"
+    sections:
+      account:        "Аккаунт"
+      notifications:  "Уведомления"
+      guardian:       "Опекун"
+      personal_info:  "Личные данные"
+      contacts:       "Контакты"
+      guardian_description: "Обязательно для несовершеннолетних — для верификации личности."
+    fields:
+      name:                  "Имя"
+      email_address:         "Email"
+      avatar:                "Фото профиля"
+      avatar_hint:           "JPEG, PNG, WebP или GIF, до 5 МБ."
+      avatar_choose:         "Выберите изображение…"
+      avatar_remove:         "Удалить текущее"
+      country:               "Страна"
+      birthday:              "Дата рождения"
+      phone:                 "Телефон"
+      phone_hint:            "+7 XXX XXX XX XX"
+      whatsapp:              "WhatsApp"
+      whatsapp_hint:         "+7 XXX XXX XX XX"
+      locale:                "Язык"
+      notification_email:    "Уведомления по email"
+      notification_telegram: "Уведомления в Telegram"
+      notification_push:     "Push-уведомления на этом устройстве"
+      notification_push_hint: "Вы будете получать уведомления браузера, даже когда вкладка закрыта."
+      privacy_accepted_at:   "Политика принята"
+      guardian_name:         "Имя опекуна"
+      guardian_email:        "Email опекуна"
+      guardian_phone:        "Телефон опекуна"
+    toggle:
+      on:  "Вкл"
+      off: "Выкл"
+    notifications:
+      email_description:    "Обновления по заявке и сообщения."
+      telegram_description: "Уведомления через Telegram."
+      push_description:     "Уведомления браузера, даже когда вкладка закрыта."
+    locales:
+      es: "Испанский"
+      en: "Английский"
+      ru: "Русский"
+    countries:
+      ES: "Испания"
+      AR: "Аргентина"
+      MX: "Мексика"
+      CO: "Колумбия"
+      RU: "Россия"
+      UA: "Украина"
+      BY: "Беларусь"
+      KZ: "Казахстан"
+      PE: "Перу"
+      CL: "Чили"
+      VE: "Венесуэла"
+      EC: "Эквадор"
+      US: "США"
+      OTHER: "Другая"
+    gdpr:
+      title:                      "Мои данные (GDPR)"
+      export_button:              "Экспортировать данные"
+      export_hint:                "Скачать JSON-файл со всеми вашими персональными данными (ст. 20 GDPR)."
+      deletion_button:            "Запросить удаление аккаунта"
+      deletion_hint:              "Аккаунт и персональные данные будут анонимизированы в течение 30 дней."
+      deletion_confirm:           "Подтвердить запрос на удаление аккаунта? Это действие нельзя отменить."
+      deletion_requested_at:      "Удаление запрошено"
+      deletion_requested_notice:  "Запрос на удаление зарегистрирован %{date}. Будет обработан в течение 30 дней."
+
+  home:
+    hero:
+      title:    "Омологация университетских дипломов"
+      subtitle: "Помогаем признать ваш диплом в Испании — эффективно, прозрачно, с отслеживанием в реальном времени."
+
+  auth:
+    password:               "Пароль"
+    new_password:           "Новый пароль"
+    repeat_password:        "Повторите новый пароль"
+    forgot_password:        "Забыли пароль?"
+    password_reset_title:   "Восстановление пароля"
+    password_reset_hint:    "Введите email — мы отправим ссылку для сброса пароля."
+    password_reset_submit:  "Отправить инструкции"
+    password_update_title:  "Задайте новый пароль"
+    no_account:             "Ещё нет аккаунта?"
+    secure_login:           "Ваши данные зашифрованы"
+    welcome_back:
+      title:  "С возвращением"
+      submit: "Войти в кабинет"
+    or:       "или"
+    brand:
+      tagline_line_1: "15 лет"
+      tagline_line_2: "открываем двери в Испанию."
+      lede:           "Мы берём бюрократию на себя — Ministerio, RedSARA, cotejo — чтобы вы могли сосредоточиться на главном."
+      steps:
+        submit:
+          title: "Проверяем перед подачей"
+        quote:
+          title: "Фиксируем цену до старта"
+        track:
+          title: "Доводим до cotejo"
+      trust:
+        gdpr:           "RGPD · данные в ЕС"
+        no_hidden_fees: "Без скрытых платежей"
+
+  registrations:
+    title:                "Создайте аккаунт"
+    submit:               "Зарегистрироваться"
+    privacy_accept:       "Принимаю политику конфиденциальности."
+    privacy_accept_html:  "Принимаю <a href=\"%{url}\" target=\"_blank\" class=\"link\">политику конфиденциальности</a>."
+    have_account:         "Уже есть аккаунт?"
+
+  plans:
+    compare_link: "Подробнее о тарифах на сайте"
+    compare_url:  "https://spaceforedu.com/ru/pricing/#plans"
+    basico:
+      title:      "Омологация"
+      short_desc: "Омологация диплома с полной экспертной поддержкой."
+    completo:
+      title:      "Интеграл"
+      short_desc: "Омологация + поступление — полный путь."
+    premium:
+      title:      "VIP — Максимальная гарантия"
+
+  pipeline:
+    active:  "Активные"
+    revenue: "Выручка"
+    empty:   "Нет заявок на этом этапе."
+    stages:
+      pago_recibido:     "Оплата получена"
+      documentos:        "Документы"
+      traduccion:        "Перевод"
+      tasas_volantes:    "Тасы и воланты"
+      redsara:           "Подача в RedSARA"
+      cotejo_ministerio: "Cotejo (министерство)"
+      cotejo_delegacion: "Cotejo (делегация)"
+      completado:        "Завершено"
+
+  requests:
+    empty: "У вас пока нет заявок."
+    empty_heading: "Готовимся к старту"
+    new_title:  "Новая заявка"
+    edit_title: "Редактировать заявку"
+    new_lede:   "Расскажите о дипломе и о том, что вам нужно. Это займёт пару минут — заявку можно сохранить как черновик и вернуться позже."
+    edit_lede:  "Заявку можно редактировать, пока она в статусе «Черновик» или «Ожидает ответа»."
+    save_draft: "Сохранить черновик"
+    next_step_title:    "Что дальше?"
+    next_step_intro:    "После сохранения вы загрузите документы для проверки. Готовьте сканы или фото — заранее ничего не нужно."
+    actions:
+      submit:     "Подать заявку"
+      send_reply: "Отправить ответ"
+      new:       "Новая заявка"
+      open_chat: "Открыть чат"
+      submit_disabled_hint: "Сначала загрузите хотя бы один документ."
+    attachments:
+      intro:           "Прикрепите перечисленные ниже документы. Сразу всё или по мере готовности."
+      required_label:  "обязательно"
+      optional_label:  "не обязательно"
+      drop_hint:       "Нажмите или перетащите файл"
+      expected:
+        diploma:
+          title: "Диплом"
+          body:  "Скан с обеих сторон. Если есть апостиль — приложите вместе."
+        transcript:
+          title: "Академическая справка"
+          body:  "Список дисциплин, оценок и часов за весь период обучения."
+        passport:
+          title: "Паспорт"
+          body:  "Страница с фото и личными данными."
+        language_certificate:
+          title: "Сертификат испанского"
+          body:  "DELE, SIELE или аналог — если уже сдавали."
+        apostille:
+          title: "Апостиль"
+          body:  "Если уже проставлен на дипломе или академической справке."
+        translation:
+          title: "Присяжный перевод"
+          body:  "Если уже есть перевод от traductor jurado."
+      formats_hint:    "PDF, JPG, PNG, WebP · до 15 МБ за файл"
+      download:        "Скачать"
+      remove:          "Удалить"
+      replace:         "Заменить"
+      confirm_remove:  "Удалить этот файл?"
+    sections:
+      info:        "Информация о заявке"
+      documents:         "Этапы проверки"
+      documents_subtitle: "Наша команда отмечает пункты по мере рассмотрения заявки."
+      attachments: "Документы"
+      payment:     "Оплата"
+      student:   "Студент"
+      pipeline:  "Работа над заявкой"
+      chat:      "Чат"
+      status:    "Статус"
+      pipeline_notes: "Внутренние заметки"
+      plan:      "Выберите тариф"
+      plan_description: "Можно поменять, пока заявка в статусе черновика."
+      diploma:   "Об образовании"
+      diploma_description: "Где, когда и какую квалификацию вы получили."
+      language:  "Знание испанского"
+      language_description: "Если сертификата нет, выберите ближайший уровень."
+      request:   "Что мы должны сделать"
+      request_description: "Кратко опишите задачу — это увидит ваш ассистент."
+    fields:
+      subject:              "Тема"
+      description:          "Описание"
+      plan_key:             "Тариф"
+      education_system:     "Система образования"
+      university:           "Университет"
+      year:                 "Год"
+      studies_finished:     "Учёба завершена?"
+      language_knowledge:   "Уровень языка"
+      language_certificate: "Сертификат о языке"
+      privacy_accepted:      "Принимаю политику конфиденциальности."
+      privacy_accepted_html: "Принимаю <a href=\"%{url}\" target=\"_blank\" class=\"link\">политику конфиденциальности</a>."
+    placeholders:
+      subject:              "Например: Гомологация диплома специалиста"
+      university:           "Например: Universidad de Buenos Aires"
+      education_system:     "Страна или система образования"
+      language_certificate: "Например: DELE B2, SIELE 750"
+      description:          "Опишите специальность, цели, любые нюансы — это увидит ваш ассистент."
+    hints:
+      subject:              "Короткое название, по которому вы узнаете заявку в списке."
+      university:           "Полное название учебного заведения, как в дипломе."
+      education_system:     "В какой стране и по какой системе вы учились."
+      year:                 "Год получения диплома или планируемой защиты."
+      studies_finished:     "«Нет», если вы ещё не защитились."
+      language_knowledge:   "Самооценка тоже подходит — мы уточним при необходимости."
+      language_certificate: "Оставьте пустым, если сертификата нет."
+      description:          "Что особенного, чем планируете заниматься после гомологации."
+    studies_finished:
+      yes_label: "Да"
+      no_label:  "Нет"
+    language_knowledge:
+      A1:     "A1"
+      A2:     "A2"
+      B1:     "B1"
+      B2:     "B2"
+      C1:     "C1"
+      C2:     "C2"
+      native: "Носитель"
+    checklist:
+      sol: "Solicitud"
+      vol: "Volante"
+      tas: "Tasas"
+      cer: "Certificación académica"
+      tit: "Título"
+    checklist_descriptions:
+      sol: "Официальное заявление по форме министерства. Шаблон выдаст ваш ассистент после подачи."
+      vol: "Подтверждение оплаты госпошлины — документ из банка."
+      tas: "Квитанции об оплате процедурных пошлин."
+      cer: "Справка с перечнем дисциплин и оценок за весь период обучения."
+      tit: "Скан или фото диплома с обеих сторон. Апостиль и присяжный перевод — отдельно, если уже есть."
+    stepper:
+      draft:        "Черновик"
+      submitted:    "Подана"
+      in_review:    "На рассмотрении"
+      in_progress:  "В работе"
+      resolved:     "Готова"
+    declined_note: "Ваш ассистент не сможет взять это дело. Объяснение — в чате."
+    declined_card:
+      heading:    "Сообщение ассистента"
+      empty:      "Ассистент напишет объяснение в чате."
+      open_chat:  "Открыть переписку"
+    timeline:
+      created_at: "Создана"
+      updated_at: "Обновлена"
+    next_step:
+      heading: "Что дальше?"
+      ready:        "Готово к подаче. Нажмите «Подать заявку», чтобы отправить дело ассистенту."
+      missing_app:  "Прикрепите хотя бы один документ, чтобы можно было подать заявку."
+      submitted:    "Заявка подана. Мы напишем в чат, как только начнём проверку."
+      in_review:    "Ваш ассистент изучает дело. Обычно это занимает 1–3 дня."
+      awaiting_reply:  "Мы ждём от вас уточнений или дополнительных документов — проверьте чат."
+      awaiting_payment: "Ассистент рассмотрел дело и берёт его. Оплатите — начинаем работу."
+      in_progress:     "Дело в работе у ассистента. Следите за этапами в чате."
+      resolved:        "Готово. Проверьте итоговые документы и рейтинги."
+      closed:          "Заявка закрыта. Архив доступен только для просмотра."
+      declined:        "К сожалению, мы не можем взять этот случай. Объяснение — в чате."
+    payment:
+      your_plan:    "Ваш тариф"
+      confirmed_at: "Подтверждено"
+      confirmed_by: "Подтвердил"
+      pay_now:      "Оплатить %{amount}"
+      pay_subtitle: "Безопасный платёж через Stripe. После оплаты вернётесь сюда."
+    status:
+      draft:             "Черновик"
+      submitted:         "Отправлена"
+      in_review:         "На проверке"
+      awaiting_reply:    "Ожидает ответа"
+      awaiting_payment:  "Ожидает оплаты"
+      payment_confirmed: "Оплата подтверждена"
+      in_progress:       "В работе"
+      resolved:          "Решена"
+      closed:            "Закрыта"
+      declined:          "Отклонена"
+
+  roles:
+    super_admin: "Администратор"
+    student:     "Студент"
+
+  actions:
+    view:   "Просмотр"
+    edit:   "Редактировать"
+    delete: "Удалить"
+    cancel: "Отмена"
+    save:   "Сохранить"
+    submit: "Отправить"
+    back:   "Назад"
+    send:   "Отправить"
+
+  messages:
+    placeholder: "Введите сообщение..."
+    empty: "Сообщений пока нет."
+    enter_hint: "Enter — отправить · Shift+Enter — новая строка"
+
+  admin:
+    requests:
+      sections:
+        student:        "Студент"
+        status:         "Статус"
+        payment:        "Оплата"
+        pipeline:       "Работа над заявкой"
+        checklist:      "Чеклист документов"
+        chat:           "Чат"
+        pipeline_notes: "Внутренние заметки"
+      actions:
+        change_status:        "Сменить статус"
+        confirm_payment:      "Отметить оплаченным"
+        approve_for_payment:  "Принять — открыть оплату"
+        request_documents:    "Запросить документы"
+        request_documents_modal:  "Запросить дополнительные документы"
+        request_documents_submit: "Отправить запрос"
+        decline:              "Не возьмёмся"
+        decline_modal:        "Отклонить заявку"
+        decline_submit:       "Отправить отказ"
+        advance:              "Дальше"
+        retreat:              "Назад"
+        retreat_modal:        "Откатить на предыдущий этап"
+        start_chat:           "Начать чат"
+        open_chat:            "Открыть чат"
+        download_archive:     "Скачать архив"
+      labels:
+        changed_at:     "Изменено"
+        changed_by:     "Изменил"
+        confirmed_at:   "Подтверждено"
+        confirmed_by:   "Подтвердил"
+        retreat_reason: "Причина"
+        decline_reason: "Причина — студент увидит её в чате"
+        document_request_reason: "Что нужно загрузить или исправить? Студент увидит это в чате."
+      errors:
+        decline_reason_required: "Укажите причину отказа — студент увидит её в чате."
+        document_request_reason_required: "Напишите, что именно загрузить или исправить — студент увидит это в чате."
+      navigation:
+        previous:    "Предыдущая"
+        next:        "Следующая"
+        position:    "%{position} из %{total}"
+      documents:
+        admin_intro: "Документы, загруженные студентом."
+      latest_message:
+        title: "Последнее сообщение"
+        empty: "В этом деле ещё нет сообщений."
+      verdict:
+        heading: "Это дело ждёт твоего вердикта"
+        intro:   "Просмотри документы и переписку, затем одобри или откажи."
+      checklist:
+        final_state: "Итоговое состояние"
+    pipeline:
+      inbox:
+        title:     "Inbox"
+        subtitle:  "Ждёт твоего вердикта или ответа"
+        empty:     "Inbox пуст. Ничего не ждёт твоего действия."
+      unread:      "Непрочитанные"
+      stale_hint:  "Без движения более 7 дней."
+    quick_replies:
+      label: "Готовые ответы"
+
+  countries:
+    AR: "Аргентина"
+    BR: "Бразилия"
+    CO: "Колумбия"
+    DE: "Германия"
+    ES: "Испания"
+    JP: "Япония"
+    MX: "Мексика"
+    PE: "Перу"
+    RU: "Россия"
+    TR: "Турция"
+
+  footer:
+    about:    "О нас"
+    pricing:  "Цены"
+    legal:    "Правовая информация"
+    cookies:  "Cookies"
+    contact:  "Контакты"
+
+  nav:
+    dashboard:     "Панель"
+    requests:      "Заявки"
+    my_requests:   "Мои заявки"
+    new_request:   "Новая заявка"
+    conversations: "Сообщения"
+    pipeline:      "Производство"
+    profile:       "Профиль"
+    notifications: "Уведомления"
+    sign_in:       "Войти"
+    sign_out:      "Выйти"
+    language:      "Язык"
+    menu:          "Меню"
+    privacy:       "Конфиденциальность"
+
+  notification_mailer:
+    new_event:
+      greeting: "Здравствуйте, %{name}."
+      open_app: "Открыть Space for Edu"
+      footer:   "Вы получили это письмо, потому что у вас включены email-уведомления в Space for Edu."
+
+  notifications:
+    empty:         "У вас пока нет уведомлений."
+    empty_heading: "Всё прочитано"
+    mark_all_read: "Отметить все как прочитанные"
+    group_count:
+      one:   "×%{count}"
+      few:   "×%{count}"
+      many:  "×%{count}"
+      other: "×%{count}"
+    status_changed:
+      title: "Заявка «%{subject}» сменила статус"
+      body:  "Текущий статус: %{status}."
+    payment_confirmed:
+      title: "Оплата по заявке «%{subject}» подтверждена"
+      body:  "Мы получили оплату. Начинаем работу."
+    new_message:
+      title: "Новое сообщение в «%{subject}»"
+      body:  "У вас новое сообщение от %{sender}."
+    payment_failed:
+      title: "Оплата по заявке «%{subject}» не прошла"
+      body:  "Stripe сообщает, что платёж не прошёл. Свяжитесь со студентом."
+    request_submitted:
+      title: "Новая заявка: «%{subject}»"
+      body:  "%{student} только что отправил заявку. Пора смотреть."
+    payment_received:
+      title: "Оплата по заявке «%{subject}» получена"
+      body:  "%{student} только что оплатил. Заявка ушла в работу."
+    documents_added:
+      title: "Новые документы по заявке «%{subject}»"
+      body:  "%{student} загрузил файл в ответ на ваш запрос."
+
+  passwords_mailer:
+    reset:
+      subject: "Сброс пароля Space for Edu"
+
+  cookie_notice:
+    text:         "Этот сайт использует только одну сессионную cookie — строго необходимую для работы сервиса."
+    privacy_link: "Подробнее"
+    dismiss:      "Понятно"
+
+  privacy:
+    page_title:   "Политика конфиденциальности"
+    last_updated: "Последнее обновление: май 2025 г."
+
+    controller:
+      title:     "1. Ответственный за обработку данных"
+      body_html: "%{company}, юридический адрес: %{address}, номер CIF: %{cif} — ответственный за обработку персональных данных, собираемых через эту платформу. По вопросам защиты данных: <a href='mailto:%{email}' class='link'>%{email}</a>."
+
+    data_collected:
+      title:          "2. Данные, которые мы собираем"
+      items_label:    "Данные"
+      purpose_label:  "Цель"
+      basis_label:    "Правовое основание"
+      categories:
+        account:
+          title:    "Данные аккаунта"
+          items:    "Имя, email, страна, язык."
+          purpose:  "Создание аккаунта и оказание услуги."
+          basis:    "Исполнение договора (ст. 6(1)(б) GDPR)"
+        contact:
+          title:    "Контактные данные"
+          items:    "Телефон, WhatsApp."
+          purpose:  "Операционная координация дела."
+          basis:    "Договор / Согласие (ст. 6(1)(б) и (а) GDPR)"
+        identity:
+          title:    "Документы удостоверения личности"
+          items:    "Номер паспорта или удостоверения личности."
+          purpose:  "Верификация личности для обработки гомологации."
+          basis:    "Исполнение договора (ст. 6(1)(б) GDPR)"
+        application:
+          title:    "Данные заявки"
+          items:    "Университет, год, специальность, система образования, учебные документы."
+          purpose:  "Обработка дела гомологации."
+          basis:    "Исполнение договора (ст. 6(1)(б) GDPR)"
+        session:
+          title:    "Данные сессии"
+          items:    "IP-адрес, user-agent браузера."
+          purpose:  "Безопасность платформы и предотвращение мошенничества."
+          basis:    "Законный интерес (ст. 6(1)(ф) GDPR)"
+        payment:
+          title:    "Платёжные данные"
+          items:    "Space for Edu не хранит данные карт. Платежи обрабатываются Stripe, Inc."
+          purpose:  "Обработка оплаты услуги."
+          basis:    "Исполнение договора (ст. 6(1)(б) GDPR)"
+        messages:
+          title:    "Переписка"
+          items:    "Сообщения внутреннего чата между студентом и администратором."
+          purpose:  "Ведение дела и поддержка пользователей."
+          basis:    "Исполнение договора (ст. 6(1)(б) GDPR)"
+
+    retention:
+      title: "3. Сроки хранения данных"
+      intro: "Мы храним данные только в течение времени, необходимого для каждой цели:"
+      rows:
+        account:    "Данные аккаунта — на период действия отношений и, после их прекращения, 5 лет (испанское налоговое законодательство)."
+        identity:   "Документы удостоверения личности — на период действия дела."
+        session:    "Данные сессии (IP, браузер) — 90 дней."
+        requests:   "Дела и прикреплённые документы — 5 лет после закрытия."
+        payments:   "События платежей — 13 месяцев."
+        messages:   "Сообщения чата — на период действия дела."
+
+    recipients:
+      title: "4. Получатели и международные передачи данных"
+      intro: "Ваши данные могут быть переданы следующим получателям:"
+      stripe:
+        name:     "Stripe, Inc."
+        role:     "Обработчик платежей. Stripe может передавать данные за пределы ЕЭЗ на основании Стандартных договорных положений Европейской комиссии. Соглашение об обработке данных доступно на"
+        dpa_link: "stripe.com/legal/dpa"
+      hosting:
+        name: "Хостинг-провайдер"
+        role: "Сервер, на котором размещено приложение, находится в пределах ЕЭЗ."
+
+    rights:
+      title: "5. Ваши права"
+      intro: "В соответствии с GDPR и LOPD-GDD у вас есть право:"
+      items:
+        access:        "Доступ — узнать, какие персональные данные мы обрабатываем."
+        rectification: "Исправление — скорректировать неточные данные в профиле."
+        erasure:       "Удаление — потребовать удаления данных, когда они больше не нужны."
+        restriction:   "Ограничение обработки."
+        portability:   "Перенос данных — получить данные в структурированном формате JSON."
+        objection:     "Возражение — когда обработка основана на законном интересе."
+        withdraw:      "Отзыв согласия — в любой момент, без обратной силы."
+
+    how_to_exercise:
+      title:     "6. Как воспользоваться правами"
+      body_html: "Экспортировать данные и запросить удаление аккаунта можно прямо в <a href='%{profile_url}' class='link'>вашем профиле</a>. По остальным вопросам обращайтесь на <a href='mailto:%{email}' class='link'>%{email}</a>, указав имя, зарегистрированный email и право, которым вы хотите воспользоваться. Ответим в течение одного месяца (ст. 12 GDPR)."
+
+    cookies:
+      title: "7. Файлы cookie"
+      body:  "Сайт использует только одну строго необходимую сессионную cookie для управления аутентифицированным доступом. Cookie истекает через 90 дней или при выходе из системы. Трекинг, рекламные и аналитические cookie третьих сторон не используются."
+
+    complaints:
+      title:     "8. Жалобы в AEPD"
+      body_html: "Если вы считаете, что обработка ваших данных нарушает применимое законодательство, вы вправе подать жалобу в Испанское агентство по защите данных (AEPD): <a href='https://www.aepd.es' target='_blank' rel='noopener' class='link'>www.aepd.es</a>."

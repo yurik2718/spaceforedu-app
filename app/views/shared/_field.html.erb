@@ -1,0 +1,64 @@
+<%#
+  Locals:
+    form         — Rails form builder
+    name         — Symbol, attribute name
+    type         — :text (default), :select, :textarea
+    label        — String, defaults to t("requests.fields.<name>")
+    hint         — String, optional helper text shown under control
+    placeholder  — String, optional input placeholder
+    required     — Boolean, draws an asterisk and applies HTML required
+    choices      — Array, for type: :select
+    include_blank — Boolean, for type: :select (default true)
+    rows         — Integer, for type: :textarea (default 4)
+
+  The control inherits the project's @utility classes (input, select, textarea)
+  and turns red on validation errors.
+%>
+<%
+  type        ||= :text
+  label_text    = local_assigns[:label] || t("requests.fields.#{name}")
+  required      = local_assigns.fetch(:required, false)
+  hint          = local_assigns[:hint]
+  placeholder   = local_assigns[:placeholder]
+  has_error     = form.object.errors[name].any?
+  field_id      = form.field_id(name)
+  base_classes  = "w-full"
+  err_classes   = has_error ? "input-error" : ""
+%>
+
+<div>
+  <label class="label" for="<%= field_id %>">
+    <span><%= label_text %></span>
+    <% if required %>
+      <span class="text-primary ml-0.5" aria-hidden="true">*</span>
+    <% end %>
+  </label>
+
+  <% case type %>
+  <% when :select %>
+    <%= form.select name,
+          local_assigns[:choices] || [],
+          { include_blank: local_assigns.fetch(:include_blank, true) },
+          class: "select select-bordered #{base_classes} #{err_classes}",
+          required: required %>
+  <% when :textarea %>
+    <%= form.text_area name,
+          class: "textarea textarea-bordered #{base_classes} #{err_classes}",
+          rows: local_assigns.fetch(:rows, 4),
+          placeholder: placeholder,
+          required: required %>
+  <% else %>
+    <%= form.text_field name,
+          class: "input input-bordered #{base_classes} #{err_classes}",
+          placeholder: placeholder,
+          required: required %>
+  <% end %>
+
+  <% if has_error %>
+    <p class="label-text-alt text-error mt-1" id="<%= field_id %>_error">
+      <%= form.object.errors[name].to_sentence %>
+    </p>
+  <% elsif hint.present? %>
+    <p class="label-text-alt mt-1"><%= hint %></p>
+  <% end %>
+</div>

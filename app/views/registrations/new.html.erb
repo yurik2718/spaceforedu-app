@@ -1,0 +1,75 @@
+<% content_for :title, t("registrations.title") %>
+
+<h1 class="font-display font-bold text-4xl text-ink leading-[1.1] tracking-tight">
+  <%= t("registrations.title") %>
+</h1>
+
+<%= form_with model: @user, url: registration_path, class: "space-y-5" do |f| %>
+  <% if @user.errors.any? %>
+    <div class="alert alert-error">
+      <ul class="list-disc list-inside text-sm space-y-0.5">
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <label class="label" for="<%= f.field_id(:name) %>"><%= t("profile.fields.name") %></label>
+    <%= f.text_field :name,
+          required: true,
+          autofocus: true,
+          autocomplete: "name",
+          class: "input w-full" %>
+  </div>
+
+  <div>
+    <label class="label" for="<%= f.field_id(:email_address) %>"><%= t("profile.fields.email_address") %></label>
+    <%= f.email_field :email_address,
+          required: true,
+          autocomplete: "username",
+          placeholder: "you@example.com",
+          class: "input w-full" %>
+  </div>
+
+  <div>
+    <label class="label" for="<%= f.field_id(:password) %>"><%= t("auth.password") %></label>
+    <%= f.password_field :password,
+          required: true,
+          autocomplete: "new-password",
+          maxlength: 72,
+          placeholder: "••••••••",
+          class: "input w-full" %>
+  </div>
+
+  <div>
+    <label class="label" for="<%= f.field_id(:password_confirmation) %>"><%= t("auth.repeat_password") %></label>
+    <%= f.password_field :password_confirmation,
+          required: true,
+          autocomplete: "new-password",
+          maxlength: 72,
+          placeholder: "••••••••",
+          class: "input w-full" %>
+  </div>
+
+  <label class="flex items-start gap-3 cursor-pointer text-sm text-body">
+    <%= f.check_box :privacy_accepted, { class: "checkbox mt-0.5 shrink-0" }, "1", "0" %>
+    <span><%= t("registrations.privacy_accept_html", url: privacy_path) %></span>
+  </label>
+
+  <div class="space-y-2 pt-1">
+    <%= f.submit t("registrations.submit"), class: "btn btn-primary w-full h-12 text-base" %>
+    <p class="flex items-center justify-center gap-1.5 text-xs text-ash">
+      <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v3H5a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1v-8a1 1 0 00-1-1h-1V6a4 4 0 00-4-4zm2 7V6a2 2 0 10-4 0v3h4z" clip-rule="evenodd"/>
+      </svg>
+      <%= t("auth.secure_login") %>
+    </p>
+  </div>
+<% end %>
+
+<div class="divider"><%= t("auth.or") %></div>
+
+<%= link_to t("nav.sign_in"), new_session_path,
+      class: "btn w-full h-12 text-base border border-hairline text-ink hover:bg-surface-card no-underline flex items-center justify-center gap-2" %>

@@ -1,0 +1,36 @@
+service: spaceforedu
+image: YOUR_GITHUB_USERNAME/spaceforedu
+
+servers:
+  web:
+    - YOUR_VPS_IP
+
+proxy:
+  ssl: true
+  host: YOUR_DOMAIN
+
+registry:
+  server: ghcr.io
+  username: YOUR_GITHUB_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+
+volumes:
+  - "spaceforedu_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell:   app exec --interactive --reuse "bash"
+  logs:    app logs -f
+  dbc:     app exec --interactive --reuse "bin/rails dbconsole --include-password"
