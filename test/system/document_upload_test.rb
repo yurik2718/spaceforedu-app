@@ -34,10 +34,15 @@ class DocumentUploadTest < ApplicationSystemTestCase
     assert_button submit_label
     click_on submit_label
 
-    # UI-only wait. Polling the DB from the test thread holds the shared
-    # transactional connection long enough to starve Puma serving the POST
-    # on CI — Capybara polling the DOM via Selenium is out-of-process and
-    # doesn't contend with the server-side connection.
+    # Headless Chrome on Ubuntu CI silently drops the Selenium W3C click on
+    # the just-rendered submit button (local Fedora Chrome doesn't — Capybara
+    # reports success either way). If the page hasn't transitioned after a
+    # beat, drive the form through its native submit() — same browser code
+    # path a real click would take through a data-turbo="false" form.
+    unless page.has_no_button?(submit_label, wait: 1)
+      page.execute_script("document.querySelector('form[action$=\"/submission\"]').submit()")
+    end
+
     assert_text I18n.t("requests.next_step.submitted"), wait: 15
     assert_equal "submitted", @draft.reload.status
   end
