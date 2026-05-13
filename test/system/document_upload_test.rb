@@ -32,7 +32,9 @@ class DocumentUploadTest < ApplicationSystemTestCase
 
     submit_label = I18n.t("requests.actions.submit")
     assert_button submit_label
+    Rails.logger.warn("[test] before click_on: conn=#{ActiveRecord::Base.connection.object_id} thr=#{Thread.current.object_id}")
     click_on submit_label
+    Rails.logger.warn("[test] after click_on: conn=#{ActiveRecord::Base.connection.object_id} thr=#{Thread.current.object_id}")
 
     # Server-side first: the transition is the actual contract, not the UI
     # copy. Wait for it via the database to avoid racing Turbo's DOM swap on
