@@ -1,5 +1,0 @@
-# app.homologation.es — authenticated application, nothing to index here.
-# SEO lives on homologation.es (marketing site).
-
-User-agent: *
-Disallow: /
