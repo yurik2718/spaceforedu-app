@@ -20,7 +20,7 @@ gem "pagy", "~> 43.5"
 gem "rails-i18n", "~> 8.1"
 
 # Prevent dangerous migrations (missing null constraints, locking migrations, etc.)
-gem "strong_migrations", "~> 2.7"
+gem "strong_migrations", "~> 2.8"
 
 # Rate limiting (brute force protection on login)
 gem "rack-attack", "~> 6.8"
